@@ -76,7 +76,19 @@ export async function updateDayOfWeekOfExercise(exerciseId, week, day) {
 }
 
 export async function deleteExercise(exerciseId) {
-    // access exercises-label-score table and exercises-occurences table and delete all rows that belong to exerciseId
+    try {
+        let queryText = `DELETE FROM ${TABLE_NAME_EXERCISES_OCCURENCES} WHERE id = $1`;
+        let queryValues = [exerciseId];
+        await pool.query(queryText, queryValues);
+        console.log(`deleteExercise : delete all roww with id ${exerciseId} in table ${TABLE_NAME_EXERCISES_OCCURENCES}`);
+        queryText = `DELETE FROM ${TABLE_NAME_EXERCISES} WHERE id = $1`;
+        queryValues = [exerciseId];
+        await pool.query(queryText, queryValues);
+        console.log(`deleteExercise : delete row with id ${exerciseId} in table ${TABLE_NAME_EXERCISES}`);
+    }
+    catch {
+        console.log(`deleteExercise : Error when tried to delete rows referencing id ${exerciseId}`);
+    }
 }
 
 export async function deleteWeekOfExercise(exerciseId, week) {

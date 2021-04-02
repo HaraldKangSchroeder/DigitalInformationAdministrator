@@ -20,10 +20,10 @@ export async function createExercise(exerciseLabel, score) {
         let queryText = `INSERT INTO ${TABLE_NAME_EXERCISES} VALUES ($1,$2,$3);`;
         let queryValues = [id, exerciseLabel, score];
         await pool.query(queryText, queryValues);
-        console.log(`Added row(${id},${exerciseLabel},${score}) to table ${TABLE_NAME_EXERCISES}`);
+        console.log(`createExercise : Added row(${id},${exerciseLabel},${score}) to table ${TABLE_NAME_EXERCISES}`);
     }
     catch {
-        console.log(`createExercise Error when tried to add ${exerciseLabel} , ${score}`);
+        console.log(`createExercise : Error when tried to add ${exerciseLabel} , ${score}`);
     }
 }
 
@@ -32,10 +32,10 @@ export async function addWeekToExercise(exerciseId, week) {
         let queryText = `INSERT INTO ${TABLE_NAME_EXERCISES_OCCURENCES} VALUES ($1,$2,null);`;
         let queryValues = [exerciseId, week];
         await pool.query(queryText, queryValues);
-        console.log(`Added row(${exerciseId},${week},null) to table ${TABLE_NAME_EXERCISES_OCCURENCES}`);
+        console.log(`addWeekToExercise : Added row(${exerciseId},${week},null) to table ${TABLE_NAME_EXERCISES_OCCURENCES}`);
     }
     catch {
-        console.log(`addWeekToExercise Error when tried to add ${exerciseId} , ${week}`);
+        console.log(`addWeekToExercise : Error when tried to add ${exerciseId} , ${week}`);
     }
 }
 
@@ -46,7 +46,15 @@ export async function addWeeksToExercise(exerciseId, weeks) {
 }
 
 export async function addWeekAndDayToExercise(exerciseId, week, day) {
-    // access exercises-occurences table and add respective entries (exerciseId,week,day)
+    try {
+        let queryText = `INSERT INTO ${TABLE_NAME_EXERCISES_OCCURENCES} VALUES ($1,$2,$3);`;
+        let queryValues = [exerciseId, week, day];
+        await pool.query(queryText, queryValues);
+        console.log(`addWeekAndDayToExercise : Added row(${exerciseId},${week},${day}) to table ${TABLE_NAME_EXERCISES_OCCURENCES}`);
+    }
+    catch {
+        console.log(`addWeekAndDayToExercise : Error when tried to add ${exerciseId} , ${week}, ${day}`);
+    }
 }
 
 export async function updateDayOfWeekOfExercise(exerciseId, week, day) {

@@ -64,7 +64,15 @@ export async function addWeeksAndDaysToExercise(exerciseId, weeks, days){
 }
 
 export async function updateDayOfWeekOfExercise(exerciseId, week, day) {
-    // access exercises-occurences table and update the day of the given exerciseId and week respectively
+    try {
+        let queryText = `UPDATE ${TABLE_NAME_EXERCISES_OCCURENCES} SET day = $3 WHERE id = $1 AND week = $2;`;
+        let queryValues = [exerciseId, week, day];
+        await pool.query(queryText, queryValues);
+        console.log(`updateDayOfWeekOfExercise : Updated to row(${exerciseId},${week},${day}) in table ${TABLE_NAME_EXERCISES_OCCURENCES}`);
+    }
+    catch {
+        console.log(`updateDayOfWeekOfExercise : Error when tried to update with ${exerciseId} , ${week} , ${day}`);
+    }
 }
 
 export async function deleteExercise(exerciseId) {

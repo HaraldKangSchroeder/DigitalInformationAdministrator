@@ -40,7 +40,9 @@ export async function addWeekToExercise(exerciseId, week) {
 }
 
 export async function addWeeksToExercise(exerciseId, weeks) {
-    // access exercises-occurences table and add respective entries (exerciseId,week,null)*
+    await weeks.forEach(async week => {
+        await addWeekToExercise(exerciseId,week);
+    });
 }
 
 export async function addWeekAndDayToExercise(exerciseId, week, day) {

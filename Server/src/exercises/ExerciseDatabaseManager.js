@@ -3,6 +3,7 @@ import { configs } from "../../config.js";
 
 const MAX_ID = 1000;
 const TABLE_NAME_EXERCISES = "exercises";
+const TABLE_NAME_EXERCISES_OCCURENCES = "exercises_occurences";
 
 const pool = new pg.Pool({
     user: process.env.DATABASE_USERNAME,
@@ -19,42 +20,50 @@ export async function createExercise(exerciseLabel, score) {
         let queryText = `INSERT INTO ${TABLE_NAME_EXERCISES} VALUES ($1,$2,$3);`;
         let queryValues = [id, exerciseLabel, score];
         await pool.query(queryText, queryValues);
-        console.log(`Added row(${id},${exerciseLabel},${score}) to table exercises`);
+        console.log(`Added row(${id},${exerciseLabel},${score}) to table ${TABLE_NAME_EXERCISES}`);
     }
     catch {
         console.log(`createExercise Error when tried to add ${exerciseLabel} , ${score}`);
     }
 }
 
-export function addWeekToExercise(exerciseId, week) {
-    // access exercises-occurences table and add respective entry (exerciseId,week,null)
+export async function addWeekToExercise(exerciseId, week) {
+    try {
+        let queryText = `INSERT INTO ${TABLE_NAME_EXERCISES_OCCURENCES} VALUES ($1,$2,null);`;
+        let queryValues = [exerciseId, week];
+        await pool.query(queryText, queryValues);
+        console.log(`Added row(${exerciseId},${week},null) to table ${TABLE_NAME_EXERCISES_OCCURENCES}`);
+    }
+    catch {
+        console.log(`addWeekToExercise Error when tried to add ${exerciseId} , ${week}`);
+    }
 }
 
-export function addWeeksToExercise(exerciseId, weeks) {
+export async function addWeeksToExercise(exerciseId, weeks) {
     // access exercises-occurences table and add respective entries (exerciseId,week,null)*
 }
 
-export function addWeekAndDayToExercise(exerciseId, week, day) {
+export async function addWeekAndDayToExercise(exerciseId, week, day) {
     // access exercises-occurences table and add respective entries (exerciseId,week,day)
 }
 
-export function updateDayOfWeekOfExercise(exerciseId, week, day) {
+export async function updateDayOfWeekOfExercise(exerciseId, week, day) {
     // access exercises-occurences table and update the day of the given exerciseId and week respectively
 }
 
-export function deleteExercise(exerciseId) {
+export async function deleteExercise(exerciseId) {
     // access exercises-label-score table and exercises-occurences table and delete all rows that belong to exerciseId
 }
 
-export function deleteWeekOfExercise(exerciseId, week) {
+export async function deleteWeekOfExercise(exerciseId, week) {
     // access exercises-occurences table and delete respective row containing the week of the given exerciseId
 }
 
-export function getExercisesOfCurrentWeek(currentWeek) {
+export async function getExercisesOfCurrentWeek(currentWeek) {
     // access weekly-exercises table and get all entries of the currentWeek
 }
 
-export function setExercisesOfCurrentWeek(currentWeek) {
+export async function setExercisesOfCurrentWeek(currentWeek) {
     // access weekly-exercises and add all exercises that should be in at the currentWeek
 }
 

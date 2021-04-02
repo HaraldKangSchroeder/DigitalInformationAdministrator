@@ -57,6 +57,12 @@ export async function addWeekAndDayToExercise(exerciseId, week, day) {
     }
 }
 
+export async function addWeeksAndDaysToExercise(exerciseId, weeks, days){
+    for (let i = 0; i < weeks.length; i++){
+        await addWeekAndDayToExercise(exerciseId,weeks[i],days[i]);
+    }
+}
+
 export async function updateDayOfWeekOfExercise(exerciseId, week, day) {
     // access exercises-occurences table and update the day of the given exerciseId and week respectively
 }

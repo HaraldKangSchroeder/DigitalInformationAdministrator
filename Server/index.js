@@ -1,6 +1,7 @@
 import express from "express";
 import http from "http";
 import {configs} from "./config.js";
+import {createExercise} from "./src/exercises/ExerciseDatabaseManager.js";
 
 const app = express();
 const server = http.createServer(app);

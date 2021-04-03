@@ -92,7 +92,10 @@ export async function deleteExercise(exerciseId) {
 }
 
 export async function deleteWeekOfExercise(exerciseId, week) {
-    // access exercises-occurences table and delete respective row containing the week of the given exerciseId
+    let queryText = `DELETE FROM ${TABLE_NAME_EXERCISES_OCCURENCES} WHERE id = $1 AND week = $2`;
+    let queryValues = [exerciseId,week];
+    await pool.query(queryText, queryValues);
+    console.log(`deleteExercise : delete row with id ${exerciseId} and week ${week} in table ${TABLE_NAME_EXERCISES_OCCURENCES}`);
 }
 
 export async function getExercisesOfCurrentWeek(currentWeek) {

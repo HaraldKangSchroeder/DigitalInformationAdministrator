@@ -22,6 +22,7 @@ CREATE TABLE tasks_occurences
     id INT,
     week_num week_num,
     day_num day_num,
+    frequency INT,
     UNIQUE(id,week_num),
     FOREIGN KEY (id) REFERENCES tasks(id)
 );

@@ -15,6 +15,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
+import socket from "../socket.js";
+
 const scoresMenuItems = [
     { value: 1, label: 1 },
     { value: 2, label: 2 },
@@ -182,7 +184,9 @@ export function TaskCreation(props) {
             setOpenErrorAlert(true);
             return;
         }
-        console.log(state);
+        socket.emit("createTask",state);
+        setOpenAddTask(false);
+        console.log(state); 
     }
 
     return (

@@ -15,15 +15,16 @@ const pool = new pg.Pool({
 
 export async function createTask(taskLabel, score, importance) {
     try {
-        let { rows } = await pool.query("SELECT id FROM tasks");
+        let { rows } = await pool.query("SELECT id FROM tasks;");
         let id = getUnusedIds(rows);
         let queryText = `INSERT INTO ${TABLE_NAME_TASKS} VALUES ($1,$2,$3,$4);`;
         let queryValues = [id, taskLabel, score, importance];
         await pool.query(queryText, queryValues);
         console.log(`createTask : Added row(${id},${taskLabel},${score},${importance}) to table ${TABLE_NAME_TASKS}`);
     }
-    catch {
-        console.log(`createTask : Error when tried to add ${taskLabel} , ${score}`);
+    catch(e) {
+        console.log(e);
+        console.log(`createTask : Error when tried to add ${taskLabel} , ${score}, ${importance}`);
     }
 }
 
@@ -34,7 +35,8 @@ export async function addWeekToTask(taskId, week) {
         await pool.query(queryText, queryValues);
         console.log(`addWeekToTask : Added row(${taskId},${week},null) to table ${TABLE_NAME_TASKS_OCCURENCES}`);
     }
-    catch {
+    catch(e) {
+        console.log(e);
         console.log(`addWeekToTask : Error when tried to add ${taskId} , ${week}`);
     }
 }
@@ -52,7 +54,8 @@ export async function addWeekAndDayToTask(taskId, week, day) {
         await pool.query(queryText, queryValues);
         console.log(`addWeekAndDayToTask : Added row(${taskId},${week},${day}) to table ${TABLE_NAME_TASKS_OCCURENCES}`);
     }
-    catch {
+    catch(e) {
+        console.log(e);
         console.log(`addWeekAndDayToTask : Error when tried to add ${taskId} , ${week}, ${day}`);
     }
 }
@@ -70,7 +73,8 @@ export async function updateDayOfWeekOfTask(taskId, week, day) {
         await pool.query(queryText, queryValues);
         console.log(`updateDayOfWeekOfTask : Updated to row(${taskId},${week},${day}) in table ${TABLE_NAME_TASKS_OCCURENCES}`);
     }
-    catch {
+    catch(e) {
+        console.log(e);
         console.log(`updateDayOfWeekOfTask : Error when tried to update with ${taskId} , ${week} , ${day}`);
     }
 }
@@ -86,7 +90,8 @@ export async function deleteTask(taskId) {
         await pool.query(queryText, queryValues);
         console.log(`deleteTask : delete row with id ${taskId} in table ${TABLE_NAME_TASKS}`);
     }
-    catch {
+    catch(e) {
+        console.log(e);
         console.log(`deleteTask : Error when tried to delete rows referencing id ${taskId}`);
     }
 }
@@ -96,6 +101,19 @@ export async function deleteWeekOfTask(taskId, week) {
     let queryValues = [taskId,week];
     await pool.query(queryText, queryValues);
     console.log(`deleteTask : delete row with id ${taskId} and week ${week} in table ${TABLE_NAME_TASKS_OCCURENCES}`);
+}
+
+export async function getAllTasks(){
+    try {
+        let { rows } = await pool.query(`SELECT * FROM ${TABLE_NAME_TASKS};`);
+        console.log(`getAllTasks : get all tasks ${TABLE_NAME_TASKS}`);
+        return rows;
+    }
+    catch(e) {
+        console.log(e);
+        console.log(`getAllTasks : Error when tried to access all tasks in ${TABLE_NAME_TASKS}`);
+        return null;
+    }
 }
 
 export async function getTasksOfCurrentWeek(currentWeek) {

@@ -8,7 +8,7 @@ import socket from "./socket.js";
 
 
 function App() {
-  const [selectedTaskId, setSelectedTaskId] = useState("");
+  const [selectedTask, setSelectedTask] = useState(null);
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
@@ -19,6 +19,18 @@ function App() {
     socket.emit("getAllTasks");
   },[])
 
+  const changeSelectedTask = (task) => {
+    if(selectedTask == null || task == null) {
+      setSelectedTask(task);
+      return;
+    }
+    if(selectedTask.id == task.id){
+      setSelectedTask(null);
+      return;
+    }
+    setSelectedTask(task);
+  }
+
   return (
     <div className="App">
       <Grid container spacing={1}>
@@ -26,18 +38,19 @@ function App() {
           <Grid item xs={12}>
             <TaskSelection
               tasks={tasks}
-              selectedTaskId={selectedTaskId}
-              changeSelectedTaskId={setSelectedTaskId}
+              selectedTask={selectedTask}
+              changeSelectedTask={changeSelectedTask}
             />
           </Grid>
           <Grid item xs={6}>
             <TaskCreation
-              changeSelectedTaskId={setSelectedTaskId}
+              changeSelectedTask={changeSelectedTask}
             />
           </Grid>
           <Grid item xs={6}>
             <TaskDeletion
-              selectedTaskId={selectedTaskId}
+              selectedTask={selectedTask}
+              changeSelectedTask={changeSelectedTask}
             />
           </Grid>
         </Grid>

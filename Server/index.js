@@ -47,6 +47,13 @@ io.on("connection", (socket) => {
         let tasks = await tasksDatabaseManager.getAllTasks();
         socket.emit('allTasks', {tasks:tasks});
     });
+
+    socket.on('deleteTask', async (task) => {
+        console.log(task);
+        await tasksDatabaseManager.deleteTask(task.id);
+        let tasks = await tasksDatabaseManager.getAllTasks();
+        socket.emit('allTasks', {tasks:tasks});
+    });
 });
 
 

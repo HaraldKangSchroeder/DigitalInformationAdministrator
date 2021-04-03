@@ -23,11 +23,12 @@ export function TaskSelection(props) {
         <div className={classes.root}>
             <List component="nav" aria-label="main mailbox folders">
                 {props.tasks.map(task => {
+                    let isTaskSelected = props.selectedTask != null && task.id === props.selectedTask.id;
                     return (
                         <ListItem
                             button
-                            onClick={() => { props.changeSelectedTaskId(task.id) }}
-                            selected={task.id === props.selectedTaskId}
+                            onClick={() => { props.changeSelectedTask(task) }}
+                            selected={isTaskSelected}
                         >
                             <ListItemIcon>
                                 <InboxIcon />

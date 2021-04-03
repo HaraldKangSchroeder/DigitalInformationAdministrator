@@ -13,14 +13,14 @@ const pool = new pg.Pool({
     port: configs.databasePort,
 });
 
-export async function createExercise(exerciseLabel, score) {
+export async function createExercise(exerciseLabel, score, importance) {
     try {
         let { rows } = await pool.query("SELECT id FROM exercises");
         let id = getUnusedIds(rows);
-        let queryText = `INSERT INTO ${TABLE_NAME_EXERCISES} VALUES ($1,$2,$3);`;
-        let queryValues = [id, exerciseLabel, score];
+        let queryText = `INSERT INTO ${TABLE_NAME_EXERCISES} VALUES ($1,$2,$3,$4);`;
+        let queryValues = [id, exerciseLabel, score, importance];
         await pool.query(queryText, queryValues);
-        console.log(`createExercise : Added row(${id},${exerciseLabel},${score}) to table ${TABLE_NAME_EXERCISES}`);
+        console.log(`createExercise : Added row(${id},${exerciseLabel},${score},${importance}) to table ${TABLE_NAME_EXERCISES}`);
     }
     catch {
         console.log(`createExercise : Error when tried to add ${exerciseLabel} , ${score}`);

@@ -1,7 +1,7 @@
 import express from "express";
 import http from "http";
 import {configs} from "./config.js";
-import * as exerciseDatabaseManager from "./src/exercises/ExerciseDatabaseManager.js";
+import * as exerciseDatabaseManager from "./src/exercises/exerciseDatabaseManager.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -17,6 +17,4 @@ server.listen(port, ip, () => {
     console.log(`Server starts running on ${ip}:${port}`);
 });
 
-
-exerciseDatabaseManager.deleteWeekOfExercise(100,3);
 

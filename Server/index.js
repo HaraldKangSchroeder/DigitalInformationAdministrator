@@ -42,14 +42,22 @@ io.on("connection", (socket) => {
     });
 
     socket.on('createTask', async (task) => {
-        console.log(task);
-        await tasksDatabaseManager.createTask(task.name,task.score,task.importance);
+        let taskId = await tasksDatabaseManager.createTask(task.name,task.score,task.importance);
+        let isWeeklyRythmSet = task.week != "";
+        if(isWeeklyRythmSet){
+            let isDaySet = task.day != "";
+            if (isDaySet) {
+                await tasksDatabaseManager.addWeeksWithDayToTask(taskId, getWeeksOfWeeklyRythm(task.weeklyRythm), task.day);
+            }
+            else{
+                await tasksDatabaseManager.addWeeksToTask(taskId, getWeeksOfWeeklyRythm(task.weeklyRythm));
+            }
+        }
         let tasks = await tasksDatabaseManager.getAllTasks();
         socket.emit('allTasks', {tasks:tasks});
     });
 
     socket.on('deleteTask', async (task) => {
-        console.log(task);
         await tasksDatabaseManager.deleteTask(task.id);
         let tasks = await tasksDatabaseManager.getAllTasks();
         socket.emit('allTasks', {tasks:tasks});
@@ -57,3 +65,16 @@ io.on("connection", (socket) => {
 });
 
 
+function getWeeksOfWeeklyRythm(weeklyRythm){
+    let weeks = [];
+    if(weeklyRythm === "weekly"){
+        weeks = Array(54).fill().map((x,i)=>i);
+    }
+    else if(weeklyRythm === "bi-weekly"){
+        weeks = Array(27).fill().map((x,i)=>i*2);
+    }
+    else if(weeklyRythm === "third-week"){
+        weeks = Array(18).fill().map((x,i)=>i*3);
+    }
+    return weeks;
+}

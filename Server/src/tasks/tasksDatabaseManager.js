@@ -21,6 +21,7 @@ export async function createTask(taskLabel, score, importance) {
         let queryValues = [id, taskLabel, score, importance];
         await pool.query(queryText, queryValues);
         console.log(`createTask : Added row(${id},${taskLabel},${score},${importance}) to table ${TABLE_NAME_TASKS}`);
+        return id;
     }
     catch(e) {
         console.log(e);
@@ -60,9 +61,9 @@ export async function addWeekAndDayToTask(taskId, week, day) {
     }
 }
 
-export async function addWeeksAndDaysToTask(taskId, weeks, days){
+export async function addWeeksWithDayToTask(taskId, weeks, day){
     for (let i = 0; i < weeks.length; i++){
-        await addWeekAndDayToTask(taskId,weeks[i],days[i]);
+        await addWeekAndDayToTask(taskId,weeks[i],day);
     }
 }
 
@@ -84,7 +85,7 @@ export async function deleteTask(taskId) {
         let queryText = `DELETE FROM ${TABLE_NAME_TASKS_OCCURENCES} WHERE id = $1`;
         let queryValues = [taskId];
         await pool.query(queryText, queryValues);
-        console.log(`deleteTask : delete all roww with id ${taskId} in table ${TABLE_NAME_TASKS_OCCURENCES}`);
+        console.log(`deleteTask : delete all row with id ${taskId} in table ${TABLE_NAME_TASKS_OCCURENCES}`);
         queryText = `DELETE FROM ${TABLE_NAME_TASKS} WHERE id = $1`;
         queryValues = [taskId];
         await pool.query(queryText, queryValues);

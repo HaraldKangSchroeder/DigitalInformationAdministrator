@@ -34,7 +34,7 @@ export function TaskDeletion(props){
 
     const handleDeleteTask = () => {
         setOpenSafetyDeletionQuestion(false);
-        if(isTaskSelected) return;
+        if(!isTaskSelected) return;
         socket.emit("deleteTask", props.selectedTask);
         props.changeSelectedTask(null);
     }

@@ -23,7 +23,6 @@ app.get("/", (req, res) => {
     res.send("Hello World");
 })
 
-tasksDatabaseManager.createTask("wash",1,2);
 
 server.listen(port, ip, () => {
     console.log(`Server starts running on ${ip}:${port}`);

@@ -43,13 +43,13 @@ const weeklyRythmsMenuItems = [
 ]
 
 const daysMenuItems = [
-    { value: 0, label: "Monday" },
-    { value: 1, label: "Tuesday" },
-    { value: 2, label: "Wednesday" },
-    { value: 3, label: "Thursday" },
-    { value: 4, label: "Friday" },
-    { value: 5, label: "Saturday" },
-    { value: 6, label: "Sunday" }
+    { value: 0, label: "Sunday" },
+    { value: 1, label: "Monday" },
+    { value: 2, label: "Tuesday" },
+    { value: 3, label: "Wednesday" },
+    { value: 4, label: "Thursday" },
+    { value: 5, label: "Friday" },
+    { value: 6, label: "Saturday" },
 ]
 
 
@@ -133,13 +133,6 @@ export function TaskCreation(props) {
         setOpenErrorAlert(false);
     };
 
-    const handleChangeName = (e) => {
-        setState({
-            ...state,
-            name: e.target.value
-        });
-    }
-
     const handleChangeScore = (e) => {
         setState({
             ...state,
@@ -184,6 +177,7 @@ export function TaskCreation(props) {
             setOpenErrorAlert(true);
             return;
         }
+        console.log(state);
         socket.emit("createTask",state);
         setOpenAddTask(false);
         console.log(state); 

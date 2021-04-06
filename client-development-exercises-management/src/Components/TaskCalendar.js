@@ -7,10 +7,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
+
 const useStyle = makeStyles({
-    dayEntry: {
-        width: "40px",
-        height: "40px",
+    calendarEntry: {
+        width: "35px",
+        height: "35px",
         background: "white",
         display: "flex",
         justifyContent: "center",
@@ -21,91 +22,248 @@ const useStyle = makeStyles({
             background: "#f00",
         },
     },
+    calendarEntryDeactivated: {
+        background: "rgba(255,255,255,0.3)",
+        cursor: "default",
+        '&:hover': {
+            background: "rgba(255,255,255,0.3)",
+        },
+    },
+    calendarEntryTaskOccurence: {
+        width: "35px",
+        height: "35px",
+        background: "rgb(100,100,240)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        cursor: "pointer",
+        margin: "5px"
+    },
+
     table: {
-        width:0,
-        height:0,
-        // background:"red"
+        width: 0,
+        height: 0,
     },
-    tableContainer : {
-        // background:"green",
-        display:"table-cell",
-        textAlign:"center",
-        padding:"10px",
-        borderRadius:"10px",
-        background:"rgb(249,228,183)"
+    tableContainer: {
+        display: "table-cell",
+        textAlign: "center",
+        padding: "10px",
+        borderRadius: "10px",
+        background: "rgb(249,228,183)"
     },
-    tableTitle : {
-        marginBottom:"10px",
-        color:"rgb(100,100,100)",
-        fontWeight:"bold",
-        fontSize:"1.3em"
+    tableTitle: {
+        marginBottom: "10px",
+        color: "rgb(100,100,100)",
+        fontWeight: "bold",
+        fontSize: "1.3em"
     },
     tableCellDefault: {
-        padding:0,
-        borderBottom:"none"
+        padding: 0,
+        borderBottom: "none"
     },
-    tableCellCalendarWeek : {
-        padding:0,
-        borderBottom:"none",
-        borderWidth:"1px",
-        borderColor:"rgba(0,0,0,0.2)"
+    tableCellCalendarWeek: {
+        padding: 0,
+        borderRightStyle: "solid",
+        borderBottom: "none",
+        borderWidth: "1px",
+        borderColor: "rgba(0,0,0,0.3)"
     }
-})
+});
 
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
+const CALENDAR_ROWS = 6;
+const CALENDAR_COLUMNS = 7;
+
+const MONTHS = [
+    "JANUARY",
+    "FEBRUARY",
+    "MARCH",
+    "APRIL",
+    "MAY",
+    "JUNE",
+    "JULY",
+    "AUGUST",
+    "SEPTEMBER",
+    "OCTOBER",
+    "NOVEMBER",
+    "DECEMBER"
 ];
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
+const currentYear = (new Date()).getFullYear();
+const daysInYear = getDaysInYearPerMonth(currentYear);
+const calendarWeeksInYear = getCalendarWeeksInYearPerMonth(currentYear);
+
+
+function getCalendarWeeksInYearPerMonth(year) {
+    let calendarWeeksInYear = [];
+    for (let month = 0; month < 12; month++) {
+        let calendarWeeksInMonth = [];
+        let daysInMonth = getDaysInMonth(year, month);
+        daysInMonth.forEach(day => {
+            let calendarWeek = getWeekNumber(day);
+            if (!calendarWeeksInMonth.includes(calendarWeek)) {
+                calendarWeeksInMonth.push(calendarWeek);
+            }
+        })
+        calendarWeeksInYear[month] = calendarWeeksInMonth;
+    }
+    return calendarWeeksInYear;
 }
 
-export function TaskCalendar() {
+function getDaysInYearPerMonth(year) {
+    let daysInYear = [];
+    for (let month = 0; month < 12; month++) {
+        daysInYear[month] = getDaysInMonth(year, month);
+    }
+    return daysInYear;
+}
+
+function getDaysInMonth(year, month) {
+    var date = new Date(year, month, 1);
+    var days = [];
+    while (date.getMonth() === month) {
+        days.push(new Date(date));
+        date.setDate(date.getDate() + 1);
+    }
+    return days;
+}
+
+
+function getWeekNumber(d) {
+    var onejan = new Date(d.getFullYear(), 0, 1);
+    var millisecsInDay = 86400000;
+    return Math.ceil((((d - onejan) / millisecsInDay) + onejan.getDay() + 1) / 7);
+};
+
+function getCalendarRowsData(days, calendarWeeks) {
+    let startIndex = days[0].getDay();
+    let rows = [];
+    for (let i = 0; i < CALENDAR_ROWS; i++) {
+        rows.push({ cw: i < calendarWeeks.length ? calendarWeeks[i] : null, days: [] });
+    }
+
+    for (let i = 0; i < CALENDAR_ROWS * CALENDAR_COLUMNS; i++) {
+        if (i < startIndex || i - startIndex >= days.length) {
+            rows[Math.floor(i / 7)].days.push(null);
+            continue;
+        }
+        rows[Math.floor(i / 7)].days.push(days[i - startIndex]);
+    }
+    return rows;
+}
+
+function doesTaskOccurOnCalendarWeekAndDay(taskOccurences, week, day) {
+    for (let i = 0; i < taskOccurences.length; i++) {
+        if (taskOccurences[i].calendar_week == week && taskOccurences[i].day == day) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function doesTaskOccurOnCalendarWeek(taskOccurences, week) {
+    for (let i = 0; i < taskOccurences.length; i++) {
+        if (taskOccurences[i].calendar_week == week) {
+            return true;
+        }
+    }
+    return false;
+}
+
+export function TaskCalendar(props) {
+
     const classes = useStyle();
+    let daysInMonth = daysInYear[props.month];
+    let calendarWeeksInMonth = calendarWeeksInYear[props.month];
+    let calendarRowsData = getCalendarRowsData(daysInMonth, calendarWeeksInMonth);
+
     return (
         <Paper className={classes.tableContainer} elevation={10}>
-            <div className={classes.tableTitle}>JANUARY</div>
+            <div className={classes.tableTitle}>{MONTHS[props.month]}</div>
             <TableContainer>
-            <Table style={{width: "80%"}} className={classes.table}>
-                <TableHead>
-                    <TableRow>
-                        <TableCell className={classes.tableCellCalendarWeek} align="center">CW</TableCell>
-                        <TableCell className={classes.tableCellDefault} align="center">Mon</TableCell>
-                        <TableCell className={classes.tableCellDefault} align="center">Tue</TableCell>
-                        <TableCell className={classes.tableCellDefault} align="center">Wed</TableCell>
-                        <TableCell className={classes.tableCellDefault} align="center">Thu</TableCell>
-                        <TableCell className={classes.tableCellDefault} align="center">Fri</TableCell>
-                        <TableCell className={classes.tableCellDefault} align="center">Sat</TableCell>
-                        <TableCell className={classes.tableCellDefault} align="center">Sun</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row) => (
-                        <TableRow key={row.name}>
-                            <TableCell className={classes.tableCellCalendarWeek} align="center"><TaskCalendarDayEntry></TaskCalendarDayEntry></TableCell>
-                            <TableCell className={classes.tableCellDefault} align="center"><TaskCalendarDayEntry></TaskCalendarDayEntry></TableCell>
-                            <TableCell className={classes.tableCellDefault} align="center"><TaskCalendarDayEntry></TaskCalendarDayEntry></TableCell>
-                            <TableCell className={classes.tableCellDefault} align="center"><TaskCalendarDayEntry></TaskCalendarDayEntry></TableCell>
-                            <TableCell className={classes.tableCellDefault} align="center"><TaskCalendarDayEntry></TaskCalendarDayEntry></TableCell>
-                            <TableCell className={classes.tableCellDefault} align="center"><TaskCalendarDayEntry></TaskCalendarDayEntry></TableCell>
-                            <TableCell className={classes.tableCellDefault} align="center"><TaskCalendarDayEntry></TaskCalendarDayEntry></TableCell>
-                            <TableCell className={classes.tableCellDefault} align="center"><TaskCalendarDayEntry></TaskCalendarDayEntry></TableCell>
+                <Table style={{ width: "80%" }} className={classes.table}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell className={classes.tableCellCalendarWeek} align="center">CW</TableCell>
+                            <TableCell className={classes.tableCellDefault} align="center">Sun</TableCell>
+                            <TableCell className={classes.tableCellDefault} align="center">Mon</TableCell>
+                            <TableCell className={classes.tableCellDefault} align="center">Tue</TableCell>
+                            <TableCell className={classes.tableCellDefault} align="center">Wed</TableCell>
+                            <TableCell className={classes.tableCellDefault} align="center">Thu</TableCell>
+                            <TableCell className={classes.tableCellDefault} align="center">Fri</TableCell>
+                            <TableCell className={classes.tableCellDefault} align="center">Sat</TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHead>
+                    <TableBody>
+                        {
+                            calendarRowsData.map((calendarRow) => (
+                                <TableRow>
+                                    {
+                                        calendarRow.cw == null ?
+                                            <TableCell className={classes.tableCellCalendarWeek} align="center">
+                                                <TaskCalendarEmptyEntry />
+                                            </TableCell>
+                                            :
+                                            <TableCell className={classes.tableCellCalendarWeek} align="center">
+                                                <TaskCalendarWeekEntry
+                                                    taskOccurences={props.taskOccurences}
+                                                    calendarWeek={calendarRow.cw}
+                                                />
+                                            </TableCell>
+                                    }
+                                    {calendarRow.days.map(date => {
+                                        if (date == null) {
+                                            return (
+                                                <TableCell className={classes.tableCellDefault} align="center">
+                                                    <TaskCalendarEmptyEntry />
+                                                </TableCell>
+                                            )
+                                        }
+                                        return (
+                                            <TableCell className={classes.tableCellDefault} align="center">
+                                                <TaskCalendarDayEntry
+                                                    taskOccurences={props.taskOccurences}
+                                                    calendarWeek={calendarRow.cw}
+                                                    date={date.getDate()}
+                                                    day={date.getDay()}
+                                                />
+                                            </TableCell>
+                                        )
+                                    })}
+                                </TableRow>
+                            ))}
+                    </TableBody>
+                </Table>
             </TableContainer>
-            </Paper>
+        </Paper >
     );
 }
 
 export function TaskCalendarDayEntry(props) {
     const classes = useStyle();
+    let classNames = `${classes.calendarEntry}`;
+    if (props.calendarWeek != null && doesTaskOccurOnCalendarWeekAndDay(props.taskOccurences, props.calendarWeek, props.day)) {
+        classNames += ` ${classes.calendarEntryTaskOccurence}`;
+    }
     return (
-        <Paper className={classes.dayEntry} elevation={4}>10</Paper>
+        <Paper className={classNames} elevation={4}>{props.date}</Paper>
+    )
+}
+
+export function TaskCalendarEmptyEntry() {
+    const classes = useStyle();
+    return (
+        <Paper className={`${classes.calendarEntry} ${classes.calendarEntryDeactivated}`} elevation={4}></Paper>
+    )
+}
+
+
+export function TaskCalendarWeekEntry(props) {
+    const classes = useStyle();
+    let classNames = `${classes.calendarEntry}`;
+    if (doesTaskOccurOnCalendarWeek(props.taskOccurences, props.calendarWeek)) {
+        classNames += ` ${classes.calendarEntryTaskOccurence}`;
+    }
+    return (
+        <Paper className={classNames} elevation={4}>{props.calendarWeek}</Paper>
     )
 }

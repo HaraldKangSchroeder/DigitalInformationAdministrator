@@ -1,5 +1,8 @@
-import pg from "pg";
-import { configs } from "../../config.js";
+const pg = require("pg");
+const {configs} = require("../../configs");
+const dotenv = require("dotenv");
+dotenv.config();
+
 
 const MAX_ID = 1000;
 const TABLE_NAME_TASKS = "tasks";
@@ -13,7 +16,7 @@ const pool = new pg.Pool({
     port: configs.databasePort,
 });
 
-export async function createTask(taskLabel, score, importance) {
+exports.createTask =  async (taskLabel, score, importance) => {
     try {
         let { rows } = await pool.query("SELECT id FROM tasks;");
         let id = getUnusedIds(rows);
@@ -29,7 +32,7 @@ export async function createTask(taskLabel, score, importance) {
     }
 }
 
-export async function addWeekToTask(taskId, week) {
+async function addWeekToTask(taskId, week){
     try {
         let queryText = `INSERT INTO ${TABLE_NAME_TASKS_OCCURENCES} VALUES ($1,$2,null);`;
         let queryValues = [taskId, week];
@@ -41,14 +44,15 @@ export async function addWeekToTask(taskId, week) {
         console.log(`addWeekToTask : Error when tried to add ${taskId} , ${week}`);
     }
 }
+exports.addWeekToTask = addWeekToTask;
 
-export async function addWeeksToTask(taskId, weeks) {
+exports.addWeeksToTask = async (taskId, weeks) => {
     await weeks.forEach(async week => {
         await addWeekToTask(taskId,week);
     });
 }
 
-export async function addWeekAndDayToTask(taskId, week, day) {
+async function addWeekAndDayToTask(taskId, week, day){
     try {
         let queryText = `INSERT INTO ${TABLE_NAME_TASKS_OCCURENCES} VALUES ($1,$2,$3);`;
         let queryValues = [taskId, week, day];
@@ -60,14 +64,15 @@ export async function addWeekAndDayToTask(taskId, week, day) {
         console.log(`addWeekAndDayToTask : Error when tried to add ${taskId} , ${week}, ${day}`);
     }
 }
+exports.addWeekAndDayToTask = addWeekAndDayToTask;
 
-export async function addWeeksWithDayToTask(taskId, weeks, day){
+exports.addWeeksWithDayToTask = async (taskId, weeks, day) => {
     for (let i = 0; i < weeks.length; i++){
         await addWeekAndDayToTask(taskId,weeks[i],day);
     }
 }
 
-export async function updateDayOfWeekOfTask(taskId, week, day) {
+exports.updateDayOfWeekOfTask = async (taskId, week, day) => {
     try {
         let queryText = `UPDATE ${TABLE_NAME_TASKS_OCCURENCES} SET day = $3 WHERE id = $1 AND week = $2;`;
         let queryValues = [taskId, week, day];
@@ -80,7 +85,7 @@ export async function updateDayOfWeekOfTask(taskId, week, day) {
     }
 }
 
-export async function deleteTask(taskId) {
+exports.deleteTask = async (taskId) => {
     try {
         let queryText = `DELETE FROM ${TABLE_NAME_TASKS_OCCURENCES} WHERE id = $1`;
         let queryValues = [taskId];
@@ -97,14 +102,14 @@ export async function deleteTask(taskId) {
     }
 }
 
-export async function deleteWeekOfTask(taskId, week) {
+exports.deleteWeekOfTask = async (taskId, week) => {
     let queryText = `DELETE FROM ${TABLE_NAME_TASKS_OCCURENCES} WHERE id = $1 AND week = $2`;
     let queryValues = [taskId,week];
     await pool.query(queryText, queryValues);
     console.log(`deleteTask : delete row with id ${taskId} and week ${week} in table ${TABLE_NAME_TASKS_OCCURENCES}`);
 }
 
-export async function getAllTasks(){
+exports.getAllTasks = async () => {
     try {
         let { rows } = await pool.query(`SELECT * FROM ${TABLE_NAME_TASKS};`);
         console.log(`getAllTasks : get all tasks ${TABLE_NAME_TASKS}`);
@@ -117,11 +122,24 @@ export async function getAllTasks(){
     }
 }
 
-export async function getTasksOfCurrentWeek(currentWeek) {
+exports.getTaskOccurences = async (taskId) => {
+    try {
+        let { rows } = await pool.query(`SELECT * FROM ${TABLE_NAME_TASKS_OCCURENCES} WHERE id = ${taskId};`);
+        console.log(`getTaskOccurences : get all tasks from ${TABLE_NAME_TASKS_OCCURENCES} with id = ${taskId}`);
+        return rows;
+    }
+    catch(e) {
+        console.log(e);
+        console.log(`getTaskOccurences : Error when tried to access tasks in ${TABLE_NAME_TASKS_OCCURENCES} with id = ${taskId}`);
+        return null;
+    }
+}
+
+exports.getTasksOfCurrentWeek = async (currentWeek) => {
     // access weekly-tasks table and get all entries of the currentWeek
 }
 
-export async function setTasksOfCurrentWeek(currentWeek) {
+exports.setTasksOfCurrentWeek = async (currentWeek)  => {
     // access weekly-tasks and add all tasks that should be in at the currentWeek
 }
 

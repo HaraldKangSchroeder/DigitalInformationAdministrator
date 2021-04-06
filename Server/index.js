@@ -1,16 +1,17 @@
-import express from "express";
-import http from "http";
-import { configs } from "./config.js";
-import { Server } from "socket.io"
-import cors from "cors";
-import * as tasksDatabaseManager from "./src/tasks/tasksDatabaseManager.js";
+const express = require("express");
+const http = require("http");
+const {configs} = require("./configs");
+const Server = require("socket.io");
+const cors = require("cors");
+const tasksDatabaseManager = require("./src/tasks/tasksDatabaseManager");
+
 
 
 const app = express();
 app.use(cors());
 
 const server = http.createServer(app);
-const io = new Server(server, {
+const io = Server(server, {
     cors: {
         origin: '*',
     }
@@ -40,11 +41,18 @@ io.on("connection", (socket) => {
         socket.emit('allTasks', {tasks:tasks});
     });
 
+    socket.on('getTaskOccurences', async (data) => {
+        console.log(data);
+        let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
+        socket.emit('taskOccurences',taskOccurences);
+    });
+
     socket.on('createTask', async (task) => {
+        console.log(task);
         let taskId = await tasksDatabaseManager.createTask(task.name,task.score,task.importance);
-        let isWeeklyRythmSet = task.week != "";
+        let isWeeklyRythmSet = task.week !== "";
         if(isWeeklyRythmSet){
-            let isDaySet = task.day != "";
+            let isDaySet = task.day !== "";
             if (isDaySet) {
                 await tasksDatabaseManager.addWeeksWithDayToTask(taskId, getWeeksOfWeeklyRythm(task.weeklyRythm), task.day);
             }

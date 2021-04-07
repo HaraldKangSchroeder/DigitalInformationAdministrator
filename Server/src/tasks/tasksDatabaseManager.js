@@ -74,7 +74,7 @@ exports.addWeeksWithDayToTask = async (taskId, weeks, day) => {
 
 exports.updateDayOfWeekOfTask = async (taskId, week, day) => {
     try {
-        let queryText = `UPDATE ${TABLE_NAME_TASKS_OCCURENCES} SET day = $3 WHERE id = $1 AND week = $2;`;
+        let queryText = `UPDATE ${TABLE_NAME_TASKS_OCCURENCES} SET day = $3 WHERE id = $1 AND calendar_week = $2;`;
         let queryValues = [taskId, week, day];
         await pool.query(queryText, queryValues);
         console.log(`updateDayOfWeekOfTask : Updated to row(${taskId},${week},${day}) in table ${TABLE_NAME_TASKS_OCCURENCES}`);
@@ -103,7 +103,7 @@ exports.deleteTask = async (taskId) => {
 }
 
 exports.deleteWeekOfTask = async (taskId, week) => {
-    let queryText = `DELETE FROM ${TABLE_NAME_TASKS_OCCURENCES} WHERE id = $1 AND week = $2`;
+    let queryText = `DELETE FROM ${TABLE_NAME_TASKS_OCCURENCES} WHERE id = $1 AND calendar_week = $2`;
     let queryValues = [taskId,week];
     await pool.query(queryText, queryValues);
     console.log(`deleteTask : delete row with id ${taskId} and week ${week} in table ${TABLE_NAME_TASKS_OCCURENCES}`);

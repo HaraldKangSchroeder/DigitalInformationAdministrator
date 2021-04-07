@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import DeleteIcon from '@material-ui/icons/Delete';
+import AddIcon from '@material-ui/icons/Add';
 
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -14,6 +14,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import IconButton from '@material-ui/core/IconButton';
 
 import socket from "../socket.js";
 
@@ -55,7 +56,7 @@ const daysMenuItems = [
 
 const useStyles = makeStyles({
     root: {
-        margin: "10px"
+        marginTop: "10px"
     },
     formControl: {
         minWidth: 150,
@@ -63,6 +64,9 @@ const useStyles = makeStyles({
     informationText: {
         marginTop: "40px",
         marginBottom: "20px"
+    },
+    startIcon: {
+        margin: 0
     }
 })
 
@@ -71,8 +75,8 @@ function ValueMenuSelection(props) {
     const classes = useStyles();
 
     return (
-        <FormControl 
-            variant="outlined" 
+        <FormControl
+            variant="outlined"
             className={classes.formControl}
             disabled={props.disabled || false}
         >
@@ -178,21 +182,21 @@ export function TaskCreation(props) {
             return;
         }
         console.log(state);
-        socket.emit("createTask",state);
+        socket.emit("createTask", state);
         setOpenAddTask(false);
-        console.log(state); 
+        console.log(state);
     }
 
     return (
         <div>
             <Button
+                classes={{ startIcon: classes.startIcon }}
                 variant="contained"
                 color="secondary"
                 className={classes.root}
-                startIcon={<DeleteIcon />}
+                startIcon={<AddIcon />}
                 onClick={handleOpenAddTask}
             >
-                Add Task
             </Button>
             <Dialog open={openAddTask} onClose={handleCloseAddTask} aria-labelledby="form-dialog-title" maxWidth={'sm'} fullWidth={true}>
                 <DialogTitle id="form-dialog-title">Add Task</DialogTitle>

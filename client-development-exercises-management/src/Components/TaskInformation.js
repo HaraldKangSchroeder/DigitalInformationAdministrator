@@ -39,44 +39,44 @@ export function TaskInformation(props) {
 
             </Grid>
             <Grid item xs={4}>
-                <TaskCalendar selectedTask={props.selectedTask} taskOccurences={taskOccurences} month={0} />
+                <TaskCalendar selectedTaskId={props.selectedTask.id} taskOccurences={taskOccurences} month={0} />
             </Grid>
             <Grid item xs={4}>
-                <TaskCalendar selectedTask={props.selectedTask} taskOccurences={taskOccurences} month={1} />
+                <TaskCalendar selectedTaskId={props.selectedTask.id} taskOccurences={taskOccurences} month={1} />
             </Grid>
             <Grid item xs={4}>
-                <TaskCalendar selectedTask={props.selectedTask} taskOccurences={taskOccurences} month={2} />
-            </Grid>
-
-
-            <Grid item xs={4}>
-                <TaskCalendar selectedTask={props.selectedTask} taskOccurences={taskOccurences} month={3} />
-            </Grid>
-            <Grid item xs={4}>
-                <TaskCalendar selectedTask={props.selectedTask} taskOccurences={taskOccurences} month={4} />
-            </Grid>
-            <Grid item xs={4}>
-                <TaskCalendar selectedTask={props.selectedTask} taskOccurences={taskOccurences} month={5} />
+                <TaskCalendar selectedTaskId={props.selectedTask.id} taskOccurences={taskOccurences} month={2} />
             </Grid>
 
+
             <Grid item xs={4}>
-                <TaskCalendar selectedTask={props.selectedTask} taskOccurences={taskOccurences} month={6} />
+                <TaskCalendar selectedTaskId={props.selectedTask.id} taskOccurences={taskOccurences} month={3} />
             </Grid>
             <Grid item xs={4}>
-                <TaskCalendar selectedTask={props.selectedTask} taskOccurences={taskOccurences} month={7} />
+                <TaskCalendar selectedTaskId={props.selectedTask.id} taskOccurences={taskOccurences} month={4} />
             </Grid>
             <Grid item xs={4}>
-                <TaskCalendar selectedTask={props.selectedTask} taskOccurences={taskOccurences} month={8} />
+                <TaskCalendar selectedTaskId={props.selectedTask.id} taskOccurences={taskOccurences} month={5} />
             </Grid>
 
             <Grid item xs={4}>
-                <TaskCalendar selectedTask={props.selectedTask} taskOccurences={taskOccurences} month={9} />
+                <TaskCalendar selectedTaskId={props.selectedTask.id} taskOccurences={taskOccurences} month={6} />
             </Grid>
             <Grid item xs={4}>
-                <TaskCalendar selectedTask={props.selectedTask} taskOccurences={taskOccurences} month={10} />
+                <TaskCalendar selectedTaskId={props.selectedTask.id} taskOccurences={taskOccurences} month={7} />
             </Grid>
             <Grid item xs={4}>
-                <TaskCalendar selectedTask={props.selectedTask} taskOccurences={taskOccurences} month={11} />
+                <TaskCalendar selectedTaskId={props.selectedTask.id} taskOccurences={taskOccurences} month={8} />
+            </Grid>
+
+            <Grid item xs={4}>
+                <TaskCalendar selectedTaskId={props.selectedTask.id} taskOccurences={taskOccurences} month={9} />
+            </Grid>
+            <Grid item xs={4}>
+                <TaskCalendar selectedTaskId={props.selectedTask.id} taskOccurences={taskOccurences} month={10} />
+            </Grid>
+            <Grid item xs={4}>
+                <TaskCalendar selectedTaskId={props.selectedTask.id} taskOccurences={taskOccurences} month={11} />
             </Grid>
         </React.Fragment>
     )

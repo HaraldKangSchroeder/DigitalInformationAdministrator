@@ -15,14 +15,15 @@ import socket from "../socket.js";
 
 const useStyles = makeStyles({
     root : {
-        margin:"10px"
+        marginTop:"10px"
+    },
+    startIcon: {
+        margin: 0
     }
 })
 
 export function TaskDeletion(props){
     const [openSafetyDeletionQuestion, setOpenSafetyDeletionQuestion] = useState(false);
-
-    let isTaskSelected = props.selectedTask != null;
 
     const handleCloseSafetyDeletionQuestion = () => {
         setOpenSafetyDeletionQuestion(false);
@@ -34,7 +35,6 @@ export function TaskDeletion(props){
 
     const handleDeleteTask = () => {
         setOpenSafetyDeletionQuestion(false);
-        if(!isTaskSelected) return;
         socket.emit("deleteTask", props.selectedTask);
         props.changeSelectedTask(null);
     }
@@ -45,11 +45,12 @@ export function TaskDeletion(props){
             <Button
                 variant="contained"
                 color="secondary"
+                classes={{ startIcon: classes.startIcon }}
                 className={classes.root}
                 startIcon={<DeleteIcon />}
+                disabled={props.disabled}
                 onClick={handleOpenSafetyDeletionQuestion}
             >
-                Delete Task
             </Button>
             <Dialog
                 open={openSafetyDeletionQuestion}
@@ -61,7 +62,7 @@ export function TaskDeletion(props){
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         {
-                            isTaskSelected ? 
+                            !props.disabled ? 
                             `Are you sure that you want to delete the Task ${props.selectedTask.label} ?` : 
                             "You must select a Task in order to delete it"
                         }
@@ -71,7 +72,7 @@ export function TaskDeletion(props){
                     <Button onClick={handleCloseSafetyDeletionQuestion} color="primary" autoFocus>
                         Cancel
                     </Button>
-                    <Button disabled={!isTaskSelected} onClick={handleDeleteTask} color="primary" autoFocus>
+                    <Button onClick={handleDeleteTask} color="primary" autoFocus>
                         Agree
                     </Button>
                 </DialogActions>

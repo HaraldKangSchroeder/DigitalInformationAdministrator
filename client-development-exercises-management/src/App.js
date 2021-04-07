@@ -42,13 +42,21 @@ function App() {
               changeSelectedTask={changeSelectedTask}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <TaskCreation
               changeSelectedTask={changeSelectedTask}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <TaskDeletion
+              disabled={selectedTask == null}
+              selectedTask={selectedTask}
+              changeSelectedTask={changeSelectedTask}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <TaskDeletion
+              disabled={selectedTask == null}
               selectedTask={selectedTask}
               changeSelectedTask={changeSelectedTask}
             />

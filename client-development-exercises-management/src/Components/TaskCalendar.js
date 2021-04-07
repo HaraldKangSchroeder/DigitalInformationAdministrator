@@ -6,6 +6,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { useEffect, useState } from "react";
+import socket from "../socket";
 
 
 const useStyle = makeStyles({
@@ -19,7 +21,7 @@ const useStyle = makeStyles({
         cursor: "pointer",
         margin: "5px",
         '&:hover': {
-            background: "#f00",
+            background: "#0f0",
         },
     },
     calendarEntryDeactivated: {
@@ -37,7 +39,10 @@ const useStyle = makeStyles({
         justifyContent: "center",
         alignItems: "center",
         cursor: "pointer",
-        margin: "5px"
+        margin: "5px",
+        '&:hover': {
+            background: "#f00",
+        },
     },
 
     table: {
@@ -205,6 +210,7 @@ export function TaskCalendar(props) {
                                             :
                                             <TableCell className={classes.tableCellCalendarWeek} align="center">
                                                 <TaskCalendarWeekEntry
+                                                    selectedTaskId={props.selectedTaskId}
                                                     taskOccurences={props.taskOccurences}
                                                     calendarWeek={calendarRow.cw}
                                                 />
@@ -221,6 +227,7 @@ export function TaskCalendar(props) {
                                         return (
                                             <TableCell className={classes.tableCellDefault} align="center">
                                                 <TaskCalendarDayEntry
+                                                    selectedTaskId={props.selectedTaskId}
                                                     taskOccurences={props.taskOccurences}
                                                     calendarWeek={calendarRow.cw}
                                                     date={date.getDate()}
@@ -239,13 +246,27 @@ export function TaskCalendar(props) {
 }
 
 export function TaskCalendarDayEntry(props) {
+    const [isTaskDay, setIsTaskDay] = useState(props.calendarWeek != null && doesTaskOccurOnCalendarWeekAndDay(props.taskOccurences, props.calendarWeek, props.day));
+
+    useEffect(() => {
+        setIsTaskDay(props.calendarWeek != null && doesTaskOccurOnCalendarWeekAndDay(props.taskOccurences, props.calendarWeek, props.day));
+    })
+
+    const handleOnClick = (e) => {
+        if (isTaskDay) {
+            socket.emit("removeDayOfWeek", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek });
+            return;
+        }
+        socket.emit("addWeekAndDay", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek, day: props.day });
+    }
+
     const classes = useStyle();
     let classNames = `${classes.calendarEntry}`;
-    if (props.calendarWeek != null && doesTaskOccurOnCalendarWeekAndDay(props.taskOccurences, props.calendarWeek, props.day)) {
+    if (isTaskDay) {
         classNames += ` ${classes.calendarEntryTaskOccurence}`;
     }
     return (
-        <Paper className={classNames} elevation={4}>{props.date}</Paper>
+        <Paper onClick={handleOnClick} className={classNames} elevation={4}>{props.date}</Paper>
     )
 }
 
@@ -258,12 +279,26 @@ export function TaskCalendarEmptyEntry() {
 
 
 export function TaskCalendarWeekEntry(props) {
+    const [isTaskWeek, setIsTaskWeek] = useState(doesTaskOccurOnCalendarWeek(props.taskOccurences, props.calendarWeek));
+
+    useEffect(() => {
+        setIsTaskWeek(doesTaskOccurOnCalendarWeek(props.taskOccurences, props.calendarWeek));
+    });
+
+    const handleOnClick = () => {
+        if (isTaskWeek) {
+            socket.emit("removeTaskWeek",{taskId: props.selectedTaskId, calendarWeek:props.calendarWeek});
+            return;
+        }
+        socket.emit("addTaskWeek",{taskId: props.selectedTaskId, calendarWeek:props.calendarWeek});
+    };
+
     const classes = useStyle();
     let classNames = `${classes.calendarEntry}`;
-    if (doesTaskOccurOnCalendarWeek(props.taskOccurences, props.calendarWeek)) {
+    if (isTaskWeek) {
         classNames += ` ${classes.calendarEntryTaskOccurence}`;
     }
     return (
-        <Paper className={classNames} elevation={4}>{props.calendarWeek}</Paper>
+        <Paper onClick={handleOnClick} className={classNames} elevation={4}>{props.calendarWeek}</Paper>
     )
 }

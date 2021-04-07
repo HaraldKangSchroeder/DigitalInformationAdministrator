@@ -19,7 +19,7 @@ CREATE DOMAIN week_num AS integer CHECK (VALUE >= 0 AND VALUE <= 53);
 
 CREATE TABLE tasks_occurences
 (
-    id INT,
+    id INT NOT NULL,
     calendar_week week_num,
     day day_num,
     frequency INT,

@@ -69,6 +69,34 @@ io.on("connection", (socket) => {
         let tasks = await tasksDatabaseManager.getAllTasks();
         socket.emit('allTasks', {tasks:tasks});
     });
+
+    socket.on('addWeekAndDay', async (data) => {
+        console.log("addWeekAndDay " + data.taskId);
+        await tasksDatabaseManager.deleteWeekOfTask(data.taskId,data.calendarWeek);
+        await tasksDatabaseManager.addWeekAndDayToTask(data.taskId,data.calendarWeek, data.day);
+        let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
+        socket.emit('taskOccurences',taskOccurences);
+    });
+
+    socket.on('removeDayOfWeek', async (data) => {
+        console.log("removeDayOfWeek " + data.taskId);
+        await tasksDatabaseManager.updateDayOfWeekOfTask(data.taskId,data.calendarWeek,null);
+        let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
+        socket.emit('taskOccurences',taskOccurences);
+        console.log(data);
+    });
+
+    socket.on('addTaskWeek', async (data) => {
+        await tasksDatabaseManager.addWeekToTask(data.taskId, data.calendarWeek);
+        let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
+        socket.emit('taskOccurences',taskOccurences);
+    });
+
+    socket.on('removeTaskWeek', async (data) => {
+        await tasksDatabaseManager.deleteWeekOfTask(data.taskId, data.calendarWeek);
+        let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
+        socket.emit('taskOccurences',taskOccurences);
+    });
 });
 
 

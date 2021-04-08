@@ -2,6 +2,7 @@ import { TaskCalendar } from "./TaskCalendar";
 import Grid from '@material-ui/core/Grid';
 import React, { useEffect ,useState} from "react";
 import socket from "../socket.js";
+import {DialogChangeName} from "./DialogChangeName";
 
 export function TaskInformation(props) {
     const [taskOccurences, setTaskOccurences] = useState([]);
@@ -27,6 +28,9 @@ export function TaskInformation(props) {
     return (
         <React.Fragment>
             <Grid item xs={3}>
+                Task : {props.selectedTask.label} <DialogChangeName selectedTaskId={props.selectedTask.id} selectedTaskLabel={props.selectedTask.label}/>
+            </Grid>
+            <Grid item xs={3}>
                 Weekly Occurences : -1
             </Grid>
             <Grid item xs={3}>
@@ -35,9 +39,7 @@ export function TaskInformation(props) {
             <Grid item xs={3}>
                 Importance : {props.selectedTask.importance}
             </Grid>
-            <Grid item xs={3}>
-
-            </Grid>
+            
             <Grid item xs={4}>
                 <TaskCalendar selectedTaskId={props.selectedTask.id} taskOccurences={taskOccurences} month={0} />
             </Grid>

@@ -35,8 +35,8 @@ export function TaskDeletion(props){
 
     const handleDeleteTask = () => {
         setOpenSafetyDeletionQuestion(false);
-        socket.emit("deleteTask", props.selectedTask);
-        props.changeSelectedTask(null);
+        socket.emit("deleteTask", {id:props.selectedTaskId});
+        props.resetSelectedTaskId();
     }
 
     const classes = useStyles();
@@ -63,7 +63,7 @@ export function TaskDeletion(props){
                     <DialogContentText id="alert-dialog-description">
                         {
                             !props.disabled ? 
-                            `Are you sure that you want to delete the Task ${props.selectedTask.label} ?` : 
+                            `Are you sure that you want to delete the Task ${props.taskLabel} ?` : 
                             "You must select a Task in order to delete it"
                         }
                     </DialogContentText>

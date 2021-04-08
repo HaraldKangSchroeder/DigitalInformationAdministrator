@@ -97,6 +97,13 @@ io.on("connection", (socket) => {
         let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
         socket.emit('taskOccurences',taskOccurences);
     });
+
+    socket.on('changeTaskName', async (data) => {
+        console.log(data);
+        await tasksDatabaseManager.changeTaskName(data.taskId,data.newName);
+        let tasks = await tasksDatabaseManager.getAllTasks();
+        socket.emit('allTasks', {tasks:tasks});
+    })
 });
 
 

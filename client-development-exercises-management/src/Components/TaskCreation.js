@@ -78,7 +78,7 @@ function ValueMenuSelection(props) {
         <FormControl
             variant="outlined"
             className={classes.formControl}
-            disabled={props.disabled || false}
+            disabled={props.disabled}
         >
             <InputLabel>{props.label}</InputLabel>
             <Select
@@ -105,7 +105,6 @@ export function TaskCreation(props) {
     const classes = useStyles();
 
     const [openAddTask, setOpenAddTask] = useState(false);
-    const [openErrorAlert, setOpenErrorAlert] = useState(false);
     const [state, setState] = useState({
         name: "",
         score: "",
@@ -127,14 +126,6 @@ export function TaskCreation(props) {
             day: ""
         })
         setOpenAddTask(false);
-    };
-
-    const handleOpenErrorAlert = () => {
-        setOpenErrorAlert(true);
-    };
-
-    const handleCloseErrorAlert = () => {
-        setOpenErrorAlert(false);
     };
 
     const handleChangeScore = (e) => {
@@ -173,18 +164,15 @@ export function TaskCreation(props) {
     }
 
     const handleSubmit = () => {
-        let isNameSet = state.name != "";
-        let isScoreSet = state.score != "";
-        let isImportenceSet = state.importance != "";
-
-        if (!isNameSet || !isScoreSet || !isImportenceSet) {
-            setOpenErrorAlert(true);
-            return;
-        }
-        console.log(state);
         socket.emit("createTask", state);
+        setState({
+            name: "",
+            score: "",
+            importance: "",
+            weeklyRythm: "",
+            day: ""
+        })
         setOpenAddTask(false);
-        console.log(state);
     }
 
     return (
@@ -257,26 +245,8 @@ export function TaskCreation(props) {
                     <Button onClick={handleCloseAddTask} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleSubmit} color="primary">
+                    <Button disabled={state.name == "" || state.score == "" || state.importance == ""} onClick={handleSubmit} color="primary">
                         Add Task
-                    </Button>
-                </DialogActions>
-            </Dialog>
-            <Dialog
-                open={openErrorAlert}
-                onClose={handleCloseErrorAlert}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">Error when trying to create Task</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        Be sure that you set a task name, its respective score and an importance value!
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseErrorAlert} color="primary" autoFocus>
-                        Agree
                     </Button>
                 </DialogActions>
             </Dialog>

@@ -85,6 +85,19 @@ exports.updateDayOfWeekOfTask = async (taskId, week, day) => {
     }
 }
 
+exports.changeTaskName = async (taskId,newName) => {
+    try {
+        let queryText = `UPDATE ${TABLE_NAME_TASKS} SET label = $2 WHERE id = $1;`;
+        let queryValues = [taskId,newName];
+        await pool.query(queryText,queryValues);
+        console.log(`changeTaskName : Change task name of id ${taskId} to name ${newName}`);
+    }
+    catch(e) {
+        console.log(e);
+        console.log(`changeTaskName : Error when tried to change task name of id ${taskId} to name ${newName}`)
+    }
+}
+
 exports.deleteTask = async (taskId) => {
     try {
         let queryText = `DELETE FROM ${TABLE_NAME_TASKS_OCCURENCES} WHERE id = $1`;

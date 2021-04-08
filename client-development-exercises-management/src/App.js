@@ -6,9 +6,10 @@ import { TaskInformation } from "./Components/TaskInformation";
 import Grid from '@material-ui/core/Grid';
 import socket from "./socket.js";
 
+const NO_SELECT = -1;
 
 function App() {
-  const [selectedTask, setSelectedTask] = useState(null);
+  const [selectedTaskId, setSelectedTaskId] = useState(NO_SELECT);
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
@@ -19,61 +20,66 @@ function App() {
     socket.emit("getAllTasks");
   }, [])
 
-  const changeSelectedTask = (task) => {
-    if (selectedTask == null || task == null) {
-      setSelectedTask(task);
+  const changeSelectedTaskId = (taskId) => {
+    if (taskId == NO_SELECT || selectedTaskId == taskId) {
+      setSelectedTaskId(NO_SELECT);
       return;
     }
-    if (selectedTask.id == task.id) {
-      setSelectedTask(null);
-      return;
-    }
-    setSelectedTask(task);
+    setSelectedTaskId(taskId);
   }
 
   return (
     <div className="App">
       <Grid container spacing={0} alignItems="flex-start">
-        <Grid container item xs={2} spacing={1} style={{marginTop:"1vh",paddingLeft:"2vw"}}>
-          <Grid item xs={12} style={{height:"88vh"}}>
+        <Grid container item xs={2} spacing={1} style={{ marginTop: "1vh", paddingLeft: "2vw" }}>
+          <Grid item xs={12} style={{ height: "88vh" }}>
             <TaskSelection
               tasks={tasks}
-              selectedTask={selectedTask}
-              changeSelectedTask={changeSelectedTask}
+              selectedTaskId={selectedTaskId}
+              changeSelectedTaskId={changeSelectedTaskId}
             />
           </Grid>
           <Grid item xs={4}>
-            <TaskCreation
-              changeSelectedTask={changeSelectedTask}
+            <TaskCreation />
+          </Grid>
+          <Grid item xs={4}>
+            <TaskDeletion
+              disabled={selectedTaskId == NO_SELECT}
+              selectedTaskId={selectedTaskId}
+              taskLabel={selectedTaskId == NO_SELECT ? "" : getTaskById(tasks, selectedTaskId).label}
+              resetSelectedTaskId={() => { setSelectedTaskId(NO_SELECT) }}
             />
           </Grid>
           <Grid item xs={4}>
             <TaskDeletion
-              disabled={selectedTask == null}
-              selectedTask={selectedTask}
-              changeSelectedTask={changeSelectedTask}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <TaskDeletion
-              disabled={selectedTask == null}
-              selectedTask={selectedTask}
-              changeSelectedTask={changeSelectedTask}
+              disabled={selectedTaskId == NO_SELECT}
+              selectedTaskId={selectedTaskId}
+              taskLabel={selectedTaskId == NO_SELECT ? "" : getTaskById(tasks, selectedTaskId).label}
+              resetSelectedTaskId={() => { setSelectedTaskId(NO_SELECT) }}
             />
           </Grid>
         </Grid>
         <Grid item xs={1}>
-          </Grid>
+        </Grid>
 
-        <Grid container item xs={9} spacing={5} justify="space-evenly" style={{marginTop:"1vh", maxHeight:"97vh",overflowY:"auto"}}>
+        <Grid container item xs={9} spacing={5} justify="space-evenly" style={{ marginTop: "1vh", maxHeight: "97vh", overflowY: "auto" }}>
           <TaskInformation
-            selectedTask={selectedTask}
+            selectedTask={getTaskById(tasks,selectedTaskId)}
           />
         </Grid>
 
       </Grid>
     </div>
   );
+}
+
+function getTaskById(tasks, id) {
+  for (let i = 0; i < tasks.length; i++) {
+    if (tasks[i].id === id) {
+      return tasks[i];
+    }
+  }
+  return null;
 }
 
 export default App;

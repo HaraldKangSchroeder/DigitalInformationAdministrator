@@ -42,13 +42,11 @@ io.on("connection", (socket) => {
     });
 
     socket.on('getTaskOccurences', async (data) => {
-        console.log(data);
         let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
         socket.emit('taskOccurences',taskOccurences);
     });
 
     socket.on('createTask', async (task) => {
-        console.log(task);
         let taskId = await tasksDatabaseManager.createTask(task.name,task.score,task.importance, task.weeklyOccurences);
         let isWeeklyRythmSet = task.week !== "";
         if(isWeeklyRythmSet){
@@ -71,7 +69,6 @@ io.on("connection", (socket) => {
     });
 
     socket.on('addWeekAndDay', async (data) => {
-        console.log("addWeekAndDay " + data.taskId);
         await tasksDatabaseManager.deleteWeekOfTask(data.taskId,data.calendarWeek);
         await tasksDatabaseManager.addWeekAndDayToTask(data.taskId,data.calendarWeek, data.day);
         let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
@@ -79,11 +76,9 @@ io.on("connection", (socket) => {
     });
 
     socket.on('removeDayOfWeek', async (data) => {
-        console.log("removeDayOfWeek " + data.taskId);
         await tasksDatabaseManager.updateDayOfWeekOfTask(data.taskId,data.calendarWeek,null);
         let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
         socket.emit('taskOccurences',taskOccurences);
-        console.log(data);
     });
 
     socket.on('addTaskWeek', async (data) => {
@@ -105,29 +100,24 @@ io.on("connection", (socket) => {
     });
 
     socket.on('changeTaskScore', async (data) => {
-        console.log(data);
         await tasksDatabaseManager.changeTaskScore(data.taskId,data.newValue);
         let tasks = await tasksDatabaseManager.getAllTasks();
-        console.log("show tasks");
         socket.emit('allTasks', {tasks:tasks});
     });
 
     socket.on('changeTaskImportance', async (data) => {
-        console.log(data);
         await tasksDatabaseManager.changeTaskImportance(data.taskId,data.newValue);
         let tasks = await tasksDatabaseManager.getAllTasks();
         socket.emit('allTasks', {tasks:tasks});
     });
 
     socket.on('changeTaskWeeklyOccurences', async (data) => {
-        console.log(data);
         await tasksDatabaseManager.changeTaskWeeklyOccurences(data.taskId,data.newValue);
         let tasks = await tasksDatabaseManager.getAllTasks();
         socket.emit('allTasks', {tasks:tasks});
     });
 
     socket.on('changeTaskWeeklyRythm' , async (data) => {
-        //console.log(data);
         await tasksDatabaseManager.deleteAllWeeksOfTask(data.taskId);
         let isWeeklyRythmSet = data.weeklyRythm !== "";
         if(isWeeklyRythmSet){

@@ -21,7 +21,7 @@ const useStyle = makeStyles({
         cursor: "pointer",
         margin: "5px",
         '&:hover': {
-            background: "#0f0",
+            background: "#CAB9D9",
         },
     },
     calendarEntryDeactivated: {
@@ -34,14 +34,14 @@ const useStyle = makeStyles({
     calendarEntryTaskOccurence: {
         width: "35px",
         height: "35px",
-        background: "rgb(100,100,240)",
+        background: "#8B72BE",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         cursor: "pointer",
         margin: "5px",
         '&:hover': {
-            background: "#f00",
+            background: "#B7A9D4",
         },
     },
 
@@ -64,14 +64,16 @@ const useStyle = makeStyles({
     },
     tableCellDefault: {
         padding: 0,
-        borderBottom: "none"
+        borderBottom: "none",
+        color: "rgb(100,100,100)",
     },
     tableCellCalendarWeek: {
         padding: 0,
         borderRightStyle: "solid",
         borderBottom: "none",
         borderWidth: "1px",
-        borderColor: "rgba(0,0,0,0.3)"
+        color: "rgb(100,100,100)",
+        borderColor: "rgba(0,0,0,0.3)",
     }
 });
 

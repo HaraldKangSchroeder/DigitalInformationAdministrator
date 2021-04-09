@@ -5,13 +5,29 @@ import socket from "../socket.js";
 import { DialogChangeName } from "./DialogChangeName";
 import { DialogChangeValue } from "./DialogChangeValue";
 import { MENU_ITEMS_SCORES, MENU_ITEMS_IMPORTANCES, MENU_ITEMS_WEEKLY_RYHTMS, MENU_ITEMS_DAYS, MENU_ITEMS_WEEKLY_OCCURENCES } from '../constants';
+import { makeStyles } from "@material-ui/core";
+
+
+const useStyles = makeStyles({
+    text: {
+        fontSize : "1.1em",
+        display: "flex",
+        alignItems: "center"
+    },
+    textSelectTaskRequest : {
+        display: "flex",
+        alignItems: "center",
+        height:"80vh",
+        fontSize : "2em",
+    }
+})
+
 
 export function TaskInformation(props) {
     const [taskOccurences, setTaskOccurences] = useState([]);
 
     useEffect(() => {
         socket.on("taskOccurences", (res) => {
-            console.log(res);
             setTaskOccurences(res);
         })
     }, [])
@@ -22,18 +38,21 @@ export function TaskInformation(props) {
         }
     }, [props.selectedTask]);
 
+    const classes = useStyles();
 
     if (props.selectedTask == null) {
-        return "Select a task on the left side";
+        return <div className={classes.textSelectTaskRequest}>Select a task on the left side</div>
     }
-    console.log(props.selectedTask);
     return (
         <React.Fragment>
             <Grid item xs={3}>
+            <div className={classes.text}>
                 Task : {props.selectedTask.label} <DialogChangeName selectedTaskId={props.selectedTask.id} selectedTaskLabel={props.selectedTask.label} />
+                </div>
             </Grid>
             <Grid item xs={3}>
-                Weekly Occurences : {props.selectedTask.weekly_occurences}
+                <div className={classes.text}>
+                    Weekly Occurences : {props.selectedTask.weekly_occurences}
                 <DialogChangeValue
                     menuItems={MENU_ITEMS_WEEKLY_OCCURENCES}
                     type="Weekly Occurence"
@@ -41,8 +60,10 @@ export function TaskInformation(props) {
                     selectedTaskId={props.selectedTask.id}
                     selectedTaskLabel={props.selectedTask.label}
                 />
+                </div>
             </Grid>
             <Grid item xs={3}>
+            <div className={classes.text}>
                 Score : {props.selectedTask.score}
                 <DialogChangeValue
                     menuItems={MENU_ITEMS_SCORES}
@@ -51,8 +72,10 @@ export function TaskInformation(props) {
                     selectedTaskId={props.selectedTask.id}
                     selectedTaskLabel={props.selectedTask.label}
                 />
+                </div>
             </Grid>
             <Grid item xs={3}>
+            <div className={classes.text}>
                 Importance : {props.selectedTask.importance}
                 <DialogChangeValue
                     menuItems={MENU_ITEMS_IMPORTANCES}
@@ -61,6 +84,7 @@ export function TaskInformation(props) {
                     selectedTaskId={props.selectedTask.id}
                     selectedTaskLabel={props.selectedTask.label}
                 />
+                </div>
             </Grid>
 
             <Grid item xs={4}>

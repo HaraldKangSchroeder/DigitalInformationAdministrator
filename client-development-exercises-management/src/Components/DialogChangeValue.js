@@ -47,7 +47,6 @@ export function DialogChangeValue(props) {
     }
 
     const handleSubmit = () => {
-        console.log({taskId:props.selectedTaskId, newValue:newValue});
         socket.emit(props.messageId ,{taskId:props.selectedTaskId, newValue:newValue});
         setNewValue("");
         setIsDialogOpen(false);

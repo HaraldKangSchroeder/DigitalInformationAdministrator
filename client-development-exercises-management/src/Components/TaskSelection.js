@@ -12,7 +12,8 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         backgroundColor: theme.palette.background.paper,
         color: "rgb(80,80,80)",
-        height:"100%"
+        height:"88vh",
+        overflowY:"auto"
     },
 }));
 
@@ -21,12 +22,13 @@ export function TaskSelection(props) {
 
     return (
         <Paper className={classes.root} elevation={1}>
-            <List subheader={<ListSubheader>Tasks</ListSubheader>} component="nav" aria-label="main mailbox folders">
+            <List subheader={<ListSubheader disableSticky={true}>Tasks</ListSubheader>} component="nav" aria-label="main mailbox folders">
                 {props.tasks.map(task => {
-                    let isTaskSelected = task.id == props.selectedTaskId;
+                    let isTaskSelected = task.id === props.selectedTaskId;
                     return (
                         <ListItem
                             button
+                            key={`${task.label}${task.id}`}
                             onClick={() => { props.changeSelectedTaskId(task.id) }}
                             selected={isTaskSelected}
                         >

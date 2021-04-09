@@ -9,7 +9,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import socket from "../socket";
 import {ValueMenuSelection} from "./ValueMenuSelection";
-import { red } from "@material-ui/core/colors";
 
 
 const useStyles = makeStyles({
@@ -56,6 +55,8 @@ export function DialogChangeValue(props) {
         setNewValue(e.target.value);
     }
 
+    let isNewValueSet = newValue.length === 0;
+
     const classes = useStyles();
     return (
         <React.Fragment>
@@ -84,7 +85,7 @@ export function DialogChangeValue(props) {
                     <Button onClick={handleDialogClose} color="primary">
                         Cancel
                     </Button>
-                    <Button disabled={newValue.length == 0} onClick={handleSubmit} color="primary">
+                    <Button disabled={isNewValueSet} onClick={handleSubmit} color="primary">
                         Change {props.type}
                     </Button>
                 </DialogActions>

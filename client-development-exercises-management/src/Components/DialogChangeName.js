@@ -50,6 +50,8 @@ export function DialogChangeName(props) {
         setNewName(e.target.value);
     }
 
+    let isNewNameSet = newName.length === 0;
+
     const classes = useStyles();
     return (
         <React.Fragment>
@@ -80,7 +82,7 @@ export function DialogChangeName(props) {
                     <Button onClick={handleChangeNameClose} color="primary">
                         Cancel
                     </Button>
-                    <Button disabled={newName.length == 0} onClick={handleChangeNameSubmit} color="primary">
+                    <Button disabled={isNewNameSet} onClick={handleChangeNameSubmit} color="primary">
                         Change Taskname
                     </Button>
                 </DialogActions>

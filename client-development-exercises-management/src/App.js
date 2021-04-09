@@ -22,18 +22,20 @@ function App() {
   }, [])
 
   const changeSelectedTaskId = (taskId) => {
-    if (taskId == NO_SELECT || selectedTaskId == taskId) {
+    if (taskId === NO_SELECT || selectedTaskId === taskId) {
       setSelectedTaskId(NO_SELECT);
       return;
     }
     setSelectedTaskId(taskId);
   }
 
+  let isTaskSelected = selectedTaskId === NO_SELECT;
+
   return (
     <div className="App">
       <Grid container spacing={0} alignItems="flex-start">
         <Grid container item xs={2} spacing={1} style={{ marginTop: "1vh", paddingLeft: "2vw" }}>
-          <Grid item xs={12} style={{ height: "88vh" }}>
+          <Grid item xs={12}>
             <TaskSelection
               tasks={tasks}
               selectedTaskId={selectedTaskId}
@@ -45,17 +47,17 @@ function App() {
           </Grid>
           <Grid item xs={4} align="center">
             <TaskDeletion
-              disabled={selectedTaskId == NO_SELECT}
+              disabled={isTaskSelected}
               selectedTaskId={selectedTaskId}
-              taskLabel={selectedTaskId == NO_SELECT ? "" : getTaskById(tasks, selectedTaskId).label}
+              taskLabel={isTaskSelected ? "" : getTaskById(tasks, selectedTaskId).label}
               resetSelectedTaskId={() => { setSelectedTaskId(NO_SELECT) }}
             />
           </Grid>
           <Grid item xs={4} align="center">
             <DialogChangeWeeklyRythm
-              disabled={selectedTaskId == NO_SELECT}
+              disabled={isTaskSelected}
               selectedTaskId={selectedTaskId}
-              taskLabel={selectedTaskId == NO_SELECT ? "" : getTaskById(tasks, selectedTaskId).label}
+              taskLabel={isTaskSelected ? "" : getTaskById(tasks, selectedTaskId).label}
               resetSelectedTaskId={() => { setSelectedTaskId(NO_SELECT) }}
             />
           </Grid>

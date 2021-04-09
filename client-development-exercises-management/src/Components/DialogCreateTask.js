@@ -113,6 +113,11 @@ export function DialogCreateTask(props) {
         setOpenAddTask(false);
     }
 
+    let isNameSet = state.name === "";
+    let isImportanceSet = state.score === "";
+    let isScoreSet = state.importance === "";
+    let isWeeklyRythmSet = state.weeklyRythm === "";
+
     return (
         <div>
             <Button
@@ -185,7 +190,7 @@ export function DialogCreateTask(props) {
                         label={"Day"}
                         menuItems={MENU_ITEMS_DAYS}
                         handleChange={handleChangeDay}
-                        disabled={state.weeklyRythm === ""}
+                        disabled={isWeeklyRythmSet}
                     />
 
                 </DialogContent>
@@ -194,7 +199,7 @@ export function DialogCreateTask(props) {
                     <Button onClick={handleCloseAddTask} color="primary">
                         Cancel
                     </Button>
-                    <Button disabled={state.name == "" || state.score == "" || state.importance == ""} onClick={handleSubmit} color="primary">
+                    <Button disabled={isNameSet || isScoreSet || isImportanceSet} onClick={handleSubmit} color="primary">
                         Add Task
                     </Button>
                 </DialogActions>

@@ -47,9 +47,9 @@ async function addWeekToTask(taskId, week){
 exports.addWeekToTask = addWeekToTask;
 
 exports.addWeeksToTask = async (taskId, weeks) => {
-    await weeks.forEach(async week => {
+    for (let week of weeks) {
         await addWeekToTask(taskId,week);
-    });
+    }
 }
 
 async function addWeekAndDayToTask(taskId, week, day){
@@ -67,8 +67,8 @@ async function addWeekAndDayToTask(taskId, week, day){
 exports.addWeekAndDayToTask = addWeekAndDayToTask;
 
 exports.addWeeksWithDayToTask = async (taskId, weeks, day) => {
-    for (let i = 0; i < weeks.length; i++){
-        await addWeekAndDayToTask(taskId,weeks[i],day);
+    for (let week of weeks){
+        await addWeekAndDayToTask(taskId,week,day);
     }
 }
 
@@ -155,10 +155,29 @@ exports.deleteTask = async (taskId) => {
 }
 
 exports.deleteWeekOfTask = async (taskId, week) => {
-    let queryText = `DELETE FROM ${TABLE_NAME_TASKS_OCCURENCES} WHERE id = $1 AND calendar_week = $2`;
-    let queryValues = [taskId,week];
-    await pool.query(queryText, queryValues);
-    console.log(`deleteTask : delete row with id ${taskId} and week ${week} in table ${TABLE_NAME_TASKS_OCCURENCES}`);
+    try{
+        let queryText = `DELETE FROM ${TABLE_NAME_TASKS_OCCURENCES} WHERE id = $1 AND calendar_week = $2`;
+        let queryValues = [taskId,week];
+        await pool.query(queryText, queryValues);
+        console.log(`deleteTask : delete row with id ${taskId} and week ${week} in table ${TABLE_NAME_TASKS_OCCURENCES}`);
+    }
+    catch (e) {
+        console.log(e);
+        console.log(`deleteTask : Error when tried to delete row with id ${taskId} and week ${week} in table ${TABLE_NAME_TASKS_OCCURENCES}`);
+    }
+}
+
+exports.deleteAllWeeksOfTask = async (taskId) => {
+    try{
+        let queryText = `DELETE FROM ${TABLE_NAME_TASKS_OCCURENCES} WHERE id = $1`;
+        let queryValues = [taskId];
+        await pool.query(queryText, queryValues);
+        console.log(`deleteAllWeeksOfTask : delete all weeks of task with id ${taskId} in table ${TABLE_NAME_TASKS_OCCURENCES}`);
+    }
+    catch(e) {
+        console.log(e);
+        console.log(`deleteAllWeeksOfTask : Error when tried to delete all weeks of task with id ${taskId} in table ${TABLE_NAME_TASKS_OCCURENCES}`);
+    }
 }
 
 exports.getAllTasks = async () => {

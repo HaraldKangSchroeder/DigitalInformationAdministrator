@@ -31,19 +31,23 @@ server.listen(port, ip, () => {
 
 io.on("connection", (socket) => {
     console.log("new socket connection");
+    logDivider();
 
     socket.on('disconnect', function () {
         console.log('socket disconnect!');
+        logDivider();
     });
 
     socket.on('getAllTasks', async () => {
         let tasks = await tasksDatabaseManager.getAllTasks();
         socket.emit('allTasks', {tasks:tasks});
+        logDivider();
     });
 
     socket.on('getTaskOccurences', async (data) => {
         let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
         socket.emit('taskOccurences',taskOccurences);
+        logDivider();
     });
 
     socket.on('createTask', async (task) => {
@@ -60,12 +64,14 @@ io.on("connection", (socket) => {
         }
         let tasks = await tasksDatabaseManager.getAllTasks();
         socket.emit('allTasks', {tasks:tasks});
+        logDivider();
     });
 
     socket.on('deleteTask', async (task) => {
         await tasksDatabaseManager.deleteTask(task.id);
         let tasks = await tasksDatabaseManager.getAllTasks();
         socket.emit('allTasks', {tasks:tasks});
+        logDivider();
     });
 
     socket.on('addWeekAndDay', async (data) => {
@@ -73,48 +79,56 @@ io.on("connection", (socket) => {
         await tasksDatabaseManager.addWeekAndDayToTask(data.taskId,data.calendarWeek, data.day);
         let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
         socket.emit('taskOccurences',taskOccurences);
+        logDivider();
     });
 
     socket.on('removeDayOfWeek', async (data) => {
         await tasksDatabaseManager.updateDayOfWeekOfTask(data.taskId,data.calendarWeek,null);
         let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
         socket.emit('taskOccurences',taskOccurences);
+        logDivider();
     });
 
     socket.on('addTaskWeek', async (data) => {
         await tasksDatabaseManager.addWeekToTask(data.taskId, data.calendarWeek);
         let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
         socket.emit('taskOccurences',taskOccurences);
+        logDivider();
     });
 
     socket.on('removeTaskWeek', async (data) => {
         await tasksDatabaseManager.deleteWeekOfTask(data.taskId, data.calendarWeek);
         let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
         socket.emit('taskOccurences',taskOccurences);
+        logDivider();
     });
 
     socket.on('changeTaskName', async (data) => {
         await tasksDatabaseManager.changeTaskName(data.taskId,data.newName);
         let tasks = await tasksDatabaseManager.getAllTasks();
         socket.emit('allTasks', {tasks:tasks});
+        logDivider();
     });
 
     socket.on('changeTaskScore', async (data) => {
         await tasksDatabaseManager.changeTaskScore(data.taskId,data.newValue);
         let tasks = await tasksDatabaseManager.getAllTasks();
         socket.emit('allTasks', {tasks:tasks});
+        logDivider();
     });
 
     socket.on('changeTaskImportance', async (data) => {
         await tasksDatabaseManager.changeTaskImportance(data.taskId,data.newValue);
         let tasks = await tasksDatabaseManager.getAllTasks();
         socket.emit('allTasks', {tasks:tasks});
+        logDivider();
     });
 
     socket.on('changeTaskWeeklyOccurences', async (data) => {
         await tasksDatabaseManager.changeTaskWeeklyOccurences(data.taskId,data.newValue);
         let tasks = await tasksDatabaseManager.getAllTasks();
         socket.emit('allTasks', {tasks:tasks});
+        logDivider();
     });
 
     socket.on('changeTaskWeeklyRythm' , async (data) => {
@@ -131,6 +145,7 @@ io.on("connection", (socket) => {
         }
         let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
         socket.emit('taskOccurences',taskOccurences);
+        logDivider();
     })
 
 
@@ -149,4 +164,8 @@ function getWeeksOfWeeklyRythm(weeklyRythm){
         weeks = Array(18).fill().map((x,i)=>i*3);
     }
     return weeks;
+}
+
+function logDivider(){
+    console.log("------------------------");
 }

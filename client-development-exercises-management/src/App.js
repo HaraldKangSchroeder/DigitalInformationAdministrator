@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { TaskSelection } from "./Components/TaskSelection";
 import { TaskDeletion } from "./Components/TaskDeletion";
 import { DialogCreateTask } from "./Components/DialogCreateTask";
+import { DialogChangeWeeklyRythm} from "./Components/DialogChangeWeeklyRythm";
 import { TaskInformation } from "./Components/TaskInformation";
 import Grid from '@material-ui/core/Grid';
 import socket from "./socket.js";
@@ -15,7 +16,6 @@ function App() {
   useEffect(() => {
     socket.connect();
     socket.on("allTasks", (res) => {
-      console.log(res.tasks);
       setTasks(res.tasks);
     });
     socket.emit("getAllTasks");
@@ -40,10 +40,10 @@ function App() {
               changeSelectedTaskId={changeSelectedTaskId}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={4} align="center">
             <DialogCreateTask />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={4} align="center">
             <TaskDeletion
               disabled={selectedTaskId == NO_SELECT}
               selectedTaskId={selectedTaskId}
@@ -51,8 +51,8 @@ function App() {
               resetSelectedTaskId={() => { setSelectedTaskId(NO_SELECT) }}
             />
           </Grid>
-          <Grid item xs={4}>
-            <TaskDeletion
+          <Grid item xs={4} align="center">
+            <DialogChangeWeeklyRythm
               disabled={selectedTaskId == NO_SELECT}
               selectedTaskId={selectedTaskId}
               taskLabel={selectedTaskId == NO_SELECT ? "" : getTaskById(tasks, selectedTaskId).label}

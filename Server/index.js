@@ -108,6 +108,7 @@ io.on("connection", (socket) => {
         console.log(data);
         await tasksDatabaseManager.changeTaskScore(data.taskId,data.newValue);
         let tasks = await tasksDatabaseManager.getAllTasks();
+        console.log("show tasks");
         socket.emit('allTasks', {tasks:tasks});
     });
 
@@ -125,6 +126,23 @@ io.on("connection", (socket) => {
         socket.emit('allTasks', {tasks:tasks});
     });
 
+    socket.on('changeTaskWeeklyRythm' , async (data) => {
+        //console.log(data);
+        await tasksDatabaseManager.deleteAllWeeksOfTask(data.taskId);
+        let isWeeklyRythmSet = data.weeklyRythm !== "";
+        if(isWeeklyRythmSet){
+            let isDaySet = data.day !== "";
+            if (isDaySet) {
+                await tasksDatabaseManager.addWeeksWithDayToTask(data.taskId, getWeeksOfWeeklyRythm(data.weeklyRythm), data.day);
+            }
+            else{
+                await tasksDatabaseManager.addWeeksToTask(data.taskId, getWeeksOfWeeklyRythm(data.weeklyRythm));
+            }
+        }
+        let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
+        socket.emit('taskOccurences',taskOccurences);
+    })
+
 
 });
 
@@ -137,7 +155,7 @@ function getWeeksOfWeeklyRythm(weeklyRythm){
     else if(weeklyRythm === "bi-weekly"){
         weeks = Array(27).fill().map((x,i)=>i*2);
     }
-    else if(weeklyRythm === "third-week"){
+    else if(weeklyRythm === "three-week"){
         weeks = Array(18).fill().map((x,i)=>i*3);
     }
     return weeks;

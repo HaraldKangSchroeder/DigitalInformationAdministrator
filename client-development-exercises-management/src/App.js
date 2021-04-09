@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { TaskSelection } from "./Components/TaskSelection";
 import { TaskDeletion } from "./Components/TaskDeletion";
-import { TaskCreation } from "./Components/TaskCreation";
+import { DialogCreateTask } from "./Components/DialogCreateTask";
 import { TaskInformation } from "./Components/TaskInformation";
 import Grid from '@material-ui/core/Grid';
 import socket from "./socket.js";
@@ -15,6 +15,7 @@ function App() {
   useEffect(() => {
     socket.connect();
     socket.on("allTasks", (res) => {
+      console.log(res.tasks);
       setTasks(res.tasks);
     });
     socket.emit("getAllTasks");
@@ -40,7 +41,7 @@ function App() {
             />
           </Grid>
           <Grid item xs={4}>
-            <TaskCreation />
+            <DialogCreateTask />
           </Grid>
           <Grid item xs={4}>
             <TaskDeletion

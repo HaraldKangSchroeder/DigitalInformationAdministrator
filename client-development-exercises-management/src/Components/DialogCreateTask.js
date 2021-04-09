@@ -9,57 +9,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import IconButton from '@material-ui/core/IconButton';
-
+import { ValueMenuSelection } from './ValueMenuSelection';
+import { MENU_ITEMS_SCORES, MENU_ITEMS_IMPORTANCES, MENU_ITEMS_WEEKLY_RYTHMS, MENU_ITEMS_DAYS, MENU_ITEMS_WEEKLY_OCCURENCES} from '../constants';
 import socket from "../socket.js";
 
-const scoresMenuItems = [
-    { value: 1, label: 1 },
-    { value: 2, label: 2 },
-    { value: 3, label: 3 },
-    { value: 4, label: 4 },
-    { value: 5, label: 5 },
-    { value: 6, label: 6 },
-    { value: 7, label: 7 },
-    { value: 8, label: 8 },
-    { value: 9, label: 9 },
-    { value: 10, label: 10 },
-];
-
-const importencesMenuItems = [
-    { value: 1, label: 1 },
-    { value: 2, label: 2 },
-    { value: 3, label: 3 },
-]
-
-const weeklyRythmsMenuItems = [
-    { value: "weekly", label: "weekly" },
-    { value: "bi-weekly", label: "bi-weekly" },
-    { value: "three-week", label: "three-week" }
-]
-
-const daysMenuItems = [
-    { value: 0, label: "Sunday" },
-    { value: 1, label: "Monday" },
-    { value: 2, label: "Tuesday" },
-    { value: 3, label: "Wednesday" },
-    { value: 4, label: "Thursday" },
-    { value: 5, label: "Friday" },
-    { value: 6, label: "Saturday" },
-]
 
 
 const useStyles = makeStyles({
     root: {
         marginTop: "10px"
-    },
-    formControl: {
-        minWidth: 150,
     },
     informationText: {
         marginTop: "40px",
@@ -71,37 +29,7 @@ const useStyles = makeStyles({
 })
 
 
-function ValueMenuSelection(props) {
-    const classes = useStyles();
-
-    return (
-        <FormControl
-            variant="outlined"
-            className={classes.formControl}
-            disabled={props.disabled}
-        >
-            <InputLabel>{props.label}</InputLabel>
-            <Select
-                value={props.value}
-                onChange={props.handleChange}
-                label={props.label}
-            >
-                <MenuItem value="">
-                    <em>None</em>
-                </MenuItem>
-                {
-                    props.menuItems.map(menuItem => {
-                        return (
-                            <MenuItem value={menuItem.value}>{menuItem.label}</MenuItem>
-                        );
-                    })
-                }
-            </Select>
-        </FormControl>
-    );
-}
-
-export function TaskCreation(props) {
+export function DialogCreateTask(props) {
     const classes = useStyles();
 
     const [openAddTask, setOpenAddTask] = useState(false);
@@ -110,7 +38,8 @@ export function TaskCreation(props) {
         score: "",
         importance: "",
         weeklyRythm: "",
-        day: ""
+        day: "",
+        weeklyOccurences: "1"
     });
 
     const handleOpenAddTask = () => {
@@ -123,7 +52,8 @@ export function TaskCreation(props) {
             score: "",
             importance: "",
             weeklyRythm: "",
-            day: ""
+            day: "",
+            weeklyOccurences: "1"
         })
         setOpenAddTask(false);
     };
@@ -163,6 +93,13 @@ export function TaskCreation(props) {
         })
     }
 
+    const handleChangeWeeklyOccurences = (e) => {
+        setState({
+            ...state,
+            weeklyOccurences: e.target.value
+        })
+    }
+
     const handleSubmit = () => {
         socket.emit("createTask", state);
         setState({
@@ -170,7 +107,8 @@ export function TaskCreation(props) {
             score: "",
             importance: "",
             weeklyRythm: "",
-            day: ""
+            day: "",
+            weeklyOccurences: "1"
         })
         setOpenAddTask(false);
     }
@@ -197,13 +135,14 @@ export function TaskCreation(props) {
                         type="name"
                         onChange={handleChangeText}
                     />
+
                     <DialogContentText className={classes.informationText}>
                         Choose an importance value. A high value ensure that this Task rather occurs at the top in the presentation view
                     </DialogContentText>
                     <ValueMenuSelection
                         value={state.score}
                         label={"Score"}
-                        menuItems={scoresMenuItems}
+                        menuItems={MENU_ITEMS_SCORES}
                         handleChange={handleChangeScore}
                     />
 
@@ -213,18 +152,28 @@ export function TaskCreation(props) {
                     <ValueMenuSelection
                         value={state.importance}
                         label={"Importance"}
-                        menuItems={importencesMenuItems}
+                        menuItems={MENU_ITEMS_IMPORTANCES}
                         handleChange={handleChangeImportance}
+                    />
+
+                    <DialogContentText className={classes.informationText}>
+                        Optional : If you want the Task to occur more than once for each week, you can adjust the value here respectively
+                    </DialogContentText>
+                    <ValueMenuSelection
+                        value={state.weeklyOccurences}
+                        label={"Weekly Occurences"}
+                        menuItems={MENU_ITEMS_WEEKLY_OCCURENCES}
+                        handleChange={handleChangeWeeklyOccurences}
+                        noNone={true}
                     />
 
                     <DialogContentText className={classes.informationText}>
                         Optional : Select a rythm indicating on which weeks this Task should appear (starting from current week)
                     </DialogContentText>
-
                     <ValueMenuSelection
                         value={state.weeklyRythm}
                         label={"Weekly Rythm"}
-                        menuItems={weeklyRythmsMenuItems}
+                        menuItems={MENU_ITEMS_WEEKLY_RYTHMS}
                         handleChange={handleChangeWeeklyRythm}
                     />
 
@@ -234,7 +183,7 @@ export function TaskCreation(props) {
                     <ValueMenuSelection
                         value={state.day}
                         label={"Day"}
-                        menuItems={daysMenuItems}
+                        menuItems={MENU_ITEMS_DAYS}
                         handleChange={handleChangeDay}
                         disabled={state.weeklyRythm === ""}
                     />

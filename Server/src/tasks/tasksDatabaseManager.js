@@ -16,19 +16,19 @@ const pool = new pg.Pool({
     port: configs.databasePort,
 });
 
-exports.createTask =  async (taskLabel, score, importance) => {
+exports.createTask =  async (taskLabel, score, importance, weeklyOccurences) => {
     try {
         let { rows } = await pool.query("SELECT id FROM tasks;");
         let id = getUnusedIds(rows);
-        let queryText = `INSERT INTO ${TABLE_NAME_TASKS} VALUES ($1,$2,$3,$4);`;
-        let queryValues = [id, taskLabel, score, importance];
+        let queryText = `INSERT INTO ${TABLE_NAME_TASKS} VALUES ($1,$2,$3,$4,$5);`;
+        let queryValues = [id, taskLabel, score, importance,weeklyOccurences];
         await pool.query(queryText, queryValues);
-        console.log(`createTask : Added row(${id},${taskLabel},${score},${importance}) to table ${TABLE_NAME_TASKS}`);
+        console.log(`createTask : Added row(${id},${taskLabel},${score},${importance},${weeklyOccurences}) to table ${TABLE_NAME_TASKS}`);
         return id;
     }
     catch(e) {
         console.log(e);
-        console.log(`createTask : Error when tried to add ${taskLabel} , ${score}, ${importance}`);
+        console.log(`createTask : Error when tried to add ${taskLabel} , ${score}, ${importance},${weeklyOccurences}`);
     }
 }
 
@@ -98,6 +98,45 @@ exports.changeTaskName = async (taskId,newName) => {
     }
 }
 
+exports.changeTaskScore = async (taskId,newScore) => {
+    try {
+        let queryText = `UPDATE ${TABLE_NAME_TASKS} SET score = $2 WHERE id = $1;`;
+        let queryValues = [taskId,newScore];
+        await pool.query(queryText,queryValues);
+        console.log(`changeTaskScore : Change task score of id ${taskId} to value ${newScore}`);
+    }
+    catch(e) {
+        console.log(e);
+        console.log(`changeTaskScore : Error when tried to change score value of id ${taskId} to value ${newScore}`)
+    }
+}
+
+exports.changeTaskImportance = async (taskId,newImportance) => {
+    try {
+        let queryText = `UPDATE ${TABLE_NAME_TASKS} SET importance = $2 WHERE id = $1;`;
+        let queryValues = [taskId,newImportance];
+        await pool.query(queryText,queryValues);
+        console.log(`changeTaskImportance : Change task importance of id ${taskId} to value ${newImportance}`);
+    }
+    catch(e) {
+        console.log(e);
+        console.log(`changeTaskImportance : Error when tried to change importance value of id ${taskId} to value ${newImportance}`)
+    }
+}
+
+exports.changeTaskWeeklyOccurences = async (taskId,newWeeklyOccurences) => {
+    try {
+        let queryText = `UPDATE ${TABLE_NAME_TASKS} SET weekly_occurences = $2 WHERE id = $1;`;
+        let queryValues = [taskId,newWeeklyOccurences];
+        await pool.query(queryText,queryValues);
+        console.log(`changeTaskWeeklyOccurences : Change task weekly occurences of id ${taskId} to value ${newWeeklyOccurences}`);
+    }
+    catch(e) {
+        console.log(e);
+        console.log(`changeTaskWeeklyOccurences : Error when tried to change weekly occurences value of id ${taskId} to value ${newWeeklyOccurences}`)
+    }
+}
+
 exports.deleteTask = async (taskId) => {
     try {
         let queryText = `DELETE FROM ${TABLE_NAME_TASKS_OCCURENCES} WHERE id = $1`;
@@ -124,7 +163,7 @@ exports.deleteWeekOfTask = async (taskId, week) => {
 
 exports.getAllTasks = async () => {
     try {
-        let { rows } = await pool.query(`SELECT * FROM ${TABLE_NAME_TASKS};`);
+        let { rows } = await pool.query(`SELECT * FROM ${TABLE_NAME_TASKS} ORDER BY label;`);
         console.log(`getAllTasks : get all tasks ${TABLE_NAME_TASKS}`);
         return rows;
     }
@@ -158,7 +197,7 @@ exports.setTasksOfCurrentWeek = async (currentWeek)  => {
 
 
 function getUnusedIds(rows) {
-    for (let i = 0; i < MAX_ID; i++) {
+    for (let i = 1; i < MAX_ID; i++) {
         let exists = false;
         rows.forEach(row => {
             if (row.id == i) exists = true;

@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
 
     socket.on('createTask', async (task) => {
         console.log(task);
-        let taskId = await tasksDatabaseManager.createTask(task.name,task.score,task.importance);
+        let taskId = await tasksDatabaseManager.createTask(task.name,task.score,task.importance, task.weeklyOccurences);
         let isWeeklyRythmSet = task.week !== "";
         if(isWeeklyRythmSet){
             let isDaySet = task.day !== "";
@@ -99,11 +99,33 @@ io.on("connection", (socket) => {
     });
 
     socket.on('changeTaskName', async (data) => {
-        console.log(data);
         await tasksDatabaseManager.changeTaskName(data.taskId,data.newName);
         let tasks = await tasksDatabaseManager.getAllTasks();
         socket.emit('allTasks', {tasks:tasks});
-    })
+    });
+
+    socket.on('changeTaskScore', async (data) => {
+        console.log(data);
+        await tasksDatabaseManager.changeTaskScore(data.taskId,data.newValue);
+        let tasks = await tasksDatabaseManager.getAllTasks();
+        socket.emit('allTasks', {tasks:tasks});
+    });
+
+    socket.on('changeTaskImportance', async (data) => {
+        console.log(data);
+        await tasksDatabaseManager.changeTaskImportance(data.taskId,data.newValue);
+        let tasks = await tasksDatabaseManager.getAllTasks();
+        socket.emit('allTasks', {tasks:tasks});
+    });
+
+    socket.on('changeTaskWeeklyOccurences', async (data) => {
+        console.log(data);
+        await tasksDatabaseManager.changeTaskWeeklyOccurences(data.taskId,data.newValue);
+        let tasks = await tasksDatabaseManager.getAllTasks();
+        socket.emit('allTasks', {tasks:tasks});
+    });
+
+
 });
 
 

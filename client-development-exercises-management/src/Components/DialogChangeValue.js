@@ -2,13 +2,15 @@ import React ,{ useState } from "react";
 import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import socket from "../socket";
+import {ValueMenuSelection} from "./ValueMenuSelection";
+import { red } from "@material-ui/core/colors";
+
 
 const useStyles = makeStyles({
     root: {
@@ -24,64 +26,67 @@ const useStyles = makeStyles({
     },
     startIcon: {
         margin: 0
+    },
+    size: {
+        
     }
-})
+});
 
-export function DialogChangeName(props) {
+
+export function DialogChangeValue(props) {
     const [isDialogOpen,setIsDialogOpen] = useState(false);
-    const [newName, setNewName] = useState("");
+    const [newValue, setNewValue] = useState("");
 
-    const handleChangeNameClose = () => {
-        setNewName("");
+    const handleDialogClose = () => {
+        setNewValue("");
         setIsDialogOpen(false); 
     }
 
-    const handleChangeNameDialogOpen = () => {
+    const handleDialogOpen = () => {
         setIsDialogOpen(true);
     }
 
-    const handleChangeNameSubmit = () => {
-        socket.emit("changeTaskName",{taskId:props.selectedTaskId, newName:newName});
-        setNewName("");
+    const handleSubmit = () => {
+        console.log({taskId:props.selectedTaskId, newValue:newValue});
+        socket.emit(props.messageId ,{taskId:props.selectedTaskId, newValue:newValue});
+        setNewValue("");
         setIsDialogOpen(false);
     }
 
-    const handleChangeNameText = (e) => {
-        setNewName(e.target.value);
+    const handleChangeValue = (e) => {
+        setNewValue(e.target.value);
     }
 
     const classes = useStyles();
     return (
         <React.Fragment>
             <Button
-                classes={{ startIcon: classes.startIcon }}
+                classes={{ startIcon: classes.startIcon}}
                 className={classes.root}
                 startIcon={<EditIcon />}
-                onClick={handleChangeNameDialogOpen}
+                onClick={handleDialogOpen}
             >
             </Button>
-            <Dialog open={isDialogOpen} onClose={handleChangeNameClose} aria-labelledby="form-dialog-title" maxWidth={'sm'} fullWidth={true}>
+            <Dialog open={isDialogOpen} onClose={handleDialogClose} aria-labelledby="form-dialog-title" maxWidth={'sm'} fullWidth={true}>
                 <DialogTitle id="form-dialog-title">Add Task</DialogTitle>
                 <DialogContent>
                     <DialogContentText className={classes.informationText}>
-                        Set a new name for the Task "{props.selectedTaskLabel}"
+                        Set a new {props.type} value for the Task "{props.selectedTaskLabel}"
                     </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="newTaskname"
-                        label={"New task name"}
-                        type="name"
-                        onChange={handleChangeNameText}
+                    <ValueMenuSelection
+                        value={newValue}
+                        label={props.type}
+                        menuItems={props.menuItems}
+                        handleChange={handleChangeValue}
                     />
                 </DialogContent>
 
                 <DialogActions>
-                    <Button onClick={handleChangeNameClose} color="primary">
+                    <Button onClick={handleDialogClose} color="primary">
                         Cancel
                     </Button>
-                    <Button disabled={newName.length == 0} onClick={handleChangeNameSubmit} color="primary">
-                        Change Taskname
+                    <Button disabled={newValue.length == 0} onClick={handleSubmit} color="primary">
+                        Change {props.type}
                     </Button>
                 </DialogActions>
             </Dialog>

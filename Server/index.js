@@ -161,12 +161,10 @@ io.on("connection", (socket) => {
 
     socket.on('deleteUser', async (data) => {
         await tasksDatabaseManager.deleteUserById(data.id);
-        // TODO : also need to delete rows in table with tasks in case this specific user solved tasks as well (or maybe do it automatically with previous sql req by using foreign key)
+        // TODO : also need to delete rows in table with tasks in case this specific user solved tasks as well ( do it automatically with previous sql req by using foreign key)
         let users = await tasksDatabaseManager.getAllUsers();
         socket.emit("allUsers", {users:users});
     })
-
-
 });
 
 

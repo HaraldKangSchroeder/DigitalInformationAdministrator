@@ -4,6 +4,7 @@ import { DialogEntityDeletion } from "./DialogEntityDeletion";
 import { DialogCreateUser } from "./DialogCreateUser";
 import { DialogChangeWeeklyRythm } from "./DialogChangeWeeklyRythm";
 import { TaskInformation } from "./TaskInformation";
+import {UserCharts} from "./UserCharts";
 import Grid from '@material-ui/core/Grid';
 import socket from "../socket.js";
 
@@ -73,14 +74,12 @@ function UsersManager() {
                         /> */}
                     </Grid>
                 </Grid>
-                <Grid item xs={1}>
-                </Grid>
+                <Grid item xs={1} />
 
-                <Grid container item xs={9} spacing={5} justify="space-evenly" style={{ marginTop: "1vh", maxHeight: "93vh", overflowY: "auto" }}>
-                    {/* <TaskInformation
-                        selectedTask={getTaskById(tasks, selectedTaskId)}
-                    /> */}
+                <Grid container item xs={8} spacing={5} justify="space-evenly" style={{ marginTop: "1vh",height:"93vh", background:"",maxHeight: "93vh", overflowY: "auto" }}>
+                    <UserCharts />
                 </Grid>
+                <Grid item xs={1} />
 
             </Grid>
         </React.Fragment>

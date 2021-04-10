@@ -257,7 +257,7 @@ export function TaskCalendarDayEntry(props) {
         let isCalendarWeekExistent = props.calendarWeek != null;
         let isTaskOccurentOnCalendarWeekAndDay = doesTaskOccurOnCalendarWeekAndDay(props.taskOccurences, props.calendarWeek, props.day);
         setIsTaskDay(isCalendarWeekExistent && isTaskOccurentOnCalendarWeekAndDay);
-    },[props.calendarWeek,props.taskOccurences, props.day]);
+    }, [props.calendarWeek, props.taskOccurences, props.day]);
 
     const handleOnClick = (e) => {
         if (isTaskDay) {
@@ -291,14 +291,14 @@ export function TaskCalendarWeekEntry(props) {
     useEffect(() => {
         let isTaskOccurentOnCalendarWeek = doesTaskOccurOnCalendarWeek(props.taskOccurences, props.calendarWeek);
         setIsTaskWeek(isTaskOccurentOnCalendarWeek);
-    },[props.taskOccurences, props.calendarWeek]);
+    }, [props.taskOccurences, props.calendarWeek]);
 
     const handleOnClick = () => {
         if (isTaskWeek) {
-            socket.emit("removeTaskWeek",{taskId: props.selectedTaskId, calendarWeek:props.calendarWeek});
+            socket.emit("removeTaskWeek", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek });
             return;
         }
-        socket.emit("addTaskWeek",{taskId: props.selectedTaskId, calendarWeek:props.calendarWeek});
+        socket.emit("addTaskWeek", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek });
     };
 
     const classes = useStyle();

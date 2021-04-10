@@ -1,5 +1,5 @@
 import { TaskManager } from "./Components/TaskManager";
-import NavBar from "./Components/NavBar";
+import NavBar from './Components/NavBar';
 import {
   BrowserRouter as Router,
   Switch,

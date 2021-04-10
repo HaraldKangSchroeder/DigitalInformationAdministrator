@@ -135,20 +135,16 @@ exports.changeTaskWeeklyOccurences = async (taskId, newWeeklyOccurences) => {
     }
 }
 
-exports.deleteTask = async (taskId) => {
+exports.deleteTaskById = async (taskId) => {
     try {
-        let queryText = `DELETE FROM ${TABLE_TASKS_OCCURENCES} WHERE id = $1`;
-        let queryValues = [taskId];
-        await pool.query(queryText, queryValues);
-        console.log(`deleteTask : delete all row with id ${taskId} in table ${TABLE_TASKS_OCCURENCES}`);
         queryText = `DELETE FROM ${TABLE_TASKS} WHERE id = $1`;
         queryValues = [taskId];
         await pool.query(queryText, queryValues);
-        console.log(`deleteTask : delete row with id ${taskId} in table ${TABLE_TASKS}`);
+        console.log(`deleteTaskById : delete row with id ${taskId} in table ${TABLE_TASKS}`);
     }
     catch (e) {
         console.log(e);
-        console.log(`deleteTask : Error when tried to delete rows referencing id ${taskId}`);
+        console.log(`deleteTaskById : Error when tried to delete rows referencing id ${taskId}`);
     }
 }
 
@@ -157,11 +153,11 @@ exports.deleteWeekOfTask = async (taskId, week) => {
         let queryText = `DELETE FROM ${TABLE_TASKS_OCCURENCES} WHERE id = $1 AND calendar_week = $2`;
         let queryValues = [taskId, week];
         await pool.query(queryText, queryValues);
-        console.log(`deleteTask : delete row with id ${taskId} and week ${week} in table ${TABLE_TASKS_OCCURENCES}`);
+        console.log(`deleteWeekOfTask : delete row with id ${taskId} and week ${week} in table ${TABLE_TASKS_OCCURENCES}`);
     }
     catch (e) {
         console.log(e);
-        console.log(`deleteTask : Error when tried to delete row with id ${taskId} and week ${week} in table ${TABLE_TASKS_OCCURENCES}`);
+        console.log(`deleteWeekOfTask : Error when tried to delete row with id ${taskId} and week ${week} in table ${TABLE_TASKS_OCCURENCES}`);
     }
 }
 

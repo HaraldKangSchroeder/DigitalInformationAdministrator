@@ -25,7 +25,7 @@ CREATE TABLE tasks_occurences
     calendar_week week_num NOT NULL,
     day day_num,
     UNIQUE(id,calendar_week),
-    FOREIGN KEY (id) REFERENCES tasks(id)
+    FOREIGN KEY (id) REFERENCES tasks(id) ON DELETE CASCADE
 );
 
 CREATE TABLE users

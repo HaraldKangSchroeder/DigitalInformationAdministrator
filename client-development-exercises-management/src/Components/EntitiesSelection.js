@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         backgroundColor: theme.palette.background.paper,
         color: "rgb(80,80,80)",
-        height: "88vh",
+        height: "85vh",
         overflowY: "auto"
     },
 }));

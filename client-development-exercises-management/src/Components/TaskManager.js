@@ -70,7 +70,7 @@ export function TaskManager() {
                 <Grid item xs={1}>
                 </Grid>
 
-                <Grid container item xs={9} spacing={5} justify="space-evenly" style={{ marginTop: "1vh", maxHeight: "97vh", overflowY: "auto" }}>
+                <Grid container item xs={9} spacing={5} justify="space-evenly" style={{ marginTop: "1vh", maxHeight: "93vh", overflowY: "auto" }}>
                     <TaskInformation
                         selectedTask={getTaskById(tasks, selectedTaskId)}
                     />

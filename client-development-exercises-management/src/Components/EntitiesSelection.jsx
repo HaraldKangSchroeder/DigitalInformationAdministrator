@@ -33,7 +33,7 @@ export function EntitiesSelection(props) {
                             selected={isEntitySelected}
                         >
 
-                            <ListItemText primary={entity.label} />
+                            <ListItemText primary={entity.label || entity.name} />
                         </ListItem>
                     );
                 })}

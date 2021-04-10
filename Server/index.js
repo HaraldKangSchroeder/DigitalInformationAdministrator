@@ -146,6 +146,24 @@ io.on("connection", (socket) => {
         let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
         socket.emit('taskOccurences',taskOccurences);
         logDivider();
+    });
+
+    socket.on('createUser', async (data) => {
+        await tasksDatabaseManager.createUser(data.name);
+        let users = await tasksDatabaseManager.getAllUsers();
+        socket.emit("allUsers", {users:users});
+    });
+
+    socket.on('getAllUsers', async () => {
+        let users = await tasksDatabaseManager.getAllUsers();
+        socket.emit("allUsers", {users:users});
+    });
+
+    socket.on('deleteUser', async (data) => {
+        await tasksDatabaseManager.deleteUserById(data.id);
+        // TODO : also need to delete rows in table with tasks in case this specific user solved tasks as well
+        let users = await tasksDatabaseManager.getAllUsers();
+        socket.emit("allUsers", {users:users});
     })
 
 

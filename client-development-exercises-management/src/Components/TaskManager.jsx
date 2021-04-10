@@ -29,12 +29,13 @@ export function TaskManager() {
         setSelectedTaskId(taskId);
     }
 
-    const deleteTaskById = (taskId) => {
+    const deleteTaskById = () => {
+        if(selectedTaskId === NO_SELECT) return;
         socket.emit("deleteTask", {id:selectedTaskId});
         setSelectedTaskId(NO_SELECT)
     }
 
-    let isTaskSelected = selectedTaskId === NO_SELECT;
+    let isTaskSelected = selectedTaskId !== NO_SELECT;
 
     return (
         <React.Fragment>
@@ -42,6 +43,7 @@ export function TaskManager() {
                 <Grid container item xs={2} spacing={1} style={{ marginTop: "1vh", paddingLeft: "2vw" }}>
                     <Grid item xs={12}>
                         <EntitiesSelection
+                            entityType="Tasks"
                             entities={tasks}
                             selectedEntitiesIds={[selectedTaskId]}
                             changeSelectedEntitiesIds={changeSelectedTaskId}
@@ -52,17 +54,17 @@ export function TaskManager() {
                     </Grid>
                     <Grid item xs={4} align="center">
                         <DialogEntityDeletion
-                            disabled={isTaskSelected}
+                            disabled={!isTaskSelected}
                             entityType="Task"
-                            entityLabel={isTaskSelected ? "" : getTaskById(tasks, selectedTaskId).label}
-                            deleteEntity={() => {deleteTaskById(selectedTaskId)}}
+                            entityLabel={isTaskSelected ? getTaskById(tasks, selectedTaskId).label : ""}
+                            deleteEntity={deleteTaskById}
                         />
                     </Grid>
                     <Grid item xs={4} align="center">
                         <DialogChangeWeeklyRythm
-                            disabled={isTaskSelected}
+                            disabled={!isTaskSelected}
                             selectedTaskId={selectedTaskId}
-                            taskLabel={isTaskSelected ? "" : getTaskById(tasks, selectedTaskId).label}
+                            taskLabel={isTaskSelected ? getTaskById(tasks, selectedTaskId).label : ""}
                             resetSelectedTaskId={() => { setSelectedTaskId(NO_SELECT) }}
                         />
                     </Grid>

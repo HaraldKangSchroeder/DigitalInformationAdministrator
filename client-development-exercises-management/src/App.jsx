@@ -1,4 +1,5 @@
 import { TaskManager } from "./Components/TaskManager";
+import UsersManager from "./Components/UsersManager";
 import NavBar from './Components/NavBar';
 import {
   BrowserRouter as Router,
@@ -18,7 +19,7 @@ function App() {
             <TaskManager />
           </Route>
           <Route exact path="/users">
-            <div>hi</div>
+            <UsersManager />
           </Route>
         </Switch>
         </div>

@@ -1,12 +1,13 @@
 
 DROP TABLE IF EXISTS tasks_occurences;
 DROP TABLE IF EXISTS tasks;
+DROP TABLE IF EXISTS users;
 DROP DOMAIN IF EXISTS week_num;
 DROP DOMAIN IF EXISTS day_num;
 
 CREATE TABLE tasks
 (
-    id INT PRIMARY KEY CHECK (id > 0),
+    id SERIAL PRIMARY KEY,
     label VARCHAR NOT NULL,
     score INT NOT NULL CHECK (score > 0),
     importance INT NOT NULL CHECK (importance > 0),
@@ -25,4 +26,10 @@ CREATE TABLE tasks_occurences
     day day_num,
     UNIQUE(id,calendar_week),
     FOREIGN KEY (id) REFERENCES tasks(id)
+);
+
+CREATE TABLE users
+(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL
 );

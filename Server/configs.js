@@ -3,7 +3,7 @@ const configs = {
     port : "8910",
     databaseHost : "localhost",
     databasePort : 5432,
-    databaseName : "tasks"
+    databaseName : "digital_information_administrator"
 }
 
 exports.configs = configs;

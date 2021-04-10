@@ -85,7 +85,7 @@ export function DialogChangeWeeklyRythm(props) {
                 <DialogTitle id="form-dialog-title">Change Weekly Rythm of Task "{props.taskLabel}"</DialogTitle>
                 <DialogContent>
                     <DialogContentText className={classes.informationText}>
-                        Be careful, changes here will reset the current settings when the task appears
+                        Be careful, changes here will reset the current settings when the task appears. If you dont set anything and press change, all weeks will get removed.
                     </DialogContentText>
                     <DialogContentText className={classes.informationText}>
                         Select a rythm indicating on which weeks this Task should appear (starting from current week)

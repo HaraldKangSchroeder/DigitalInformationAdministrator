@@ -9,9 +9,10 @@ const useStyles = makeStyles({
     formControl: props => ({
         minWidth: props.minWidth || 200,
         padding:0,
+        height:49,
         marginLeft: props.marginSide || 0,
         marginRight: props.marginSide || 0
-    })
+    }),
 })
 
 

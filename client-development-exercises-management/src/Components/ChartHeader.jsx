@@ -7,8 +7,12 @@ const useStyles = makeStyles({
     root : {
         fontSize : "1.4em",
         color:"rgb(100,100,100)",
-        textAlign:"center",
-        marginTop:"1vh"
+        display:"flex",
+        justifyContent:"center",
+        alignItems:"center",
+        marginTop:"1vh",
+        
+        // background:"red"
     }
 })
 
@@ -19,13 +23,23 @@ export function ChartHeader(props){
             Scores per 
             <SelectMenuValueSelection 
                 value={""}
-                label={"test"}
+                label={"Calendar Week"}
+                minWidth={200}
+                height={10}
+                marginSide={10}
+                menuItems={X_AXIS_LABEL_DATA}
+                noNone={true}
+            />
+            of Year
+            <SelectMenuValueSelection 
+                value={""}
+                label={"Year"}
                 minWidth={100}
                 height={10}
                 marginSide={10}
                 menuItems={X_AXIS_LABEL_DATA}
+                noNone={true}
             />
-            of Year ...
         </div>
     )
 }

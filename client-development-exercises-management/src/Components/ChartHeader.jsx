@@ -20,11 +20,21 @@ export function ChartHeader(props){
     const classes = useStyles();
     return (
         <div className = {classes.root}>
-            Scores per 
+            Scores per Calender Week from
             <SelectMenuValueSelection 
                 value={""}
-                label={"Calendar Week"}
-                minWidth={200}
+                label={"CW"}
+                minWidth={80}
+                height={10}
+                marginSide={10}
+                menuItems={X_AXIS_LABEL_DATA}
+                noNone={true}
+            />
+            to 
+            <SelectMenuValueSelection 
+                value={""}
+                label={"CW"}
+                minWidth={80}
                 height={10}
                 marginSide={10}
                 menuItems={X_AXIS_LABEL_DATA}

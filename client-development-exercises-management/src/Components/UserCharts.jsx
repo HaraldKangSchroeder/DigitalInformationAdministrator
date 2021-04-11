@@ -29,10 +29,15 @@ const useStyles = makeStyles({
 })
 
 export function UserCharts(props) {
-    const [data, setData] = useState(dataset);
+    const [data, setData] = useState(null);
+    const [range,setRange] = useState({
+        start:30,
+        end:54
+    });
+    const [year, setYear] = useState("2021");
 
     useEffect(() => {
-        setData(getDatasets(props.selectedUserIds, props.users,null))
+        setData(getDatasets(props.selectedUserIds, props.users,null, range))
     }, [props.selectedUserIds, props.users]);
 
     const classes = useStyles();
@@ -65,19 +70,24 @@ export function UserCharts(props) {
     )
 }
 
-function getDatasets(selectedUserIds, users, socketresponse){
+function getDatasets(selectedUserIds, users, socketresponse, range){
     let dataset = {};
-    dataset.labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    dataset.labels = [];
+    for(let i = 0; i < 54; i++){
+        if(i >= range.start && i <= range.end){
+            dataset.labels.push(i);
+        }
+    }
     dataset.datasets = [];
     for(let i = 0; i < selectedUserIds.length; i++){
-        dataset.datasets.push(getDataset(getUserById(users,selectedUserIds[i]),COLORS[i % COLORS.length]));
+        dataset.datasets.push(getDataset(getUserById(users,selectedUserIds[i]),COLORS[i % COLORS.length], range.end - range.start + 1));
     }
     return dataset;
 }
 
-function getDataset(user, color){
+function getDataset(user, color, numDataPoints){
     let data = [];
-    for(let i = 0; i < 12; i++){
+    for(let i = 0; i < numDataPoints; i++){
         data.push(Math.random() * 30);
     }
     return (
@@ -90,45 +100,12 @@ function getDataset(user, color){
             borderColor: [
                 color
             ],
-            borderWidth: 3,
-            pointHoverRadius: 10,
-            pointBorderWidth: 3,
+            borderWidth: 2,
+            pointHoverRadius: 5,
+            pointBorderWidth: 1,
             pointBackgroundColor: color,
             pointBorderColor: color,
         }
     )
 }
 
-
-const dataset = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    datasets: [{
-        label: 'Inge',
-        data: [10, 30, 3, 5, 2, 3, 7, 1, 20, 13, 6, 3],
-        backgroundColor: [
-            'rgba(255, 255, 255, 0)',
-        ],
-        borderColor: [
-            'rgba(0, 0, 255, 1)'
-        ],
-        borderWidth: 3,
-        pointHoverRadius: 10,
-        pointBorderWidth: 3,
-        pointBackgroundColor: 'rgba(0, 0, 255, 1)',
-        pointBorderColor: 'rgba(0, 0, 255, 1)',
-    }, {
-        label: 'Harald',
-        data: [20, 15, 13, 15, 12, 13, 3, 5, 2, 3, 7, 1],
-        backgroundColor: [
-            'rgba(255, 0, 255, 0)'
-        ],
-        borderColor: [
-            'rgba(255, 0, 255, 1)'
-        ],
-        borderWidth: 3,
-        pointHoverRadius: 10,
-        pointBorderWidth: 3,
-        pointBackgroundColor: 'rgba(255, 0, 255, 1)',
-        pointBorderColor: 'rgba(255, 0, 255, 1)',
-    }]
-};

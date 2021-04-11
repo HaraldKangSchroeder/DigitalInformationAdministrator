@@ -70,13 +70,13 @@ function UsersManager() {
                     </Grid>
                     <Grid item xs={4} align="center" />
                 </Grid>
-                <Grid item xs={1} />
-                <Grid container item xs={8} spacing={1} justify="space-evenly">
+                {/* <Grid item xs={1} spacing={0} /> */}
+                <Grid container item xs={10} >
                     <Grid item xs={12}>
                         <UserCharts selectedUserIds={selectedUserIds} users={users}/>
                     </Grid>
                 </Grid>
-                <Grid item xs={1} />
+                {/* <Grid item xs={1} /> */}
 
             </Grid>
         </React.Fragment>

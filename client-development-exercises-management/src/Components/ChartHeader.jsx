@@ -1,6 +1,9 @@
 import { makeStyles } from "@material-ui/core"
 import {SelectMenuValueSelection} from "./SelectMenuValueSelection";
 import {X_AXIS_LABEL_DATA} from "../constants";
+import socket from "../socket";
+import { useEffect } from "react";
+import React, { useState } from "react";
 
 
 const useStyles = makeStyles({
@@ -10,7 +13,7 @@ const useStyles = makeStyles({
         display:"flex",
         justifyContent:"center",
         alignItems:"center",
-        marginTop:"1vh",
+        marginTop:"2vh",
         
         // background:"red"
     }
@@ -26,9 +29,31 @@ for(let i = 0; i<=54; i++){
 
 export function ChartHeader(props){
     const classes = useStyles();
+    const [tasks,setTasks] = useState([]);
+
+    useEffect(() => {
+        socket.on("allTasks", (res) => {
+            res.tasks = [{id:-1,label:"All"}].concat(res.tasks);
+            console.log(res.tasks);
+            setTasks(res.tasks);
+        });
+        socket.emit("getAllTasks");
+    },[])
+
     return (
         <div className = {classes.root}>
-            Scores per Calender Week from
+            Scores of
+            <SelectMenuValueSelection 
+                value={props.calendarWeekStart}
+                label={"Tasks"}
+                minWidth={80}
+                height={10}
+                marginSide={10}
+                handleChange={props.changeCalendarWeekStart}
+                menuItems={CALENDAR_WEEKS}
+                noNone={true}
+            />
+            per Calender Week from
             <SelectMenuValueSelection 
                 value={props.calendarWeekStart}
                 label={"CW"}

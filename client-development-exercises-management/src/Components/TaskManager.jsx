@@ -6,6 +6,7 @@ import { DialogChangeWeeklyRythm } from "./DialogChangeWeeklyRythm";
 import { TaskInformation } from "./TaskInformation";
 import Grid from '@material-ui/core/Grid';
 import socket from "../socket.js";
+import {getTaskById} from "../utils";
 
 const NO_SELECT = -1;
 
@@ -83,13 +84,6 @@ export function TaskManager() {
     );
 }
 
-function getTaskById(tasks, id) {
-    for (let i = 0; i < tasks.length; i++) {
-        if (tasks[i].id === id) {
-            return tasks[i];
-        }
-    }
-    return null;
-}
+
 
 export default TaskManager;

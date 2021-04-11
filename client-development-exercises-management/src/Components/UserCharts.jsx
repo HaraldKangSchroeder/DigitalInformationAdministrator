@@ -1,7 +1,22 @@
 import { makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { Line } from 'react-chartjs-2';
 import { ChartHeader } from "./ChartHeader";
+import {getUserById} from "../utils";
+
+
+const COLORS = [
+    'rgba(0, 0, 255,1)',
+    'rgba(0, 255, 0,1)',
+    'rgba(255, 0, 0,1)',
+    'rgba(0, 255, 255,1)',
+    'rgba(155, 155, 0,1)',
+    'rgba(255, 0, 255,1)',
+    'rgba(0, 0, 55,1)',
+    'rgba(0, 155, 0,1)',
+    'rgba(100, 0, 0,1)',
+]
 
 const useStyles = makeStyles({
     graph: {
@@ -15,8 +30,10 @@ const useStyles = makeStyles({
 
 export function UserCharts(props) {
     const [data, setData] = useState(dataset);
-    
 
+    useEffect(() => {
+        setData(getDatasets(props.selectedUserIds, props.users,null))
+    }, [props.selectedUserIds, props.users]);
 
     const classes = useStyles();
     return (
@@ -47,6 +64,41 @@ export function UserCharts(props) {
         </React.Fragment>
     )
 }
+
+function getDatasets(selectedUserIds, users, socketresponse){
+    let dataset = {};
+    dataset.labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    dataset.datasets = [];
+    for(let i = 0; i < selectedUserIds.length; i++){
+        dataset.datasets.push(getDataset(getUserById(users,selectedUserIds[i]),COLORS[i % COLORS.length]));
+    }
+    return dataset;
+}
+
+function getDataset(user, color){
+    let data = [];
+    for(let i = 0; i < 12; i++){
+        data.push(Math.random() * 30);
+    }
+    return (
+        {
+            label: user.name,
+            data: data,
+            backgroundColor: [
+                'rgba(255, 255, 255, 0)',
+            ],
+            borderColor: [
+                color
+            ],
+            borderWidth: 3,
+            pointHoverRadius: 10,
+            pointBorderWidth: 3,
+            pointBackgroundColor: color,
+            pointBorderColor: color,
+        }
+    )
+}
+
 
 const dataset = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],

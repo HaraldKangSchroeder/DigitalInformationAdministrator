@@ -15,6 +15,11 @@ function UsersManager() {
         socket.connect();
         socket.on("allUsers", (res) => {
             setUsers(res.users);
+            let ids = [];
+            for(let i = 0; i < res.users.length; i++){
+                ids.push(res.users[i].id);
+            }
+            setSelectedUserIds(ids);
         });
         socket.emit("getAllUsers");
     }, [])
@@ -68,7 +73,7 @@ function UsersManager() {
                 <Grid item xs={1} />
                 <Grid container item xs={8} spacing={1} justify="space-evenly">
                     <Grid item xs={12}>
-                        <UserCharts />
+                        <UserCharts selectedUserIds={selectedUserIds} users={users}/>
                     </Grid>
                 </Grid>
                 <Grid item xs={1} />

@@ -16,28 +16,38 @@ const useStyles = makeStyles({
     }
 })
 
+const CALENDAR_WEEKS = [
+    
+];
+
+for(let i = 0; i<=54; i++){
+    CALENDAR_WEEKS.push({value:i,label:i});
+}
+
 export function ChartHeader(props){
     const classes = useStyles();
     return (
         <div className = {classes.root}>
             Scores per Calender Week from
             <SelectMenuValueSelection 
-                value={""}
+                value={props.calendarWeekStart}
                 label={"CW"}
                 minWidth={80}
                 height={10}
                 marginSide={10}
-                menuItems={X_AXIS_LABEL_DATA}
+                handleChange={props.changeCalendarWeekStart}
+                menuItems={CALENDAR_WEEKS}
                 noNone={true}
             />
             to 
             <SelectMenuValueSelection 
-                value={""}
+                value={props.calendarWeekEnd}
                 label={"CW"}
                 minWidth={80}
                 height={10}
                 marginSide={10}
-                menuItems={X_AXIS_LABEL_DATA}
+                handleChange={props.changeCalendarWeekEnd}
+                menuItems={CALENDAR_WEEKS}
                 noNone={true}
             />
             of Year

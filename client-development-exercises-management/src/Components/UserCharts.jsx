@@ -30,20 +30,31 @@ const useStyles = makeStyles({
 
 export function UserCharts(props) {
     const [data, setData] = useState(null);
-    const [range,setRange] = useState({
-        start:30,
-        end:54
-    });
+    const [calendarWeekStart,setCalendarWeekStart] = useState(5);
+    const [calendarWeekEnd,setCalendarWeekEnd] = useState(20);
     const [year, setYear] = useState("2021");
 
+    const handleChangeCalendarWeekStart = (e) => {
+        setCalendarWeekStart(e.target.value);
+    }
+
+    const handleChangeCalendarWeekEnd = (e) => {
+        setCalendarWeekEnd(e.target.value);
+    }
+
     useEffect(() => {
-        setData(getDatasets(props.selectedUserIds, props.users,null, range))
-    }, [props.selectedUserIds, props.users]);
+        setData(getDatasets(props.selectedUserIds, props.users,null, calendarWeekStart, calendarWeekEnd))
+    }, [calendarWeekStart,calendarWeekEnd,props.selectedUserIds, props.users]);
 
     const classes = useStyles();
     return (
         <React.Fragment>
-            <ChartHeader />
+            <ChartHeader 
+                calendarWeekStart={calendarWeekStart}
+                calendarWeekEnd={calendarWeekEnd}
+                changeCalendarWeekStart={handleChangeCalendarWeekStart} 
+                changeCalendarWeekEnd={handleChangeCalendarWeekEnd} 
+            />
             <div className={classes.graph}>
                 <Line
                     data={data}
@@ -59,7 +70,7 @@ export function UserCharts(props) {
                             xAxes: [{
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Month'
+                                    labelString: 'Calendar Week'
                                 }
                             }],
                         }
@@ -70,17 +81,17 @@ export function UserCharts(props) {
     )
 }
 
-function getDatasets(selectedUserIds, users, socketresponse, range){
+function getDatasets(selectedUserIds, users, socketresponse, start, end){
     let dataset = {};
     dataset.labels = [];
     for(let i = 0; i < 54; i++){
-        if(i >= range.start && i <= range.end){
+        if(i >= start && i <= end){
             dataset.labels.push(i);
         }
     }
     dataset.datasets = [];
     for(let i = 0; i < selectedUserIds.length; i++){
-        dataset.datasets.push(getDataset(getUserById(users,selectedUserIds[i]),COLORS[i % COLORS.length], range.end - range.start + 1));
+        dataset.datasets.push(getDataset(getUserById(users,selectedUserIds[i]),COLORS[i % COLORS.length], end - start + 1));
     }
     return dataset;
 }

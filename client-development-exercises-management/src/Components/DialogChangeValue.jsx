@@ -8,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import socket from "../socket";
-import {ValueMenuSelection} from "./ValueMenuSelection";
+import {SelectMenuValueSelection} from "./SelectMenuValueSelection";
 
 
 const useStyles = makeStyles({
@@ -73,7 +73,7 @@ export function DialogChangeValue(props) {
                     <DialogContentText className={classes.informationText}>
                         Set a new {props.type} value for the Task "{props.selectedTaskLabel}"
                     </DialogContentText>
-                    <ValueMenuSelection
+                    <SelectMenuValueSelection
                         value={newValue}
                         label={props.type}
                         menuItems={props.menuItems}

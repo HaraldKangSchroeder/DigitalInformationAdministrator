@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { ValueMenuSelection } from './ValueMenuSelection';
+import { SelectMenuValueSelection } from './SelectMenuValueSelection';
 import { MENU_ITEMS_WEEKLY_RYTHMS, MENU_ITEMS_DAYS} from '../constants';
 import socket from "../socket.js";
 
@@ -90,7 +90,7 @@ export function DialogChangeWeeklyRythm(props) {
                     <DialogContentText className={classes.informationText}>
                         Select a rythm indicating on which weeks this Task should appear (starting from current week)
                     </DialogContentText>
-                    <ValueMenuSelection
+                    <SelectMenuValueSelection
                         value={state.weeklyRythm}
                         label={"Weekly Rythm"}
                         menuItems={MENU_ITEMS_WEEKLY_RYTHMS}
@@ -100,7 +100,7 @@ export function DialogChangeWeeklyRythm(props) {
                     <DialogContentText className={classes.informationText}>
                         If the Task is day dependant, you can select the respective day which gets attached to the Task name in the presentation view
                     </DialogContentText>
-                    <ValueMenuSelection
+                    <SelectMenuValueSelection
                         value={state.day}
                         label={"Day"}
                         menuItems={MENU_ITEMS_DAYS}

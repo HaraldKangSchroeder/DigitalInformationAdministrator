@@ -45,3 +45,8 @@ export const MENU_ITEMS_WEEKLY_OCCURENCES = [
     { value: 9, label: 9 },
     { value: 10, label: 10 },
 ]
+
+export const X_AXIS_LABEL_DATA = [
+    { value: "MONTH", label: "Month" },
+    { value: "CALENDAR_WEEK", label: "Calendar Week" },
+]

@@ -39,11 +39,6 @@ export function UserCharts(props) {
             data={data}
             options={{
                 maintainAspectRatio: false,
-                title: {
-                    display: true,
-                    text: "Scores per Month in Year 2020",
-                    fontSize: 25
-                },
                 scales: {
                     yAxes: [{
                         scaleLabel: {

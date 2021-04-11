@@ -6,14 +6,17 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 const useStyles = makeStyles({
-    formControl: {
-        minWidth: 200,
-    }
+    formControl: props => ({
+        minWidth: props.minWidth || 200,
+        padding:0,
+        marginLeft: props.marginSide || 0,
+        marginRight: props.marginSide || 0
+    })
 })
 
 
-export function ValueMenuSelection(props) {
-    const classes = useStyles();
+export function SelectMenuValueSelection(props) {
+    const classes = useStyles(props);
 
     return (
         <FormControl

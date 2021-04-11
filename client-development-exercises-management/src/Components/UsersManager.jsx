@@ -1,10 +1,9 @@
-import React , { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { EntitiesSelection } from "./EntitiesSelection";
 import { DialogEntityDeletion } from "./DialogEntityDeletion";
 import { DialogCreateUser } from "./DialogCreateUser";
-import { DialogChangeWeeklyRythm } from "./DialogChangeWeeklyRythm";
-import { TaskInformation } from "./TaskInformation";
-import {UserCharts} from "./UserCharts";
+import { ChartHeader } from "./ChartHeader";
+import { UserCharts } from "./UserCharts";
 import Grid from '@material-ui/core/Grid';
 import socket from "../socket.js";
 
@@ -34,8 +33,8 @@ function UsersManager() {
     }
 
     const deleteUserById = () => {
-        if(selectedUserIds.length != 1 ) return;
-        socket.emit("deleteUser", {id:selectedUserIds[0]});
+        if (selectedUserIds.length != 1) return;
+        socket.emit("deleteUser", { id: selectedUserIds[0] });
         setSelectedUserIds([]);
     }
 
@@ -55,7 +54,7 @@ function UsersManager() {
                     </Grid>
                     <Grid item xs={4} align="center">
                         <DialogCreateUser />
-                        
+
                     </Grid>
                     <Grid item xs={4} align="center">
                         <DialogEntityDeletion
@@ -65,19 +64,16 @@ function UsersManager() {
                             deleteEntity={deleteUserById}
                         />
                     </Grid>
-                    <Grid item xs={4} align="center">
-                        {/* <DialogChangeWeeklyRythm
-                            disabled={isTaskSelected}
-                            selectedTaskId={selectedTaskId}
-                            taskLabel={isTaskSelected ? "" : getTaskById(tasks, selectedTaskId).label}
-                            resetSelectedTaskId={() => { setSelectedTaskId(NO_SELECT) }}
-                        /> */}
-                    </Grid>
+                    <Grid item xs={4} align="center" />
                 </Grid>
                 <Grid item xs={1} />
-
-                <Grid container item xs={8} spacing={5} justify="space-evenly" style={{ marginTop: "1vh",height:"93vh", background:"",maxHeight: "93vh", overflowY: "auto" }}>
-                    <UserCharts />
+                <Grid container item xs={8} spacing={5} justify="space-evenly">
+                    <Grid item xs={12}>
+                        <ChartHeader />
+                    </Grid>
+                    <Grid item xs={12} style={{ marginTop: "1vh", height: "87vh", background: "", maxHeight: "93vh", overflowY: "auto" }}>
+                        <UserCharts />
+                    </Grid>
                 </Grid>
                 <Grid item xs={1} />
 

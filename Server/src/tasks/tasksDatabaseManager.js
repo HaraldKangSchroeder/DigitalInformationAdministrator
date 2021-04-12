@@ -264,7 +264,7 @@ exports.createTaskAccomplishmentsEntry = async (taskId, userId, calendarWeek, ye
 
 exports.getTaskAccomplishmentsYears = async () => {
     try {
-        let { rows } = await pool.query(`SELECT DISTINCT year FROM ${TABLE_TASK_ACCOMPLISHMENTS};`);
+        let { rows } = await pool.query(`SELECT DISTINCT year FROM ${TABLE_TASK_ACCOMPLISHMENTS} ORDER BY year;`);
         console.log(`getTaskAccomplishmentsYears : Select all distinct years in ${TABLE_TASK_ACCOMPLISHMENTS}`);
         return rows;
     }

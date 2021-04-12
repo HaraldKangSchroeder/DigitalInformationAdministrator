@@ -32,7 +32,7 @@ export function SelectMenuValueSelection(props) {
                 onChange={props.handleChange}
                 label={props.label}
             >
-                {props.noNone ? "" : 
+                {props.noNone ? <div></div> : 
                     <MenuItem value="">
                     <em>None</em>
                     </MenuItem>

@@ -48,7 +48,7 @@ export function ChartHeader(props){
                 marginSide={10}
                 handleChange={props.changeCalendarWeekStart}
                 menuItems={props.calendarWeeks}
-                // noNone={true}
+                noNone={true}
             />
             to 
             <SelectMenuValueSelection 
@@ -59,18 +59,19 @@ export function ChartHeader(props){
                 marginSide={10}
                 handleChange={props.changeCalendarWeekEnd}
                 menuItems={props.calendarWeeks}
-                // noNone={true}
+                noNone={true}
             />
             of Year
-            {/* <SelectMenuValueSelection 
+            <SelectMenuValueSelection 
                 value={props.year}
                 label={"Year"}
-                minWidth={100}
+                minWidth={80}
                 height={10}
                 marginSide={10}
-                menuItems={[{value:"2021",label:"2021"}]}
+                handleChange={props.changeYear}
+                menuItems={props.years}
                 noNone={true}
-            /> */}
+            />
         </div>
     )
 }

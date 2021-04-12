@@ -34,7 +34,7 @@ export function UserCharts(props) {
     const [dataset, setDataset] = useState(null);
     const [visualizationData, setVisualizationData] = useState({});
     const [calendarWeekData,setCalendarWeekData] = useState({start:0, end:0, latest:0})
-    const [year, setYear] = useState(null);
+    const [year, setYear] = useState(0);
     const [years, setYears] = useState([]);
 
 
@@ -114,6 +114,10 @@ export function UserCharts(props) {
             end : e.target.value
         });
     }
+
+    const handleChangeYear = (e) => {
+        setYear(e.target.value);
+    }
     
 
     const classes = useStyles();
@@ -122,10 +126,12 @@ export function UserCharts(props) {
             <ChartHeader 
                 calendarWeekStart={calendarWeekData.start}
                 calendarWeekEnd={calendarWeekData.end}
-                calendarWeeks={Array(calendarWeekData.latest).fill().map((x,i)=>i)}
+                calendarWeeks={Array(calendarWeekData.latest + 1).fill().map((x,i)=>i)}
                 changeCalendarWeekStart={handleChangeCalendarWeekStart} 
                 changeCalendarWeekEnd={handleChangeCalendarWeekEnd} 
+                changeYear={handleChangeYear}
                 year={year}
+                years={years}
             />
             <div className={classes.graph}>
                 <Line

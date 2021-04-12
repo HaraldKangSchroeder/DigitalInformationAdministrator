@@ -18,7 +18,7 @@ const pool = new pg.Pool({
 
 exports.createTask = async (taskLabel, score, importance, weeklyOccurences) => {
     try {
-        let queryText = `INSERT INTO ${TABLE_TASKS} (label,score,importance,weekly_occurences) VALUES ($1,$2,$3,$4) RETURNING id;`;
+        let queryText = `INSERT INTO ${TABLE_TASKS} (label,score,importance,weekly_occurences,active) VALUES ($1,$2,$3,$4,TRUE) RETURNING id;`;
         let queryValues = [taskLabel, score, importance, weeklyOccurences];
         let res = await pool.query(queryText, queryValues);
         console.log(`createTask : Added row(${taskLabel},${score},${importance},${weeklyOccurences}) to table ${TABLE_TASKS}`);
@@ -137,6 +137,7 @@ exports.changeTaskWeeklyOccurences = async (taskId, newWeeklyOccurences) => {
 
 exports.deleteTaskById = async (taskId) => {
     try {
+        // TODO check table tasks accomplishments whether the taskId was solved by someone. If not, simply delete (on cascase is set on other table). Else set active to false so that it is still referenceable
         queryText = `DELETE FROM ${TABLE_TASKS} WHERE id = $1`;
         queryValues = [taskId];
         await pool.query(queryText, queryValues);
@@ -174,9 +175,9 @@ exports.deleteAllWeeksOfTask = async (taskId) => {
     }
 }
 
-exports.getAllTasks = async () => {
+exports.getAllActiveTasks = async () => {
     try {
-        let { rows } = await pool.query(`SELECT * FROM ${TABLE_TASKS} ORDER BY label;`);
+        let { rows } = await pool.query(`SELECT * FROM ${TABLE_TASKS} WHERE active IS TRUE ORDER BY label;`);
         console.log(`getAllTasks : get all tasks ${TABLE_TASKS}`);
         return rows;
     }

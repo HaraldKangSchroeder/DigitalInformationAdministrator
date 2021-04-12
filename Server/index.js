@@ -38,9 +38,9 @@ io.on("connection", (socket) => {
         logDivider();
     });
 
-    socket.on('getAllTasks', async () => {
-        let tasks = await tasksDatabaseManager.getAllTasks();
-        socket.emit('allTasks', {tasks:tasks});
+    socket.on('getAllActiveTasks', async () => {
+        let tasks = await tasksDatabaseManager.getAllActiveTasks();
+        socket.emit('allActiveTasks', {tasks:tasks});
         logDivider();
     });
 
@@ -62,15 +62,15 @@ io.on("connection", (socket) => {
                 await tasksDatabaseManager.addWeeksToTask(taskId, getWeeksOfWeeklyRythm(task.weeklyRythm));
             }
         }
-        let tasks = await tasksDatabaseManager.getAllTasks();
-        socket.emit('allTasks', {tasks:tasks});
+        let tasks = await tasksDatabaseManager.getAllActiveTasks();
+        socket.emit('allActiveTasks', {tasks:tasks});
         logDivider();
     });
 
     socket.on('deleteTask', async (task) => {
         await tasksDatabaseManager.deleteTaskById(task.id);
-        let tasks = await tasksDatabaseManager.getAllTasks();
-        socket.emit('allTasks', {tasks:tasks});
+        let tasks = await tasksDatabaseManager.getAllActiveTasks();
+        socket.emit('allActiveTasks', {tasks:tasks});
         logDivider();
     });
 
@@ -105,29 +105,29 @@ io.on("connection", (socket) => {
 
     socket.on('changeTaskName', async (data) => {
         await tasksDatabaseManager.changeTaskName(data.taskId,data.newName);
-        let tasks = await tasksDatabaseManager.getAllTasks();
-        socket.emit('allTasks', {tasks:tasks});
+        let tasks = await tasksDatabaseManager.getAllActiveTasks();
+        socket.emit('allActiveTasks', {tasks:tasks});
         logDivider();
     });
 
     socket.on('changeTaskScore', async (data) => {
         await tasksDatabaseManager.changeTaskScore(data.taskId,data.newValue);
-        let tasks = await tasksDatabaseManager.getAllTasks();
-        socket.emit('allTasks', {tasks:tasks});
+        let tasks = await tasksDatabaseManager.getAllActiveTasks();
+        socket.emit('allActiveTasks', {tasks:tasks});
         logDivider();
     });
 
     socket.on('changeTaskImportance', async (data) => {
         await tasksDatabaseManager.changeTaskImportance(data.taskId,data.newValue);
-        let tasks = await tasksDatabaseManager.getAllTasks();
-        socket.emit('allTasks', {tasks:tasks});
+        let tasks = await tasksDatabaseManager.getAllActiveTasks();
+        socket.emit('allActiveTasks', {tasks:tasks});
         logDivider();
     });
 
     socket.on('changeTaskWeeklyOccurences', async (data) => {
         await tasksDatabaseManager.changeTaskWeeklyOccurences(data.taskId,data.newValue);
-        let tasks = await tasksDatabaseManager.getAllTasks();
-        socket.emit('allTasks', {tasks:tasks});
+        let tasks = await tasksDatabaseManager.getAllActiveTasks();
+        socket.emit('allActiveTasks', {tasks:tasks});
         logDivider();
     });
 

@@ -16,15 +16,15 @@ export function TaskManager() {
 
     useEffect(() => {
         socket.connect();
-        socket.on("allTasks", (res) => {
+        socket.on("allActiveTasks", (res) => {
             setTasks(res.tasks);
         });
-        socket.emit("getAllTasks");
+        socket.emit("getAllActiveTasks");
 
         // remove listening on this specific event when leaving this page. else, it will just add one more listener when mounting again which
         // would result in multiple setTasks invocations
         return () => {
-            socket.off("allTasks");
+            socket.off("allActiveTasks");
         }
     }, [])
 

@@ -1,6 +1,5 @@
 
-
-export function getTaskById(tasks, id) {
+function getTaskById(tasks, id) {
     for (let i = 0; i < tasks.length; i++) {
         if (tasks[i].id === id) {
             return tasks[i];
@@ -8,6 +7,7 @@ export function getTaskById(tasks, id) {
     }
     return null;
 }
+
 
 export function getUserById(users, id){
     for (let i = 0; i < users.length; i++) {
@@ -17,3 +17,14 @@ export function getUserById(users, id){
     }
     return null;
 }
+
+export function getTaskLabelsByIds(tasks,ids){
+    let labels = [];
+    for (let id of ids){
+        let task = getTaskById(tasks,id);
+        if(task != null) labels.push(task.label);
+    }
+    return labels;
+}
+
+export {getTaskById}

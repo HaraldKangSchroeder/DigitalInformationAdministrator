@@ -4,6 +4,7 @@ import {X_AXIS_LABEL_DATA} from "../constants";
 import socket from "../socket";
 import { useEffect } from "react";
 import React, { useState } from "react";
+import MultipleSelectMenuValueSelection from "./MultipleSelectMenuValueSelection";
 
 
 const useStyles = makeStyles({
@@ -28,33 +29,29 @@ for(let i = 0; i<=54; i++){
 }
 
 export function ChartHeader(props){
-    const classes = useStyles();
+    const [selectedTaskIds, setSelectedTaskIds] = useState([]);
     const [tasks,setTasks] = useState([]);
 
     useEffect(() => {
-        socket.on("allTasks", (res) => {
-            let tasksTemp = [{id:-1,label:"All"}].concat(res.tasks);
-            setTasks(tasksTemp);
+        socket.on("allActiveTasks", (res) => {
+            setTasks(res.tasks);
         });
-        socket.emit("getAllTasks");
+        socket.emit("getAllActiveTasks");
 
         return () => {
-            socket.off("allTasks");
+            socket.off("allActiveTasks");
         }
     },[])
 
+    console.log(selectedTaskIds);
+    const classes = useStyles();
     return (
         <div className = {classes.root}>
             Scores of
-            <SelectMenuValueSelection 
-                value={props.calendarWeekStart}
-                label={"Tasks"}
-                minWidth={80}
-                height={10}
-                marginSide={10}
-                handleChange={props.changeCalendarWeekStart}
-                menuItems={CALENDAR_WEEKS}
-                noNone={true}
+            <MultipleSelectMenuValueSelection
+                tasks={tasks}
+                selectedTaskIds={selectedTaskIds}
+                changeSelectedTaskIds={setSelectedTaskIds}
             />
             per Calender Week from
             <SelectMenuValueSelection 

@@ -4,7 +4,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { ControlPointSharp } from '@material-ui/icons';
 
 const useStyles = makeStyles({
     formControl: props => ({

@@ -11,7 +11,8 @@ CREATE TABLE tasks
     label VARCHAR NOT NULL,
     score INT NOT NULL CHECK (score > 0),
     importance INT NOT NULL CHECK (importance > 0),
-    weekly_occurences INT NOT NULL CHECK (weekly_occurences > 0)
+    weekly_occurences INT NOT NULL CHECK (weekly_occurences > 0),
+    active BOOLEAN NOT NULL
 );
 
 
@@ -32,4 +33,15 @@ CREATE TABLE users
 (
     id SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL
+);
+
+
+CREATE TABLE tasks_accomplishments
+(
+    task_id INT NOT NULL,
+    user_id INT NOT NULL,
+    calendar_week week_num NOT NULL,
+    year INT NOT NULL,
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

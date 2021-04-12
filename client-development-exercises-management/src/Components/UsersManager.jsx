@@ -17,6 +17,10 @@ function UsersManager() {
             setUsers(res.users);
         });
         socket.emit("getAllUsers");
+
+        return () => {
+            socket.off("allUsers");
+        }
     }, [])
 
     const changeSelectedUserIds = (userId) => {

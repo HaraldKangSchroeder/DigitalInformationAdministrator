@@ -1,5 +1,5 @@
-
 DROP TABLE IF EXISTS tasks_occurences;
+DROP TABLE IF EXISTS task_accomplishments;
 DROP TABLE IF EXISTS tasks;
 DROP TABLE IF EXISTS users;
 DROP DOMAIN IF EXISTS week_num;
@@ -36,10 +36,10 @@ CREATE TABLE users
 );
 
 
-CREATE TABLE tasks_accomplishments
+CREATE TABLE task_accomplishments
 (
     task_id INT NOT NULL,
-    user_id INT NOT NULL,
+    user_id INT,
     calendar_week week_num NOT NULL,
     year INT NOT NULL,
     FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,

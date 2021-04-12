@@ -7,6 +7,7 @@ dotenv.config();
 const TABLE_TASKS = "tasks";
 const TABLE_TASKS_OCCURENCES = "tasks_occurences";
 const TABLE_USERS = "users";
+const TABLE_TASK_ACCOMPLISHMENTS = "task_accomplishments";
 
 const pool = new pg.Pool({
     user: process.env.DATABASE_USERNAME,
@@ -236,15 +237,98 @@ exports.getAllUsers = async () => {
 }
 
 exports.deleteUserById = async (userId) => {
-    try{
+    try {
         let queryText = `DELETE FROM ${TABLE_USERS} WHERE id = $1;`;
         let queryValues = [userId];
-        await pool.query(queryText,queryValues);
+        await pool.query(queryText, queryValues);
         console.log(`deleteUserById : deleted user with id ${userId}`);
     }
     catch (e) {
         console.log(e);
         console.log(`deleteUserById : Error when tried to delete user with id ${userid}`);
+    }
+}
+
+exports.createTaskAccomplishmentsEntry = async (taskId, userId, calendarWeek, year) => {
+    try {
+        let queryText = `INSERT INTO ${TABLE_TASK_ACCOMPLISHMENTS} (task_id,user_id,calendar_week,year) VALUES ($1,$2,$3,$4);`
+        let queryValues = [taskId, userId, calendarWeek, year];
+        await pool.query(queryText, queryValues);
+        console.log(`createTaskAccomplishmentsEntry : Added row(${taskId},${userId},${calendarWeek},${year}`);
+    }
+    catch (e) {
+        console.log(e);
+        console.log(`createTaskAccomplishmentsEntry : Error when tried to add row(${taskId},${userId},${calendarWeek},${year}`);
+    }
+}
+
+exports.getTaskAccomplishmentsYears = async () => {
+    try {
+        let { rows } = await pool.query(`SELECT DISTINCT year FROM ${TABLE_TASK_ACCOMPLISHMENTS};`);
+        console.log(`getTaskAccomplishmentsYears : Select all distinct years in ${TABLE_TASK_ACCOMPLISHMENTS}`);
+        return rows;
+    }
+    catch (e) {
+        console.log(e);
+        console.log(`getTaskAccomplishmentsYears : Error when tried to select all distinct years in ${TABLE_TASK_ACCOMPLISHMENTS}`);
+    }
+}
+
+exports.getTaskAccomplishmentsLatestCalendarWeekOfYear = async (year) => {
+    try {
+        let queryText = `SELECT MAX(calendar_week) FROM ${TABLE_TASK_ACCOMPLISHMENTS} WHERE year = $1;`;
+        let queryValues = [year];
+        let { rows } = await pool.query(queryText, queryValues);
+        console.log(`getTaskAccomplishmentsCalendarWeekRangeOfYear : Select latest calendar_week of year ${year} in ${TABLE_TASK_ACCOMPLISHMENTS}`);
+        return rows;
+    }
+    catch (e) {
+        console.log(e);
+        console.log(`getTaskAccomplishmentsCalendarWeekRangeOfYear : Error when tried to select latest calendar_week of year ${year} in ${TABLE_TASK_ACCOMPLISHMENTS}`);
+    }
+}
+
+exports.getDistinctTaskAccomplishmentsInCalendarWeekRangeOfYear = async (start, end, year) => {
+    try {
+        let queryText = `SELECT DISTINCT task_id FROM ${TABLE_TASK_ACCOMPLISHMENTS} WHERE calendar_week >= $1 AND calendar_week <= $2 AND year = $3;`;
+        let queryValues = [start, end, year];
+        let { rows } = await pool.query(queryText, queryValues);
+        console.log(`getDistinctTaskAccomplishmentsInCalendarWeekRangeOfYear : Select all distinct tasks in ${TABLE_TASK_ACCOMPLISHMENTS} taht occur in year ${year} from calendar week ${start} to ${end}`);
+        return rows;
+    }
+    catch (e) {
+        console.log(e);
+        console.log(`getDistinctTaskAccomplishmentsInCalendarWeekRangeOfYear : Error when tried to select all distinct tasks in ${TABLE_TASK_ACCOMPLISHMENTS} taht occur in year ${year} from calendar week ${start} to ${end}`);
+    }
+}
+
+exports.getTaskAccomplishmentsEntriesInCalendarWeekRangeOfYear = async (start, end, year) => {
+    try {
+        let queryText = `SELECT * FROM ${TABLE_TASK_ACCOMPLISHMENTS} WHERE calendar_week >= $1 AND calendar_week <= $2 AND year = $3;`;
+        let queryValues = [start, end, year];
+        let { rows } = await pool.query(queryText, queryValues);
+        console.log(`getDistinctTaskAccomplishmentsInCalendarWeekRangeOfYear : Select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year} from calendar week ${start} to ${end}`);
+        return rows;
+    }
+    catch (e) {
+        console.log(e);
+        console.log(`getDistinctTaskAccomplishmentsInCalendarWeekRangeOfYear : Error when tried to select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year} from calendar week ${start} to ${end}`);
+    }
+}
+
+exports.getAllTaskAccomplishmentsEntriesInYear = async (year) => {
+    try {
+        let queryText = `SELECT calendar_week, user_id, SUM(score) as score_sum FROM 
+        (SELECT * , (SELECT score FROM ${TABLE_TASKS} AS t WHERE t.id = ta.task_id) AS score FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS ta) AS ta_with_score
+        WHERE year = $1 GROUP BY calendar_week,user_id ORDER BY calendar_week;`;
+        let queryValues = [year];
+        let { rows } = await pool.query(queryText, queryValues);
+        console.log(`getTaskAccomplishmentsEntriesInYear : Select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} + Score that occur in year ${year}`);
+        return rows;
+    }
+    catch (e) {
+        console.log(e);
+        console.log(`getDistinctTaskAccomplishmentsInCalendarWeekRangeOfYear : Error when tried to select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} + Score`);
     }
 }
 

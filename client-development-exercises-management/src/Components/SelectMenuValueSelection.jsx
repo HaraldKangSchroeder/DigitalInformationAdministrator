@@ -40,7 +40,7 @@ export function SelectMenuValueSelection(props) {
                 {
                     props.menuItems.map(menuItem => {
                         return (
-                            <MenuItem value={menuItem.value}>{menuItem.label}</MenuItem>
+                            <MenuItem value={menuItem.value || menuItem}>{menuItem.label || menuItem}</MenuItem>
                         );
                     })
                 }

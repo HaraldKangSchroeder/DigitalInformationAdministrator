@@ -28,30 +28,17 @@ for(let i = 0; i<=54; i++){
 }
 
 export function ChartHeader(props){
-    const [selectedTaskIds, setSelectedTaskIds] = useState([]);
-    const [tasks,setTasks] = useState([]);
+    
 
-    useEffect(() => {
-        socket.on("allActiveTasks", (res) => {
-            setTasks(res.tasks);
-        });
-        socket.emit("getAllActiveTasks");
-
-        return () => {
-            socket.off("allActiveTasks");
-        }
-    },[])
-
-    console.log(selectedTaskIds);
     const classes = useStyles();
     return (
         <div className = {classes.root}>
             Scores of
-            <MultipleSelectMenuValueSelection
+            {/* <MultipleSelectMenuValueSelection
                 tasks={tasks}
                 selectedTaskIds={selectedTaskIds}
                 changeSelectedTaskIds={setSelectedTaskIds}
-            />
+            /> */}
             per Calender Week from
             <SelectMenuValueSelection 
                 value={props.calendarWeekStart}
@@ -60,8 +47,8 @@ export function ChartHeader(props){
                 height={10}
                 marginSide={10}
                 handleChange={props.changeCalendarWeekStart}
-                menuItems={CALENDAR_WEEKS}
-                noNone={true}
+                menuItems={props.calendarWeeks}
+                // noNone={true}
             />
             to 
             <SelectMenuValueSelection 
@@ -71,11 +58,11 @@ export function ChartHeader(props){
                 height={10}
                 marginSide={10}
                 handleChange={props.changeCalendarWeekEnd}
-                menuItems={CALENDAR_WEEKS}
-                noNone={true}
+                menuItems={props.calendarWeeks}
+                // noNone={true}
             />
             of Year
-            <SelectMenuValueSelection 
+            {/* <SelectMenuValueSelection 
                 value={props.year}
                 label={"Year"}
                 minWidth={100}
@@ -83,7 +70,7 @@ export function ChartHeader(props){
                 marginSide={10}
                 menuItems={[{value:"2021",label:"2021"}]}
                 noNone={true}
-            />
+            /> */}
         </div>
     )
 }

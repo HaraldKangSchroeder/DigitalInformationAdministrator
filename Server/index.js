@@ -165,6 +165,16 @@ io.on("connection", (socket) => {
         let users = await tasksDatabaseManager.getAllUsers();
         socket.emit("allUsers", {users:users});
     })
+
+    socket.on('GetTaskAccomplishmentsYears', async () => {
+        let years = await tasksDatabaseManager.getTaskAccomplishmentsYears();
+        socket.emit("TaskAccomplishmentsYears", {years : years});
+    });
+
+    socket.on('GetTaskAccomplishmentsEntriesInYear', async ({year}) => {
+        let data = await tasksDatabaseManager.getAllTaskAccomplishmentsEntriesInYear(year);
+        socket.emit("TaskAccomplishmentsEntriesInYear",{data: data});
+    });
 });
 
 

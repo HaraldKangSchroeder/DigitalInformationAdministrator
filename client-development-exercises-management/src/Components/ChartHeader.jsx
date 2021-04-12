@@ -1,6 +1,5 @@
 import { makeStyles } from "@material-ui/core"
 import {SelectMenuValueSelection} from "./SelectMenuValueSelection";
-import {X_AXIS_LABEL_DATA} from "../constants";
 import socket from "../socket";
 import { useEffect } from "react";
 import React, { useState } from "react";
@@ -77,12 +76,12 @@ export function ChartHeader(props){
             />
             of Year
             <SelectMenuValueSelection 
-                value={""}
+                value={props.year}
                 label={"Year"}
                 minWidth={100}
                 height={10}
                 marginSide={10}
-                menuItems={X_AXIS_LABEL_DATA}
+                menuItems={[{value:"2021",label:"2021"}]}
                 noNone={true}
             />
         </div>

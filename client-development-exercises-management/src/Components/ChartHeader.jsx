@@ -33,11 +33,14 @@ export function ChartHeader(props){
 
     useEffect(() => {
         socket.on("allTasks", (res) => {
-            res.tasks = [{id:-1,label:"All"}].concat(res.tasks);
-            console.log(res.tasks);
-            setTasks(res.tasks);
+            let tasksTemp = [{id:-1,label:"All"}].concat(res.tasks);
+            setTasks(tasksTemp);
         });
         socket.emit("getAllTasks");
+
+        return () => {
+            socket.off("allTasks");
+        }
     },[])
 
     return (

@@ -19,7 +19,6 @@ const useStyles = makeStyles({
 
 export function SelectMenuValueSelection(props) {
     const classes = useStyles(props);
-    console.log(props);
 
     return (
         <FormControl

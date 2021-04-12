@@ -20,6 +20,12 @@ export function TaskManager() {
             setTasks(res.tasks);
         });
         socket.emit("getAllTasks");
+
+        // remove listening on this specific event when leaving this page. else, it will just add one more listener when mounting again which
+        // would result in multiple setTasks invocations
+        return () => {
+            socket.off("allTasks");
+        }
     }, [])
 
     const changeSelectedTaskId = (taskId) => {

@@ -8,6 +8,15 @@ function getTaskById(tasks, id) {
     return null;
 }
 
+export function getTaskLabelById(tasks,id){
+    for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === id) {
+            return tasks[i].label;
+        }
+    }
+    return id;
+}
+
 
 export function getUserById(users, id){
     for (let i = 0; i < users.length; i++) {
@@ -25,6 +34,16 @@ export function getTaskLabelsByIds(tasks,ids){
         if(task != null) labels.push(task.label);
     }
     return labels;
+}
+
+export function getIntersection(arr1,arr2){
+    let intersection = [];
+    for(let i = 0; i < arr1.length; i++){
+        if(arr2.includes(arr1[i])){
+            intersection.push(arr1[i]);
+        }
+    }
+    return intersection;
 }
 
 export {getTaskById}

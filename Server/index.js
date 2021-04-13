@@ -44,6 +44,12 @@ io.on("connection", (socket) => {
         logDivider();
     });
 
+    socket.on('GetAllTasks', async () => {
+        let tasks = await tasksDatabaseManager.getAllTasks();
+        socket.emit('AllTasks', {tasks:tasks});
+        logDivider();
+    });
+
     socket.on('getTaskOccurences', async (data) => {
         let taskOccurences = await tasksDatabaseManager.getTaskOccurences(data.taskId);
         socket.emit('taskOccurences',taskOccurences);
@@ -171,9 +177,14 @@ io.on("connection", (socket) => {
         socket.emit("TaskAccomplishmentsYears", {years : years});
     });
 
-    socket.on('GetTaskAccomplishmentsEntriesInYear', async ({year}) => {
-        let data = await tasksDatabaseManager.getAllTaskAccomplishmentsEntriesInYear(year);
+    socket.on('GetTaskAccomplishmentsEntriesInYear', async ({year,taskIds}) => {
+        let data = await tasksDatabaseManager.getAllTaskAccomplishmentsEntriesInYear(year,taskIds);
         socket.emit("TaskAccomplishmentsEntriesInYear",{data: data});
+    });
+
+    socket.on('GetTaskAccomplishmentsIdsInYear', async ({year}) => {
+        let ids = await tasksDatabaseManager.getTaskAccomplishmentsIdsInYear(year);
+        socket.emit("TaskAccomplishmentsIdsInYear", {ids:ids});
     });
 });
 

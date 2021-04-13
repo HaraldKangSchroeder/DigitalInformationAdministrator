@@ -34,11 +34,11 @@ export function ChartHeader(props){
     return (
         <div className = {classes.root}>
             Scores of
-            {/* <MultipleSelectMenuValueSelection
-                tasks={tasks}
-                selectedTaskIds={selectedTaskIds}
-                changeSelectedTaskIds={setSelectedTaskIds}
-            /> */}
+            <MultipleSelectMenuValueSelection
+                taskIds={props.taskIdsInYear}
+                selectedTaskIds={props.selectedTaskIds}
+                changeSelectedTaskIds={props.changeSelectedTaskIds}
+            />
             per Calender Week from
             <SelectMenuValueSelection 
                 value={props.calendarWeekStart}

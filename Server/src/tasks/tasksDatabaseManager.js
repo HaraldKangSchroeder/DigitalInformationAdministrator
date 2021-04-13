@@ -179,6 +179,19 @@ exports.deleteAllWeeksOfTask = async (taskId) => {
 exports.getAllActiveTasks = async () => {
     try {
         let { rows } = await pool.query(`SELECT * FROM ${TABLE_TASKS} WHERE active IS TRUE ORDER BY label;`);
+        console.log(`getAllActiveTasks : get all active tasks ${TABLE_TASKS}`);
+        return rows;
+    }
+    catch (e) {
+        console.log(e);
+        console.log(`getAllActiveTasks : Error when tried to access all active tasks in ${TABLE_TASKS}`);
+        return null;
+    }
+}
+
+exports.getAllTasks = async () => {
+    try {
+        let { rows } = await pool.query(`SELECT * FROM ${TABLE_TASKS} ORDER BY label;`);
         console.log(`getAllTasks : get all tasks ${TABLE_TASKS}`);
         return rows;
     }
@@ -201,6 +214,7 @@ exports.getTaskOccurences = async (taskId) => {
         return null;
     }
 }
+
 
 exports.getTasksOfCurrentWeek = async (currentWeek) => {
     // access weekly-tasks table and get all entries of the currentWeek
@@ -316,15 +330,25 @@ exports.getTaskAccomplishmentsEntriesInCalendarWeekRangeOfYear = async (start, e
     }
 }
 
-exports.getAllTaskAccomplishmentsEntriesInYear = async (year) => {
+exports.getAllTaskAccomplishmentsEntriesInYear = async (year, taskIds) => {
     try {
+        if (taskIds.length === 0) {
+            let queryText = `SELECT calendar_week, user_id, SUM(score) as score_sum FROM 
+            (SELECT * , (SELECT score FROM ${TABLE_TASKS} AS t WHERE t.id = ta.task_id) AS score FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS ta) AS ta_with_score
+            WHERE year = $1 GROUP BY calendar_week,user_id ORDER BY calendar_week;`;
+            let queryValues = [year];
+            let { rows } = await pool.query(queryText, queryValues);
+            console.log(`getTaskAccomplishmentsEntriesInYear : Select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} + Score that occur in year ${year}`);
+            return rows;
+        }
         let queryText = `SELECT calendar_week, user_id, SUM(score) as score_sum FROM 
-        (SELECT * , (SELECT score FROM ${TABLE_TASKS} AS t WHERE t.id = ta.task_id) AS score FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS ta) AS ta_with_score
-        WHERE year = $1 GROUP BY calendar_week,user_id ORDER BY calendar_week;`;
-        let queryValues = [year];
+            (SELECT * , (SELECT score FROM ${TABLE_TASKS} AS t WHERE t.id = ta.task_id) AS score FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS ta) AS ta_with_score
+            WHERE year = $1 AND task_id = ANY($2) GROUP BY calendar_week,user_id ORDER BY calendar_week;`;
+        let queryValues = [year, taskIds];
         let { rows } = await pool.query(queryText, queryValues);
         console.log(`getTaskAccomplishmentsEntriesInYear : Select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} + Score that occur in year ${year}`);
         return rows;
+
     }
     catch (e) {
         console.log(e);
@@ -332,4 +356,17 @@ exports.getAllTaskAccomplishmentsEntriesInYear = async (year) => {
     }
 }
 
+exports.getTaskAccomplishmentsIdsInYear = async (year) => {
+    try {
+        let queryText = `SELECT DISTINCT task_id FROM ${TABLE_TASK_ACCOMPLISHMENTS} WHERE year = $1 ORDER BY task_id;`;
+        let queryValues = [year];
+        let { rows } = await pool.query(queryText, queryValues);
+        console.log(`getTaskAccomplishmentsIdsInYear : Select all task_ids in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year}`);
+        return rows;
+    }
+    catch (e) {
+        console.log(e);
+        console.log(`getTaskAccomplishmentsIdsInYear : Error when tried to select all task_ids in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year}`);
+    }
+}
 

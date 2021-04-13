@@ -1,11 +1,10 @@
-import { makeStyles, useScrollTrigger } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { Line } from 'react-chartjs-2';
 import { ChartHeader } from "./ChartHeader";
-import { getUserById } from "../utils";
+import { getUserById ,getIntersection} from "../utils";
 import socket from "../socket";
-import { CompassCalibrationOutlined, SettingsInputAntennaTwoTone } from "@material-ui/icons";
 
 
 const COLORS = [
@@ -31,11 +30,13 @@ const useStyles = makeStyles({
 })
 
 export function UserCharts(props) {
-    const [dataset, setDataset] = useState(null);
+    const [dataset, setDataset] = useState([]);
     const [visualizationData, setVisualizationData] = useState({});
     const [calendarWeekData,setCalendarWeekData] = useState({start:0, end:0, latest:0})
     const [year, setYear] = useState(0);
     const [years, setYears] = useState([]);
+    const [taskIdsInYear, setTaskIdsInYear] = useState([]);
+    const [selectedTaskIds, setSelectedTaskIds] = useState([]);
 
 
     useEffect(() => {
@@ -52,6 +53,16 @@ export function UserCharts(props) {
             console.log("data:");
             console.log(data);
             setDataset(data);
+        })
+
+        socket.on("TaskAccomplishmentsIdsInYear", ({ids}) => {
+            console.log(ids);
+            let idsArray = [];
+            for(let idElement of ids){
+                idsArray.push(idElement.task_id);
+            }
+            console.log(idsArray);
+            setTaskIdsInYear(idsArray);
         })
         
 
@@ -75,18 +86,33 @@ export function UserCharts(props) {
     }, [years])
 
     useEffect(() => {
-        if(year == null) return;
-        socket.emit("GetTaskAccomplishmentsEntriesInYear", {year:year});
+        if(year === 0) return;
+        socket.emit("GetTaskAccomplishmentsIdsInYear", {year:year});
+        // socket.emit("GetTaskAccomplishmentsEntriesInYear", {year:year});
     }, [year])
 
     useEffect(() => {
-        if(dataset == null) return;
+        let taskIdsIntersection = getIntersection(selectedTaskIds,taskIdsInYear);
+        console.log("ITERNSECTION");
+        console.log(selectedTaskIds);
+        console.log(taskIdsInYear);
+        console.log(taskIdsIntersection);
+        setSelectedTaskIds(taskIdsIntersection);
+    }, [taskIdsInYear])
+
+    useEffect(() => {
+        console.log(selectedTaskIds);
+        socket.emit("GetTaskAccomplishmentsEntriesInYear", {year:year, taskIds:selectedTaskIds});
+    }, [selectedTaskIds])
+
+    useEffect(() => {
+        if(dataset.length === 0) return;
         console.log(dataset);
         let latestCalendarWeek = dataset[dataset.length - 1].calendar_week;
         console.log(latestCalendarWeek);
         setCalendarWeekData({
             ...calendarWeekData,
-            end:latestCalendarWeek,
+            end: calendarWeekData.end === 0 || calendarWeekData.end >= latestCalendarWeek ? latestCalendarWeek : calendarWeekData.end,
             latest:latestCalendarWeek
         });
     }, [dataset])
@@ -118,6 +144,12 @@ export function UserCharts(props) {
     const handleChangeYear = (e) => {
         setYear(e.target.value);
     }
+
+    const handleChangeSelectedTaskids = (e) => {
+        console.log("HANDLE CHANGE SELECTED TASK IDS");
+        console.log(e)
+        setSelectedTaskIds(e);
+    }
     
 
     const classes = useStyles();
@@ -132,6 +164,9 @@ export function UserCharts(props) {
                 changeYear={handleChangeYear}
                 year={year}
                 years={years}
+                taskIdsInYear={taskIdsInYear}
+                selectedTaskIds={selectedTaskIds}
+                changeSelectedTaskIds={handleChangeSelectedTaskids}
             />
             <div className={classes.graph}>
                 <Line

@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useEffect } from "react";
 import { Line } from 'react-chartjs-2';
 import { ChartHeader } from "./ChartHeader";
@@ -210,10 +210,18 @@ function getVisualizationData(selectedUserIds, users, globalDataset, calendarWee
 
 function getUserVisualizationData(user, globalDataset, calendarWeekStart,calendarWeekEnd){
     let data = [];
-    for(let i = 0; i < globalDataset.length; i++){
-        if(!(globalDataset[i].calendar_week >= calendarWeekStart && globalDataset[i].calendar_week <= calendarWeekEnd && user.id === globalDataset[i].user_id)) continue;
-        data.push(globalDataset[i].score_sum);
+    for(let calendarWeek = calendarWeekStart; calendarWeek <= calendarWeekEnd; calendarWeek++){
+        let entry = getUserEntryInDatasetAtCalendarWeek(globalDataset, calendarWeek, user.id);
+        if(entry == null){
+            data.push(0);
+            continue;
+        } 
+        data.push(entry.score_sum);
     }
+    // for(let i = 0; i < globalDataset.length; i++){
+    //     if(!(globalDataset[i].calendar_week >= calendarWeekStart && globalDataset[i].calendar_week <= calendarWeekEnd && user.id === globalDataset[i].user_id)) continue;
+    //     data.push(globalDataset[i].score_sum);
+    // }
     let color = "rgba(255,0,0,1)";
     return (
         {
@@ -232,6 +240,15 @@ function getUserVisualizationData(user, globalDataset, calendarWeekStart,calenda
             pointBorderColor: color,
         }
     )
+}
+
+function getUserEntryInDatasetAtCalendarWeek(dataset,calendarWeek,userId){
+    for(let i = 0; i < dataset.length; i++){
+        if(dataset[i].calendar_week === calendarWeek && dataset[i].user_id === userId){
+            return dataset[i];
+        }
+    }
+    return null;
 }
 
 

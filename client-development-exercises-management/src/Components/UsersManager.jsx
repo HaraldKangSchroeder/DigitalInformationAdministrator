@@ -5,16 +5,17 @@ import { DialogCreateUser } from "./DialogCreateUser";
 import { UserCharts } from "./UserCharts";
 import Grid from '@material-ui/core/Grid';
 import socket from "../socket.js";
+import Users from "../Classes/Users";
 
 
 function UsersManager() {
-    const [selectedUserIds, setSelectedUserIds] = useState([]);
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState(new Users());
+    const [selectedUsers, setSelectedUsers] = useState(new Users());
 
     useEffect(() => {
         socket.connect();
         socket.on("allUsers", (res) => {
-            setUsers(res.users);
+            setUsers(new Users(res.users));
         });
         socket.emit("getAllUsers");
 
@@ -23,25 +24,26 @@ function UsersManager() {
         }
     }, [])
 
-    const changeSelectedUserIds = (userId) => {
-        let selectedUserIdsCopy = [...selectedUserIds];
-        if (selectedUserIds.includes(userId)) {
-            let index = selectedUserIdsCopy.indexOf(userId);
-            selectedUserIdsCopy.splice(index, 1);
-            setSelectedUserIds(selectedUserIdsCopy);
+    const changeSelectedUserById = (id) => {
+        let selectedUsersCopy = selectedUsers.getCopy();
+        if(selectedUsersCopy.containsUserById(id)){
+            selectedUsersCopy.removeUserById(id);
+            setSelectedUsers(selectedUsersCopy);
             return;
         }
-        selectedUserIdsCopy.push(userId);
-        setSelectedUserIds(selectedUserIdsCopy);
+        let user = users.getUserById(id);
+        selectedUsersCopy.addUser(user);
+        setSelectedUsers(selectedUsersCopy);
     }
 
-    const deleteUserById = () => {
-        if (selectedUserIds.length != 1) return;
-        socket.emit("deleteUser", { id: selectedUserIds[0] });
-        setSelectedUserIds([]);
+    const deleteSelectedUser = () => {
+        if(selectedUsers.containsExactlyOneUser()){
+            let id = selectedUsers.getUserList()[0].getId();
+            socket.emit("deleteUser", { id: id});
+            let selectedUsersCopy = selectedUsers.getCopy();
+            selectedUsersCopy.removeUserById(id);
+        }
     }
-
-    let isOneUserSelected = selectedUserIds.length === 1;
 
     return (
         <React.Fragment>
@@ -50,9 +52,9 @@ function UsersManager() {
                     <Grid item xs={12}>
                         <EntitiesSelection
                             entityType="Users"
-                            entities={users}
-                            selectedEntitiesIds={selectedUserIds}
-                            changeSelectedEntitiesIds={changeSelectedUserIds}
+                            entities={users.getJsonListWithIdAndLabel()}
+                            selectedEntitiesIds={selectedUsers.getUserIds()}
+                            changeSelectedEntitiesIds={changeSelectedUserById}
                         />
                     </Grid>
                     <Grid item xs={4} align="center">
@@ -61,10 +63,10 @@ function UsersManager() {
                     </Grid>
                     <Grid item xs={4} align="center">
                         <DialogEntityDeletion
-                            disabled={!isOneUserSelected}
+                            disabled={!selectedUsers.containsExactlyOneUser()}
                             entityType="User"
-                            entityLabel={isOneUserSelected ? getUserById(users, selectedUserIds[0]).name : ""}
-                            deleteEntity={deleteUserById}
+                            entityLabel={selectedUsers.containsExactlyOneUser() ? selectedUsers.getUserList()[0].getName() : ""}
+                            deleteEntity={deleteSelectedUser}
                         />
                     </Grid>
                     <Grid item xs={4} align="center" />
@@ -72,7 +74,7 @@ function UsersManager() {
                 {/* <Grid item xs={1} spacing={0} /> */}
                 <Grid container item xs={10} >
                     <Grid item xs={12}>
-                        <UserCharts selectedUserIds={selectedUserIds} users={users}/>
+                        <UserCharts selectedUserIds={selectedUsers.getUserIds()} users={users.getJsonListWithIdAndLabel()}/>
                     </Grid>
                 </Grid>
                 {/* <Grid item xs={1} /> */}

@@ -3,10 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
-import { ControlPointSharp, PinDropSharp } from '@material-ui/icons';
 import {getTaskLabelById, getTaskLabelsByIds} from "../utils";
 import socket from "../socket";
 
@@ -34,7 +32,6 @@ export default function MutlipleSelectMenuValueSelection(props) {
     
     useEffect(() => {
         socket.on("AllTasks", ({tasks}) => {
-            console.log(tasks);
             setTasks(tasks);
         });
         socket.emit("GetAllTasks");
@@ -45,7 +42,6 @@ export default function MutlipleSelectMenuValueSelection(props) {
     const handleChange = (event) => {
         props.changeSelectedTaskIds(event.target.value)
     };
-    console.log(props);
     let label = props.selectedTaskIds.length > 0 ? "Selected Tasks" : "All Tasks in year";
     return (
             <FormControl
@@ -60,7 +56,6 @@ export default function MutlipleSelectMenuValueSelection(props) {
                     label={label}
                     onChange={handleChange}
                     renderValue={(selected) => getTaskLabelsByIds(tasks,selected).join(', ')}
-                    // renderValue={(selected) => selected.join(', ')}
                     MenuProps={MenuProps}
                 >
                     {props.taskIds.map((taskId) => (

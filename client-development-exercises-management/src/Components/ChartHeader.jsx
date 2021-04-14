@@ -1,8 +1,6 @@
 import { makeStyles } from "@material-ui/core"
 import {SelectMenuValueSelection} from "./SelectMenuValueSelection";
-import socket from "../socket";
-import { useEffect } from "react";
-import React, { useState } from "react";
+import React from "react";
 import MultipleSelectMenuValueSelection from "./MultipleSelectMenuValueSelection";
 
 
@@ -14,18 +12,9 @@ const useStyles = makeStyles({
         justifyContent:"center",
         alignItems:"center",
         marginTop:"2vh",
-        
-        // background:"red"
     }
 })
 
-const CALENDAR_WEEKS = [
-    
-];
-
-for(let i = 0; i<=54; i++){
-    CALENDAR_WEEKS.push({value:i,label:i});
-}
 
 export function ChartHeader(props){
     

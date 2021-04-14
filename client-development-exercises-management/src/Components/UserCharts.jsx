@@ -43,25 +43,19 @@ export function UserCharts(props) {
         socket.on("TaskAccomplishmentsYears", ({ years }) => {
             let yearsArr = [];
             for (let element of years) yearsArr.push(element.year);
-            console.log("all years are:");
-            console.log(yearsArr);
             setYears(yearsArr);
         });
         
         socket.on("TaskAccomplishmentsEntriesInYear", ({data}) => {
             if(data.length == 0) return;
-            console.log("data:");
-            console.log(data);
             setDataset(data);
         })
 
         socket.on("TaskAccomplishmentsIdsInYear", ({ids}) => {
-            console.log(ids);
             let idsArray = [];
             for(let idElement of ids){
                 idsArray.push(idElement.task_id);
             }
-            console.log(idsArray);
             setTaskIdsInYear(idsArray);
         })
         socket.emit("GetTaskAccomplishmentsYears");
@@ -76,35 +70,26 @@ export function UserCharts(props) {
         let noYearsAvailable = years.length == 0;
         if(noYearsAvailable) return;
         let latestYear = years[years.length - 1];
-        console.log("latest year is " + latestYear);
         setYear(latestYear);
     }, [years])
 
     useEffect(() => {
         if(year === 0) return;
         socket.emit("GetTaskAccomplishmentsIdsInYear", {year:year});
-        // socket.emit("GetTaskAccomplishmentsEntriesInYear", {year:year});
     }, [year])
 
     useEffect(() => {
         let taskIdsIntersection = getIntersection(selectedTaskIds,taskIdsInYear);
-        console.log("ITERNSECTION");
-        console.log(selectedTaskIds);
-        console.log(taskIdsInYear);
-        console.log(taskIdsIntersection);
         setSelectedTaskIds(taskIdsIntersection);
     }, [taskIdsInYear])
 
     useEffect(() => {
-        console.log(selectedTaskIds);
         socket.emit("GetTaskAccomplishmentsEntriesInYear", {year:year, taskIds:selectedTaskIds});
     }, [selectedTaskIds])
 
     useEffect(() => {
         if(dataset.length === 0) return;
-        console.log(dataset);
         let latestCalendarWeek = dataset[dataset.length - 1].calendar_week;
-        console.log(latestCalendarWeek);
         setCalendarWeekData({
             ...calendarWeekData,
             end: calendarWeekData.end === 0 || calendarWeekData.end >= latestCalendarWeek ? latestCalendarWeek : calendarWeekData.end,
@@ -113,12 +98,10 @@ export function UserCharts(props) {
     }, [dataset])
 
     useEffect(() => {
-        console.log(calendarWeekData);
         setVisualizationData(getVisualizationData(props.selectedUsers,dataset,calendarWeekData.start,calendarWeekData.end));
     }, [calendarWeekData,props.selectedUsers]);
 
     useEffect(() => {
-        console.log(visualizationData);
     },[visualizationData])
 
 
@@ -141,8 +124,6 @@ export function UserCharts(props) {
     }
 
     const handleChangeSelectedTaskids = (e) => {
-        console.log("HANDLE CHANGE SELECTED TASK IDS");
-        console.log(e)
         setSelectedTaskIds(e);
     }
     

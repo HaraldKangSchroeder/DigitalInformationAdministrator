@@ -64,17 +64,12 @@ export function UserCharts(props) {
             console.log(idsArray);
             setTaskIdsInYear(idsArray);
         })
-        
-
-
         socket.emit("GetTaskAccomplishmentsYears");
-        //setData(getDatasets(props.selectedUserIds, props.users,null, calendarWeekStart, calendarWeekEnd))
 
         return () => {
             socket.off("TaskAccomplishmentsYears");
             socket.off("TaskAccomplishmentsEntriesInYear");
         }
-        //}, [calendarWeekStart,calendarWeekEnd,props.selectedUserIds, props.users]);
     }, []);
 
     useEffect(() => {
@@ -119,8 +114,8 @@ export function UserCharts(props) {
 
     useEffect(() => {
         console.log(calendarWeekData);
-        setVisualizationData(getVisualizationData(props.selectedUserIds,props.users,dataset,calendarWeekData.start,calendarWeekData.end));
-    }, [calendarWeekData,props.selectedUserIds]);
+        setVisualizationData(getVisualizationData(props.selectedUsers,dataset,calendarWeekData.start,calendarWeekData.end));
+    }, [calendarWeekData,props.selectedUsers]);
 
     useEffect(() => {
         console.log(visualizationData);
@@ -194,15 +189,15 @@ export function UserCharts(props) {
     )
 }
 
-function getVisualizationData(selectedUserIds, users, globalDataset, calendarWeekStart, calendarWeekEnd){
+function getVisualizationData(selectedUsers, globalDataset, calendarWeekStart, calendarWeekEnd){
     let visualizationData = {}
     visualizationData.labels = [];
     for (let calendarWeek = calendarWeekStart; calendarWeek <= calendarWeekEnd; calendarWeek++) {
         visualizationData.labels.push(calendarWeek);
     }
     visualizationData.datasets = [];
-    for (var userId of selectedUserIds) {
-        let userVisualizationData = getUserVisualizationData(getUserById(users,userId),globalDataset,calendarWeekStart,calendarWeekEnd);
+    for (var user of selectedUsers.getUserList()) {
+        let userVisualizationData = getUserVisualizationData(user,globalDataset,calendarWeekStart,calendarWeekEnd);
         visualizationData.datasets.push(userVisualizationData);
     }
     return visualizationData;
@@ -211,21 +206,17 @@ function getVisualizationData(selectedUserIds, users, globalDataset, calendarWee
 function getUserVisualizationData(user, globalDataset, calendarWeekStart,calendarWeekEnd){
     let data = [];
     for(let calendarWeek = calendarWeekStart; calendarWeek <= calendarWeekEnd; calendarWeek++){
-        let entry = getUserEntryInDatasetAtCalendarWeek(globalDataset, calendarWeek, user.id);
+        let entry = getUserEntryInDatasetAtCalendarWeek(globalDataset, calendarWeek, user.getId());
         if(entry == null){
             data.push(0);
             continue;
         } 
         data.push(entry.score_sum);
     }
-    // for(let i = 0; i < globalDataset.length; i++){
-    //     if(!(globalDataset[i].calendar_week >= calendarWeekStart && globalDataset[i].calendar_week <= calendarWeekEnd && user.id === globalDataset[i].user_id)) continue;
-    //     data.push(globalDataset[i].score_sum);
-    // }
     let color = "rgba(255,0,0,1)";
     return (
         {
-            label: user.name,
+            label: user.getName(),
             data: data,
             backgroundColor: [
                 'rgba(255, 255, 255, 0)',

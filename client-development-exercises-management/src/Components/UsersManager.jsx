@@ -74,7 +74,7 @@ function UsersManager() {
                 {/* <Grid item xs={1} spacing={0} /> */}
                 <Grid container item xs={10} >
                     <Grid item xs={12}>
-                        <UserCharts selectedUserIds={selectedUsers.getUserIds()} users={users.getJsonListWithIdAndLabel()}/>
+                        <UserCharts selectedUsers={selectedUsers}/>
                     </Grid>
                 </Grid>
                 {/* <Grid item xs={1} /> */}

@@ -370,3 +370,17 @@ exports.getTaskAccomplishmentsIdsInYear = async (year) => {
     }
 }
 
+exports.getTaskAccomplishmentsInYearOfUsers = async (year) => {
+    try {
+        let queryText = `SELECT * FROM ${TABLE_TASK_ACCOMPLISHMENTS} WHERE year = $1 ORDER BY calendar_week;`;
+        let queryValues = [year];
+        let { rows } = await pool.query(queryText, queryValues);
+        console.log(`getTaskAccomplishmentsInYearOfUsers : Select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year} with respect to the given userIds`);
+        return rows;
+    }
+    catch (e) {
+        console.log(e);
+        console.log(`getTaskAccomplishmentsIdsInYear : Error when tried to select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year} with respect to the given userIds`);
+    }
+}
+

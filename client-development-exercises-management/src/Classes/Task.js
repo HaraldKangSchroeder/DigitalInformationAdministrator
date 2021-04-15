@@ -20,7 +20,7 @@ export default class Task {
         return this.score;
     }
 
-    getImoprtance(){
+    getImportance(){
         return this.importance;
     }
 

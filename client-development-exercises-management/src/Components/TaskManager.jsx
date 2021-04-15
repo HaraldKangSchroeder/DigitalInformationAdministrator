@@ -6,18 +6,16 @@ import { DialogChangeWeeklyRythm } from "./DialogChangeWeeklyRythm";
 import { TaskInformation } from "./TaskInformation";
 import Grid from '@material-ui/core/Grid';
 import socket from "../socket.js";
-import {getTaskById} from "../utils";
-
-const NO_SELECT = -1;
+import Tasks from "../Classes/Tasks";
 
 export function TaskManager() {
-    const [selectedTaskId, setSelectedTaskId] = useState(NO_SELECT);
-    const [tasks, setTasks] = useState([]);
+    const [selectedTask,setSelectedTask] = useState(null);
+    const [tasks, setTasks] = useState(new Tasks());
 
     useEffect(() => {
         socket.connect();
         socket.on("allActiveTasks", (res) => {
-            setTasks(res.tasks);
+            setTasks(new Tasks(res.tasks));
         });
         socket.emit("getAllActiveTasks");
 
@@ -28,22 +26,23 @@ export function TaskManager() {
         }
     }, [])
 
-    const changeSelectedTaskId = (taskId) => {
-        if (taskId === NO_SELECT || selectedTaskId === taskId) {
-            setSelectedTaskId(NO_SELECT);
+    const changeSelectedTaskById = (id) => {
+        if(selectedTask == null || selectedTask.getId() !== id){
+            let newSelectedTask = tasks.getTaskById(id);
+            setSelectedTask(newSelectedTask);
             return;
         }
-        setSelectedTaskId(taskId);
+        setSelectedTask(null);
     }
 
-    const deleteTaskById = () => {
-        if(selectedTaskId === NO_SELECT) return;
-        socket.emit("deleteTask", {id:selectedTaskId});
-        setSelectedTaskId(NO_SELECT)
+    const deleteSelectedTask = () => {
+        if(selectedTask == null) return;
+        socket.emit("deleteTask", {id:selectedTask.getId()});
+        setSelectedTask(null);
     }
 
-    let isTaskSelected = selectedTaskId !== NO_SELECT;
 
+    let isTaskSelected = selectedTask != null;
     return (
         <React.Fragment>
             <Grid container spacing={0} alignItems="flex-start">
@@ -51,9 +50,9 @@ export function TaskManager() {
                     <Grid item xs={12}>
                         <EntitiesSelection
                             entityType="Tasks"
-                            entities={tasks}
-                            selectedEntitiesIds={[selectedTaskId]}
-                            changeSelectedEntitiesIds={changeSelectedTaskId}
+                            entities={tasks.getJsonListWithIdAndLabel()}
+                            selectedEntitiesIds={isTaskSelected ? [selectedTask.getId()] : []}
+                            changeSelectedEntitiesIds={changeSelectedTaskById}
                         />
                     </Grid>
                     <Grid item xs={4} align="center">
@@ -63,16 +62,16 @@ export function TaskManager() {
                         <DialogEntityDeletion
                             disabled={!isTaskSelected}
                             entityType="Task"
-                            entityLabel={isTaskSelected ? getTaskById(tasks, selectedTaskId).label : ""}
-                            deleteEntity={deleteTaskById}
+                            entityLabel={isTaskSelected ? selectedTask.getLabel() : ""}
+                            deleteEntity={deleteSelectedTask}
                         />
                     </Grid>
                     <Grid item xs={4} align="center">
                         <DialogChangeWeeklyRythm
                             disabled={!isTaskSelected}
-                            selectedTaskId={selectedTaskId}
-                            taskLabel={isTaskSelected ? getTaskById(tasks, selectedTaskId).label : ""}
-                            resetSelectedTaskId={() => { setSelectedTaskId(NO_SELECT) }}
+                            selectedTaskId={isTaskSelected ? selectedTask.getId() : -1}
+                            taskLabel={isTaskSelected ? selectedTask.getLabel() : ""}
+                            resetSelectedTaskId={() => { setSelectedTask(null) }}
                         />
                     </Grid>
                 </Grid>
@@ -81,7 +80,7 @@ export function TaskManager() {
 
                 <Grid container item xs={9} spacing={5} justify="space-evenly" style={{ marginTop: "1vh", maxHeight: "93vh", overflowY: "auto" }}>
                     <TaskInformation
-                        selectedTask={getTaskById(tasks, selectedTaskId)}
+                        selectedTask={selectedTask}
                     />
                 </Grid>
 

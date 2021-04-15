@@ -8,6 +8,15 @@ export default class Tasks {
         }
     }
 
+    getJsonListWithIdAndLabel(){
+        let jsonList = [];
+        for(let taskEntry of this.taskList){
+            jsonList.push({id:taskEntry.getId(), label:taskEntry.getLabel()});
+        }
+        return jsonList;
+    }
+
+
     getTaskList(){
         return this.taskList;
     }

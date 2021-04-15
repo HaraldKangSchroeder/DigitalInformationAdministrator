@@ -158,26 +158,6 @@ function getCalendarRowsData(days, calendarWeeks) {
     return rows;
 }
 
-function doesTaskOccurOnCalendarWeekAndDay(taskOccurences, week, day) {
-    for (let i = 0; i < taskOccurences.length; i++) {
-        let isTaskOnSameCalendarWeek = taskOccurences[i].calendar_week === week;
-        let isTaskOnSameDay = taskOccurences[i].day === day;
-        if (isTaskOnSameCalendarWeek && isTaskOnSameDay) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function doesTaskOccurOnCalendarWeek(taskOccurences, week) {
-    for (let i = 0; i < taskOccurences.length; i++) {
-        let isTaskOnSameCalendarWeek = taskOccurences[i].calendar_week === week;
-        if (isTaskOnSameCalendarWeek) {
-            return true;
-        }
-    }
-    return false;
-}
 
 export function TaskCalendar(props) {
 
@@ -251,11 +231,11 @@ export function TaskCalendar(props) {
 }
 
 export function TaskCalendarDayEntry(props) {
-    const [isTaskDay, setIsTaskDay] = useState(props.calendarWeek != null && doesTaskOccurOnCalendarWeekAndDay(props.taskOccurences, props.calendarWeek, props.day));
+    const [isTaskDay, setIsTaskDay] = useState(props.calendarWeek != null && props.taskOccurences.containsWeekAndDay(props.calendarWeek, props.day));
 
     useEffect(() => {
         let isCalendarWeekExistent = props.calendarWeek != null;
-        let isTaskOccurentOnCalendarWeekAndDay = doesTaskOccurOnCalendarWeekAndDay(props.taskOccurences, props.calendarWeek, props.day);
+        let isTaskOccurentOnCalendarWeekAndDay = props.taskOccurences.containsWeekAndDay(props.calendarWeek,props.day);//doesTaskOccurOnCalendarWeekAndDay(props.taskOccurences, props.calendarWeek, props.day);
         setIsTaskDay(isCalendarWeekExistent && isTaskOccurentOnCalendarWeekAndDay);
     }, [props.calendarWeek, props.taskOccurences, props.day]);
 
@@ -286,10 +266,11 @@ export function TaskCalendarEmptyEntry() {
 
 
 export function TaskCalendarWeekEntry(props) {
-    const [isTaskWeek, setIsTaskWeek] = useState(doesTaskOccurOnCalendarWeek(props.taskOccurences, props.calendarWeek));
+    const [isTaskWeek, setIsTaskWeek] = useState(props.taskOccurences.containsWeek(props.calendarWeek));
 
     useEffect(() => {
-        let isTaskOccurentOnCalendarWeek = doesTaskOccurOnCalendarWeek(props.taskOccurences, props.calendarWeek);
+        console.log(props.taskOccurences);
+        let isTaskOccurentOnCalendarWeek = props.taskOccurences.containsWeek(props.calendarWeek);//doesTaskOccurOnCalendarWeek(props.taskOccurences, props.calendarWeek);
         setIsTaskWeek(isTaskOccurentOnCalendarWeek);
     }, [props.taskOccurences, props.calendarWeek]);
 

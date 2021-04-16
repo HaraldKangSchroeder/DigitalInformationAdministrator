@@ -1,4 +1,4 @@
-const tasksDatabaseManager = require("./tasksDatabaseManager");
+const tasksDatabaseManager = require("./databaseManager");
 
 
 const TEST_TASKS = ["Waschen", "Putzen", "Ernten", "Einkaufen"];

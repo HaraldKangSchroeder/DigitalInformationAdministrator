@@ -27,7 +27,7 @@ const useStyles = makeStyles({
     }
 })
 
-export function DialogChangeName(props) {
+export function DialogChangeTaskName(props) {
     const [isDialogOpen,setIsDialogOpen] = useState(false);
     const [newName, setNewName] = useState("");
 
@@ -41,7 +41,7 @@ export function DialogChangeName(props) {
     }
 
     const handleChangeNameSubmit = () => {
-        socket.emit("changeTaskName",{taskId:props.selectedTaskId, newName:newName});
+        socket.emit("changeTaskName",{taskId:props.selectedTask.getId(), newName:newName});
         setNewName("");
         setIsDialogOpen(false);
     }
@@ -66,7 +66,7 @@ export function DialogChangeName(props) {
                 <DialogTitle id="form-dialog-title">Add Task</DialogTitle>
                 <DialogContent>
                     <DialogContentText className={classes.informationText}>
-                        Set a new name for the Task "{props.selectedTaskLabel}"
+                        Set a new name for the Task "{props.selectedTask.getLabel()}"
                     </DialogContentText>
                     <TextField
                         autoFocus

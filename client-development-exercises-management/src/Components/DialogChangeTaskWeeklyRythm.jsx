@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { SelectMenuValueSelection } from './SelectMenuValueSelection';
+import { SelectMenu } from './SelectMenu';
 import { MENU_ITEMS_WEEKLY_RYTHMS, MENU_ITEMS_DAYS} from '../constants';
 import socket from "../socket.js";
 
@@ -26,7 +26,7 @@ const useStyles = makeStyles({
     }
 })
 
-export function DialogChangeWeeklyRythm(props) {
+export function DialogChangeTaskWeeklyRythm(props) {
     const classes = useStyles();
     const [openDialog, setOpenDialog] = useState(false);
     const [state, setState] = useState({
@@ -61,7 +61,7 @@ export function DialogChangeWeeklyRythm(props) {
     }
 
     const handleSubmit = () => {
-        socket.emit("changeTaskWeeklyRythm", {taskId: props.selectedTaskId , ...state});
+        socket.emit("changeTaskWeeklyRythm", {taskId: props.selectedTask.getId() , ...state});
         setState({
             weeklyRythm: "",
             day: "",
@@ -82,7 +82,7 @@ export function DialogChangeWeeklyRythm(props) {
             >
             </Button>
             <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="form-dialog-title" maxWidth={'sm'} fullWidth={true}>
-                <DialogTitle id="form-dialog-title">Change Weekly Rythm of Task "{props.taskLabel}"</DialogTitle>
+                <DialogTitle id="form-dialog-title">Change Weekly Rythm of Task "{props.selectedTask != null ? props.selectedTask.getLabel() : ""}"</DialogTitle>
                 <DialogContent>
                     <DialogContentText className={classes.informationText}>
                         Be careful, changes here will reset the current settings when the task appears. If you dont set anything and press change, all weeks will get removed.
@@ -90,7 +90,7 @@ export function DialogChangeWeeklyRythm(props) {
                     <DialogContentText className={classes.informationText}>
                         Select a rythm indicating on which weeks this Task should appear (starting from current week)
                     </DialogContentText>
-                    <SelectMenuValueSelection
+                    <SelectMenu
                         value={state.weeklyRythm}
                         label={"Weekly Rythm"}
                         menuItems={MENU_ITEMS_WEEKLY_RYTHMS}
@@ -100,7 +100,7 @@ export function DialogChangeWeeklyRythm(props) {
                     <DialogContentText className={classes.informationText}>
                         If the Task is day dependant, you can select the respective day which gets attached to the Task name in the presentation view
                     </DialogContentText>
-                    <SelectMenuValueSelection
+                    <SelectMenu
                         value={state.day}
                         label={"Day"}
                         menuItems={MENU_ITEMS_DAYS}

@@ -8,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import socket from "../socket";
-import {SelectMenuValueSelection} from "./SelectMenuValueSelection";
+import {SelectMenu} from "./SelectMenu";
 
 
 const useStyles = makeStyles({
@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 });
 
 
-export function DialogChangeValue(props) {
+export function DialogChangeTaskValue(props) {
     const [isDialogOpen,setIsDialogOpen] = useState(false);
     const [newValue, setNewValue] = useState("");
 
@@ -46,7 +46,7 @@ export function DialogChangeValue(props) {
     }
 
     const handleSubmit = () => {
-        socket.emit(props.messageId ,{taskId:props.selectedTaskId, newValue:newValue});
+        socket.emit(props.messageId ,{taskId:props.selectedTask.getId(), newValue:newValue});
         setNewValue("");
         setIsDialogOpen(false);
     }
@@ -71,9 +71,9 @@ export function DialogChangeValue(props) {
                 <DialogTitle id="form-dialog-title">Add Task</DialogTitle>
                 <DialogContent>
                     <DialogContentText className={classes.informationText}>
-                        Set a new {props.type} value for the Task "{props.selectedTaskLabel}"
+                        Set a new {props.type} value for the Task "{props.selectedTask.getLabel()}"
                     </DialogContentText>
-                    <SelectMenuValueSelection
+                    <SelectMenu
                         value={newValue}
                         label={props.type}
                         menuItems={props.menuItems}

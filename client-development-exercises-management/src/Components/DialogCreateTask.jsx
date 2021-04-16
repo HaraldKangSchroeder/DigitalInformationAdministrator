@@ -9,7 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { SelectMenuValueSelection} from './SelectMenuValueSelection';
+import { SelectMenu} from './SelectMenu';
 import { MENU_ITEMS_SCORES, MENU_ITEMS_IMPORTANCES, MENU_ITEMS_WEEKLY_RYTHMS, MENU_ITEMS_DAYS, MENU_ITEMS_WEEKLY_OCCURENCES} from '../constants';
 import socket from "../socket.js";
 
@@ -144,7 +144,7 @@ export function DialogCreateTask(props) {
                     <DialogContentText className={classes.informationText}>
                         Choose an importance value. A high value ensure that this Task rather occurs at the top in the presentation view
                     </DialogContentText>
-                    <SelectMenuValueSelection
+                    <SelectMenu
                         value={state.score}
                         label={"Score"}
                         menuItems={MENU_ITEMS_SCORES}
@@ -154,7 +154,7 @@ export function DialogCreateTask(props) {
                     <DialogContentText className={classes.informationText}>
                         Choose a Score value which is obtained after solving this Task
                     </DialogContentText>
-                    <SelectMenuValueSelection
+                    <SelectMenu
                         value={state.importance}
                         label={"Importance"}
                         menuItems={MENU_ITEMS_IMPORTANCES}
@@ -164,7 +164,7 @@ export function DialogCreateTask(props) {
                     <DialogContentText className={classes.informationText}>
                         Optional : If you want the Task to occur more than once for each week, you can adjust the value here respectively
                     </DialogContentText>
-                    <SelectMenuValueSelection
+                    <SelectMenu
                         value={state.weeklyOccurences}
                         label={"Weekly Occurences"}
                         menuItems={MENU_ITEMS_WEEKLY_OCCURENCES}
@@ -175,7 +175,7 @@ export function DialogCreateTask(props) {
                     <DialogContentText className={classes.informationText}>
                         Optional : Select a rythm indicating on which weeks this Task should appear (starting from current week)
                     </DialogContentText>
-                    <SelectMenuValueSelection
+                    <SelectMenu
                         value={state.weeklyRythm}
                         label={"Weekly Rythm"}
                         menuItems={MENU_ITEMS_WEEKLY_RYTHMS}
@@ -185,7 +185,7 @@ export function DialogCreateTask(props) {
                     <DialogContentText className={classes.informationText}>
                         Optional : If the Task is day dependant, you can select the respective day which gets attached to the Task name in the presentation view
                     </DialogContentText>
-                    <SelectMenuValueSelection
+                    <SelectMenu
                         value={state.day}
                         label={"Day"}
                         menuItems={MENU_ITEMS_DAYS}

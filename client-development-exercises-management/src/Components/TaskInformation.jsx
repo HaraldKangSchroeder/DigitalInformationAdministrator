@@ -2,8 +2,8 @@ import { TaskCalendar } from "./TaskCalendar";
 import Grid from '@material-ui/core/Grid';
 import React, { useEffect, useState } from "react";
 import socket from "../socket.js";
-import { DialogChangeName } from "./DialogChangeName";
-import { DialogChangeValue } from "./DialogChangeValue";
+import { DialogChangeTaskName } from "./DialogChangeTaskName";
+import { DialogChangeTaskValue } from "./DialogChangeTaskValue";
 import { MENU_ITEMS_SCORES, MENU_ITEMS_IMPORTANCES, MENU_ITEMS_WEEKLY_OCCURENCES } from '../constants';
 import { makeStyles } from "@material-ui/core";
 import TaskOccurences from "../Classes/TaskOccurences";
@@ -30,7 +30,6 @@ export function TaskInformation(props) {
     useEffect(() => {
         socket.on("taskOccurences", (res) => {
             let newTaskOccurences = new TaskOccurences(res);
-            console.log(newTaskOccurences);
             setTaskOccurences(newTaskOccurences);
         })
         return () => {
@@ -54,45 +53,41 @@ export function TaskInformation(props) {
             <Grid item xs={3}>
                 <div className={classes.text}>
                     Task : {props.selectedTask.getLabel()}
-                    <DialogChangeName
-                        selectedTaskId={props.selectedTask.getId()}
-                        selectedTaskLabel={props.selectedTask.getLabel()}
+                    <DialogChangeTaskName
+                        selectedTask={props.selectedTask}
                     />
                 </div>
             </Grid>
             <Grid item xs={3}>
                 <div className={classes.text}>
                     Weekly Occurences : {props.selectedTask.getWeeklyOccurences()}
-                    <DialogChangeValue
+                    <DialogChangeTaskValue
                         menuItems={MENU_ITEMS_WEEKLY_OCCURENCES}
                         type="Weekly Occurence"
                         messageId="changeTaskWeeklyOccurences"
-                        selectedTaskId={props.selectedTask.getId()}
-                        selectedTaskLabel={props.selectedTask.getLabel()}
+                        selectedTask={props.selectedTask}
                     />
                 </div>
             </Grid>
             <Grid item xs={3}>
                 <div className={classes.text}>
                     Score : {props.selectedTask.getScore()}
-                    <DialogChangeValue
+                    <DialogChangeTaskValue
                         menuItems={MENU_ITEMS_SCORES}
                         type="Score"
                         messageId="changeTaskScore"
-                        selectedTaskId={props.selectedTask.getId()}
-                        selectedTaskLabel={props.selectedTask.getLabel()}
+                        selectedTask={props.selectedTask}
                     />
                 </div>
             </Grid>
             <Grid item xs={3}>
                 <div className={classes.text}>
                     Importance : {props.selectedTask.getImportance()}
-                    <DialogChangeValue
+                    <DialogChangeTaskValue
                         menuItems={MENU_ITEMS_IMPORTANCES}
                         type="Importance"
                         messageId="changeTaskImportance"
-                        selectedTaskId={props.selectedTask.getId()}
-                        selectedTaskLabel={props.selectedTask.getLabel()}
+                        selectedTask={props.selectedTask}
                     />
                 </div>
             </Grid>

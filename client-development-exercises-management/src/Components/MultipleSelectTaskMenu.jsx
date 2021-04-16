@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
-import {getTaskLabelById, getTaskLabelsByIds} from "../utils";
-import socket from "../socket";
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -27,22 +24,14 @@ const MenuProps = {
 };
 
 
-export default function MutlipleSelectMenuValueSelection(props) {
-    const [tasks,setTasks] = useState([])
-    
-    useEffect(() => {
-        socket.on("AllTasks", ({tasks}) => {
-            setTasks(tasks);
-        });
-        socket.emit("GetAllTasks");
-    },[])
-
+export default function MultipleSelectTaskMenu(props) {
     const classes = useStyles();
 
     const handleChange = (event) => {
-        props.changeSelectedTaskIds(event.target.value)
+        let ids = event.target.value;
+        props.changeSelectedTasksByIds(ids);
     };
-    let label = props.selectedTaskIds.length > 0 ? "Selected Tasks" : "All Tasks in year";
+    let label = props.selectedTasks.getTaskList().length > 0 ? "Selected Tasks" : "All Tasks in year";
     return (
             <FormControl
                 size="small"
@@ -52,16 +41,16 @@ export default function MutlipleSelectMenuValueSelection(props) {
                 <InputLabel>{label}</InputLabel>
                 <Select
                     multiple
-                    value={props.selectedTaskIds}
+                    value={props.selectedTasks.getTaskIds()}
                     label={label}
                     onChange={handleChange}
-                    renderValue={(selected) => getTaskLabelsByIds(tasks,selected).join(', ')}
+                    renderValue={(ids) => props.tasks.getTaskLabelsByIds(ids).join(', ')}
                     MenuProps={MenuProps}
                 >
-                    {props.taskIds.map((taskId) => (
-                        <MenuItem key={taskId} value={taskId}>
-                            <Checkbox checked={props.selectedTaskIds.includes(taskId)} />
-                            {getTaskLabelById(tasks,taskId)}
+                    {props.tasks.getTaskList().map((task) => (
+                        <MenuItem key={task.getId()} value={task.getId()}>
+                            <Checkbox checked={props.selectedTasks.containsTaskById(task.getId())} />
+                            {task.getLabel()}
                         </MenuItem>
                     ))}
                 </Select>

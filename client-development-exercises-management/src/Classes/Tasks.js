@@ -16,6 +16,13 @@ export default class Tasks {
         return jsonList;
     }
 
+    getTasksByIds(ids){
+        let newTasks = new Tasks();
+        for(let taskId of ids){
+            newTasks.addTask(this.getTaskById(taskId));
+        }
+        return newTasks;
+    }
 
     getTaskList(){
         return this.taskList;
@@ -36,6 +43,17 @@ export default class Tasks {
             ids.push(task.getId());
         }
         return ids;
+    }
+
+    getTaskLabelsByIds(ids){
+        let labels = [];
+        for(let taskId of ids){
+            let task = this.getTaskById(taskId);
+            if(task != null){
+                labels.push(task.getLabel());
+            }
+        }
+        return labels;
     }
 
     addTask(task){

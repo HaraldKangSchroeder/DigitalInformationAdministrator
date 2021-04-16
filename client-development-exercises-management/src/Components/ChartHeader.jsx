@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core"
-import {SelectMenuValueSelection} from "./SelectMenuValueSelection";
+import {SelectMenu} from "./SelectMenu";
 import React from "react";
-import MultipleSelectMenuValueSelection from "./MultipleSelectMenuValueSelection";
+import MultipleSelectTaskMenu from "./MultipleSelectTaskMenu";
 
 
 const useStyles = makeStyles({
@@ -23,13 +23,13 @@ export function ChartHeader(props){
     return (
         <div className = {classes.root}>
             Scores of
-            <MultipleSelectMenuValueSelection
-                taskIds={props.taskIdsInYear}
-                selectedTaskIds={props.selectedTaskIds}
-                changeSelectedTaskIds={props.changeSelectedTaskIds}
+            <MultipleSelectTaskMenu
+                tasks={props.tasks}
+                selectedTasks={props.selectedTasks}
+                changeSelectedTasksByIds={props.changeSelectedTasksByIds}
             />
             per Calender Week from
-            <SelectMenuValueSelection 
+            <SelectMenu 
                 value={props.calendarWeekStart}
                 label={"CW"}
                 minWidth={80}
@@ -40,7 +40,7 @@ export function ChartHeader(props){
                 noNone={true}
             />
             to 
-            <SelectMenuValueSelection 
+            <SelectMenu 
                 value={props.calendarWeekEnd}
                 label={"CW"}
                 minWidth={80}
@@ -51,7 +51,7 @@ export function ChartHeader(props){
                 noNone={true}
             />
             of Year
-            <SelectMenuValueSelection 
+            <SelectMenu 
                 value={props.year}
                 label={"Year"}
                 minWidth={80}

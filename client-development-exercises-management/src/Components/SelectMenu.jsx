@@ -16,7 +16,7 @@ const useStyles = makeStyles({
 })
 
 
-export function SelectMenuValueSelection(props) {
+export function SelectMenu(props) {
     const classes = useStyles(props);
 
     return (

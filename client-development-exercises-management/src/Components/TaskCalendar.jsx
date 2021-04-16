@@ -79,6 +79,7 @@ const useStyle = makeStyles({
 
 const CALENDAR_ROWS = 6;
 const CALENDAR_COLUMNS = 7;
+const NUM_MONTHS = 12;
 
 const MONTHS = [
     "JANUARY",
@@ -96,35 +97,35 @@ const MONTHS = [
 ];
 
 const currentYear = (new Date()).getFullYear();
-const daysInYear = getDaysInYearPerMonth(currentYear);
-const calendarWeeksInYear = getCalendarWeeksInYearPerMonth(currentYear);
+const datesInYearPerMonth = getDatesInYearPerMonth(currentYear);
+const calendarWeeksInYearPerMonth = getCalendarWeeksInYearPerMonth(currentYear);
 
 
 function getCalendarWeeksInYearPerMonth(year) {
-    let calendarWeeksInYear = [];
-    for (let month = 0; month < 12; month++) {
+    let calendarWeeksInYearPerMonth = [];
+    for (let month = 0; month < NUM_MONTHS; month++) {
         let calendarWeeksInMonth = [];
-        let daysInMonth = getDaysInMonth(year, month);
-        daysInMonth.forEach(day => {
-            let calendarWeek = getWeekNumber(day);
+        let datesInMonth = getDatesInMonth(year, month);
+        datesInMonth.forEach(date => {
+            let calendarWeek = getWeekNumberByDate(date);
             if (!calendarWeeksInMonth.includes(calendarWeek)) {
                 calendarWeeksInMonth.push(calendarWeek);
             }
         })
-        calendarWeeksInYear[month] = calendarWeeksInMonth;
+        calendarWeeksInYearPerMonth[month] = calendarWeeksInMonth;
     }
-    return calendarWeeksInYear;
+    return calendarWeeksInYearPerMonth;
 }
 
-function getDaysInYearPerMonth(year) {
-    let daysInYear = [];
+function getDatesInYearPerMonth(year) {
+    let datesInYearPerMonth = [];
     for (let month = 0; month < 12; month++) {
-        daysInYear[month] = getDaysInMonth(year, month);
+        datesInYearPerMonth[month] = getDatesInMonth(year, month);
     }
-    return daysInYear;
+    return datesInYearPerMonth;
 }
 
-function getDaysInMonth(year, month) {
+function getDatesInMonth(year, month) {
     var date = new Date(year, month, 1);
     var days = [];
     while (date.getMonth() === month) {
@@ -135,7 +136,7 @@ function getDaysInMonth(year, month) {
 }
 
 
-function getWeekNumber(d) {
+function getWeekNumberByDate(d) {
     var onejan = new Date(d.getFullYear(), 0, 1);
     var millisecsInDay = 86400000;
     return Math.ceil((((d - onejan) / millisecsInDay) + onejan.getDay() + 1) / 7);
@@ -162,9 +163,9 @@ function getCalendarRowsData(days, calendarWeeks) {
 export function TaskCalendar(props) {
 
     const classes = useStyle();
-    let daysInMonth = daysInYear[props.month];
-    let calendarWeeksInMonth = calendarWeeksInYear[props.month];
-    let calendarRowsData = getCalendarRowsData(daysInMonth, calendarWeeksInMonth);
+    let datesInMonth = datesInYearPerMonth[props.month];
+    let calendarWeeksInMonth = calendarWeeksInYearPerMonth[props.month];
+    let calendarRowsData = getCalendarRowsData(datesInMonth, calendarWeeksInMonth);
 
     return (
         <Paper className={classes.tableContainer} elevation={10}>
@@ -269,7 +270,7 @@ export function TaskCalendarWeekEntry(props) {
     const [isTaskWeek, setIsTaskWeek] = useState(props.taskOccurences.containsWeek(props.calendarWeek));
 
     useEffect(() => {
-        console.log(props.taskOccurences);
+        //console.log(props.taskOccurences);
         let isTaskOccurentOnCalendarWeek = props.taskOccurences.containsWeek(props.calendarWeek);//doesTaskOccurOnCalendarWeek(props.taskOccurences, props.calendarWeek);
         setIsTaskWeek(isTaskOccurentOnCalendarWeek);
     }, [props.taskOccurences, props.calendarWeek]);

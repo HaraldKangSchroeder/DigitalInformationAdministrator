@@ -2,7 +2,7 @@ import React , { useEffect, useState } from "react";
 import { EntitiesSelection } from "./EntitiesSelection";
 import { DialogEntityDeletion } from "./DialogEntityDeletion";
 import { DialogCreateTask } from "./DialogCreateTask";
-import { DialogChangeWeeklyRythm } from "./DialogChangeWeeklyRythm";
+import { DialogChangeTaskWeeklyRythm } from "./DialogChangeTaskWeeklyRythm";
 import { TaskInformation } from "./TaskInformation";
 import Grid from '@material-ui/core/Grid';
 import socket from "../socket.js";
@@ -25,6 +25,13 @@ export function TaskManager() {
             socket.off("allActiveTasks");
         }
     }, [])
+
+    useEffect(() => {
+        if(selectedTask != null){
+            // get new version of the currently selected Task that came in with the latest server response
+            setSelectedTask(tasks.getTaskById(selectedTask.getId()));
+        }
+    }, [tasks])
 
     const changeSelectedTaskById = (id) => {
         if(selectedTask == null || selectedTask.getId() !== id){
@@ -67,11 +74,9 @@ export function TaskManager() {
                         />
                     </Grid>
                     <Grid item xs={4} align="center">
-                        <DialogChangeWeeklyRythm
+                        <DialogChangeTaskWeeklyRythm
                             disabled={!isTaskSelected}
-                            selectedTaskId={isTaskSelected ? selectedTask.getId() : -1}
-                            taskLabel={isTaskSelected ? selectedTask.getLabel() : ""}
-                            resetSelectedTaskId={() => { setSelectedTask(null) }}
+                            selectedTask={selectedTask}
                         />
                     </Grid>
                 </Grid>

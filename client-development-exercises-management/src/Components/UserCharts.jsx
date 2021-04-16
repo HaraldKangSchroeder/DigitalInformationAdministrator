@@ -19,6 +19,14 @@ const COLORS = [
     'rgba(100, 0, 0,1)',
 ]
 
+const VISUALIZATION_MODE_NORMAL = "normal";
+const VISUALIZATION_MODE_ACCUMULATED = "accumulated";
+
+const VISUALIZATION_MODES = [
+    VISUALIZATION_MODE_NORMAL,
+    VISUALIZATION_MODE_ACCUMULATED
+];
+
 const useStyles = makeStyles({
     graph: {
         marginTop: "3vh",
@@ -37,6 +45,7 @@ export function UserCharts(props) {
     const [years, setYears] = useState([]);
     const [calendarWeekRange,setCalendarWeekRange] = useState({start:0,end:0});
     const [visualizationData, setVisualizationData] = useState({});
+    const [visualizationMode, setVisualizationMode] = useState(VISUALIZATION_MODES[0]);
 
     useEffect(() => {
         socket.on("taskAccomplishmentsYears", ({ years }) => {
@@ -91,9 +100,9 @@ export function UserCharts(props) {
     }, [taskAccomplishments]);
 
     useEffect(() => {
-        let visualizationData = getVisualizationData(props.selectedUsers, tasks, selectedTasks, taskAccomplishments, calendarWeekRange.start, calendarWeekRange.end);
+        let visualizationData = getVisualizationData(props.selectedUsers, tasks, selectedTasks, taskAccomplishments, calendarWeekRange.start, calendarWeekRange.end, visualizationMode);
         setVisualizationData(visualizationData);
-    }, [calendarWeekRange,props.selectedUsers, selectedTasks]);
+    }, [calendarWeekRange,props.selectedUsers, selectedTasks, visualizationMode]);
 
 
 
@@ -122,6 +131,11 @@ export function UserCharts(props) {
         }
         setSelectedTasks(newSelectedTasks);
     }
+
+    const handleChangeVisualizationMode = (e) => {
+        console.log(e.target.value);
+        setVisualizationMode(e.target.value);
+    }
     
 
     const classes = useStyles();
@@ -140,6 +154,9 @@ export function UserCharts(props) {
                 tasks={tasksInCalendarWeekRange}
                 selectedTasks={selectedTasks}
                 changeSelectedTasksByIds={handleChangeSelectedTasksByIds}
+                selectedVisualizationMode={visualizationMode}
+                visualizationModes={VISUALIZATION_MODES}
+                changeVisualizationMode={handleChangeVisualizationMode}
             />
             <div className={classes.graph}>
                 <Line
@@ -167,7 +184,7 @@ export function UserCharts(props) {
     )
 }
 
-function getVisualizationData(users, tasks, selectedTasks, taskAccomplishments, calendarWeekStart, calendarWeekEnd){
+function getVisualizationData(users, tasks, selectedTasks, taskAccomplishments, calendarWeekStart, calendarWeekEnd, visualizationMode){
     let visualizationData = {}
     visualizationData.labels = [];
     for (let calendarWeek = calendarWeekStart; calendarWeek <= calendarWeekEnd; calendarWeek++) {
@@ -175,18 +192,43 @@ function getVisualizationData(users, tasks, selectedTasks, taskAccomplishments, 
     }
     visualizationData.datasets = [];
     for (let user of users.getUserList()) {
-        let userVisualizationData = getVisualizationDatasetOfUser(user,tasks, selectedTasks,taskAccomplishments,calendarWeekStart,calendarWeekEnd);
+        let userVisualizationData = getVisualizationDatasetOfUser(user,tasks, selectedTasks,taskAccomplishments,calendarWeekStart,calendarWeekEnd,visualizationMode);
         visualizationData.datasets.push(userVisualizationData);
     }
     return visualizationData;
 }
 
-function getVisualizationDatasetOfUser(user, tasks, selectedTasks, taskAccomplishments, calendarWeekStart,calendarWeekEnd){
+function getVisualizationDatasetOfUser(user, tasks, selectedTasks, taskAccomplishments, calendarWeekStart,calendarWeekEnd,visualizationMode){
+    let data = [];
+    if(visualizationMode === VISUALIZATION_MODE_NORMAL){
+        data = getVisualizationDataOfUserNormal(user, tasks, selectedTasks, taskAccomplishments, calendarWeekStart,calendarWeekEnd);
+    }
+    else if(visualizationMode === VISUALIZATION_MODE_ACCUMULATED){
+        data =  getVisualizationDataOfUserAccumulated(user, tasks, selectedTasks, taskAccomplishments, calendarWeekStart,calendarWeekEnd);
+    }
+    return getVisualizationDataset(user,data);
+}
+function getVisualizationDataOfUserNormal(user, tasks, selectedTasks, taskAccomplishments, calendarWeekStart,calendarWeekEnd){
     let data = [];
     for(let calendarWeek = calendarWeekStart; calendarWeek <= calendarWeekEnd; calendarWeek++){
         let score = getSummedScoreInCalendarWeekByUserId(user.getId(),tasks, selectedTasks,taskAccomplishments,calendarWeek);
         data.push(score);
     }
+    return data;
+}
+
+function getVisualizationDataOfUserAccumulated(user, tasks, selectedTasks, taskAccomplishments, calendarWeekStart,calendarWeekEnd){
+    let data = [];
+    let previousScore = 0;
+    for(let calendarWeek = calendarWeekStart; calendarWeek <= calendarWeekEnd; calendarWeek++){
+        let score = previousScore + getSummedScoreInCalendarWeekByUserId(user.getId(),tasks, selectedTasks,taskAccomplishments,calendarWeek);
+        previousScore = score;
+        data.push(score);
+    }
+    return data;
+}
+
+function getVisualizationDataset(user,data){
     let color = COLORS[user.getId() % COLORS.length];
     return (
         {
@@ -219,6 +261,7 @@ function getSummedScoreInCalendarWeekByUserId(userId,tasks, selectedTasks,taskAc
     }
     return score_sum;
 }
+
 
 
 

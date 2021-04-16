@@ -61,6 +61,17 @@ export function ChartHeader(props){
                 menuItems={props.years}
                 noNone={true}
             />
+            - Mode :
+            <SelectMenu 
+                value={props.selectedVisualizationMode}
+                label={"Mode"}
+                minWidth={80}
+                height={10}
+                marginSide={10}
+                handleChange={props.changeVisualizationMode}
+                menuItems={props.visualizationModes}
+                noNone={true}
+            />
         </div>
     )
 }

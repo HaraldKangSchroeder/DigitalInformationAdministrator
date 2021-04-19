@@ -62,10 +62,10 @@ io.on("connection", (socket) => {
         if(isWeeklyRythmSet){
             let isDaySet = task.day !== "";
             if (isDaySet) {
-                await databaseManager.addWeeksWithDayToTask(taskId, getWeeksOfWeeklyRythm(task.weeklyRythm), task.day);
+                await databaseManager.addWeeksWithDayToTask(taskId, task.weeklyRythm, task.day);
             }
             else{
-                await databaseManager.addWeeksToTask(taskId, getWeeksOfWeeklyRythm(task.weeklyRythm));
+                await databaseManager.addWeeksToTask(taskId, task.weeklyRythm);
             }
         }
         let tasks = await databaseManager.getAllActiveTasks();
@@ -143,10 +143,10 @@ io.on("connection", (socket) => {
         if(isWeeklyRythmSet){
             let isDaySet = data.day !== "";
             if (isDaySet) {
-                await databaseManager.addWeeksWithDayToTask(data.taskId, getWeeksOfWeeklyRythm(data.weeklyRythm), data.day);
+                await databaseManager.addWeeksWithDayToTask(data.taskId, data.weeklyRythm, data.day);
             }
             else{
-                await databaseManager.addWeeksToTask(data.taskId, getWeeksOfWeeklyRythm(data.weeklyRythm));
+                await databaseManager.addWeeksToTask(data.taskId, data.weeklyRythm);
             }
         }
         let taskOccurences = await databaseManager.getTaskOccurences(data.taskId);
@@ -195,20 +195,6 @@ io.on("connection", (socket) => {
     })
 });
 
-
-function getWeeksOfWeeklyRythm(weeklyRythm){
-    let weeks = [];
-    if(weeklyRythm === "weekly"){
-        weeks = Array(54).fill().map((x,i)=>i);
-    }
-    else if(weeklyRythm === "bi-weekly"){
-        weeks = Array(27).fill().map((x,i)=>i*2);
-    }
-    else if(weeklyRythm === "three-week"){
-        weeks = Array(18).fill().map((x,i)=>i*3);
-    }
-    return weeks;
-}
 
 function logDivider(){
     console.log("------------------------");

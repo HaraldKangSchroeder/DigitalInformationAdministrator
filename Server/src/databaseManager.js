@@ -44,7 +44,8 @@ async function addWeekToTask(taskId, week) {
 }
 exports.addWeekToTask = addWeekToTask;
 
-exports.addWeeksToTask = async (taskId, weeks) => {
+exports.addWeeksToTask = async (taskId, weeklyRythm) => {
+    let weeks = getWeeksOfWeeklyRythm(weeklyRythm);
     for (let week of weeks) {
         await addWeekToTask(taskId, week);
     }
@@ -64,7 +65,8 @@ async function addWeekAndDayToTask(taskId, week, day) {
 }
 exports.addWeekAndDayToTask = addWeekAndDayToTask;
 
-exports.addWeeksWithDayToTask = async (taskId, weeks, day) => {
+exports.addWeeksWithDayToTask = async (taskId, weeklyRythm, day) => {
+    let weeks = getWeeksOfWeeklyRythm(weeklyRythm);
     for (let week of weeks) {
         await addWeekAndDayToTask(taskId, week, day);
     }
@@ -279,48 +281,6 @@ exports.getTaskAccomplishmentsYears = async () => {
     }
 }
 
-exports.getTaskAccomplishmentsLatestCalendarWeekOfYear = async (year) => {
-    try {
-        let queryText = `SELECT MAX(calendar_week) FROM ${TABLE_TASK_ACCOMPLISHMENTS} WHERE year = $1;`;
-        let queryValues = [year];
-        let { rows } = await pool.query(queryText, queryValues);
-        console.log(`getTaskAccomplishmentsCalendarWeekRangeOfYear : Select latest calendar_week of year ${year} in ${TABLE_TASK_ACCOMPLISHMENTS}`);
-        return rows;
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`getTaskAccomplishmentsCalendarWeekRangeOfYear : Error when tried to select latest calendar_week of year ${year} in ${TABLE_TASK_ACCOMPLISHMENTS}`);
-    }
-}
-
-exports.getDistinctTaskAccomplishmentsInCalendarWeekRangeOfYear = async (start, end, year) => {
-    try {
-        let queryText = `SELECT DISTINCT task_id FROM ${TABLE_TASK_ACCOMPLISHMENTS} WHERE calendar_week >= $1 AND calendar_week <= $2 AND year = $3;`;
-        let queryValues = [start, end, year];
-        let { rows } = await pool.query(queryText, queryValues);
-        console.log(`getDistinctTaskAccomplishmentsInCalendarWeekRangeOfYear : Select all distinct tasks in ${TABLE_TASK_ACCOMPLISHMENTS} taht occur in year ${year} from calendar week ${start} to ${end}`);
-        return rows;
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`getDistinctTaskAccomplishmentsInCalendarWeekRangeOfYear : Error when tried to select all distinct tasks in ${TABLE_TASK_ACCOMPLISHMENTS} taht occur in year ${year} from calendar week ${start} to ${end}`);
-    }
-}
-
-exports.getTaskAccomplishmentsEntriesInCalendarWeekRangeOfYear = async (start, end, year) => {
-    try {
-        let queryText = `SELECT * FROM ${TABLE_TASK_ACCOMPLISHMENTS} WHERE calendar_week >= $1 AND calendar_week <= $2 AND year = $3;`;
-        let queryValues = [start, end, year];
-        let { rows } = await pool.query(queryText, queryValues);
-        console.log(`getDistinctTaskAccomplishmentsInCalendarWeekRangeOfYear : Select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year} from calendar week ${start} to ${end}`);
-        return rows;
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`getDistinctTaskAccomplishmentsInCalendarWeekRangeOfYear : Error when tried to select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year} from calendar week ${start} to ${end}`);
-    }
-}
-
 
 exports.getTaskAccomplishmentsInYearOfUsers = async (year) => {
     try {
@@ -348,5 +308,20 @@ exports.changeUsername = async (userId, newName) => {
         console.error(e);
         console.error(`changeUsername : Error when tried to change name of user with id ${id} to ${newName}`);
     }
+}
+
+
+function getWeeksOfWeeklyRythm(weeklyRythm){
+    let weeks = [];
+    if(weeklyRythm === "weekly"){
+        weeks = Array(54).fill().map((x,i)=>i);
+    }
+    else if(weeklyRythm === "bi-weekly"){
+        weeks = Array(27).fill().map((x,i)=>i*2);
+    }
+    else if(weeklyRythm === "three-week"){
+        weeks = Array(18).fill().map((x,i)=>i*3);
+    }
+    return weeks;
 }
 

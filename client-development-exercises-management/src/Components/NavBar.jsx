@@ -36,7 +36,6 @@ export default function NavBar() {
             >
                 <Tab className={classes.text} to='/' component={Link} label="Tasks" />
                 <Tab className={classes.text} to='/users' component={Link} label="Users" />
-                <Tab className={classes.text} label="Groceries" />
             </Tabs>
         </Paper>
     );

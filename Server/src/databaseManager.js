@@ -25,8 +25,8 @@ exports.createTask = async (taskLabel, score, importance, weeklyOccurences) => {
         return res.rows[0].id;
     }
     catch (e) {
-        console.log(e);
-        console.log(`createTask : Error when tried to add ${taskLabel} , ${score}, ${importance},${weeklyOccurences}`);
+        console.error(e);
+        console.error(`createTask : Error when tried to add ${taskLabel} , ${score}, ${importance},${weeklyOccurences}`);
     }
 }
 
@@ -38,8 +38,8 @@ async function addWeekToTask(taskId, week) {
         console.log(`addWeekToTask : Added row(${taskId},${week},null) to table ${TABLE_TASKS_OCCURENCES}`);
     }
     catch (e) {
-        console.log(e);
-        console.log(`addWeekToTask : Error when tried to add ${taskId} , ${week}`);
+        console.error(e);
+        console.error(`addWeekToTask : Error when tried to add ${taskId} , ${week}`);
     }
 }
 exports.addWeekToTask = addWeekToTask;
@@ -58,8 +58,8 @@ async function addWeekAndDayToTask(taskId, week, day) {
         console.log(`addWeekAndDayToTask : Added row(${taskId},${week},${day}) to table ${TABLE_TASKS_OCCURENCES}`);
     }
     catch (e) {
-        console.log(e);
-        console.log(`addWeekAndDayToTask : Error when tried to add ${taskId} , ${week}, ${day}`);
+        console.error(e);
+        console.error(`addWeekAndDayToTask : Error when tried to add ${taskId} , ${week}, ${day}`);
     }
 }
 exports.addWeekAndDayToTask = addWeekAndDayToTask;
@@ -78,8 +78,8 @@ exports.updateDayOfWeekOfTask = async (taskId, week, day) => {
         console.log(`updateDayOfWeekOfTask : Updated to row(${taskId},${week},${day}) in table ${TABLE_TASKS_OCCURENCES}`);
     }
     catch (e) {
-        console.log(e);
-        console.log(`updateDayOfWeekOfTask : Error when tried to update with ${taskId} , ${week} , ${day}`);
+        console.error(e);
+        console.error(`updateDayOfWeekOfTask : Error when tried to update with ${taskId} , ${week} , ${day}`);
     }
 }
 
@@ -91,8 +91,8 @@ exports.changeTaskName = async (taskId, newName) => {
         console.log(`changeTaskName : Change task name of id ${taskId} to name ${newName}`);
     }
     catch (e) {
-        console.log(e);
-        console.log(`changeTaskName : Error when tried to change task name of id ${taskId} to name ${newName}`)
+        console.error(e);
+        console.error(`changeTaskName : Error when tried to change task name of id ${taskId} to name ${newName}`)
     }
 }
 
@@ -104,8 +104,8 @@ exports.changeTaskScore = async (taskId, newScore) => {
         console.log(`changeTaskScore : Change task score of id ${taskId} to value ${newScore}`);
     }
     catch (e) {
-        console.log(e);
-        console.log(`changeTaskScore : Error when tried to change score value of id ${taskId} to value ${newScore}`)
+        console.error(e);
+        console.error(`changeTaskScore : Error when tried to change score value of id ${taskId} to value ${newScore}`)
     }
 }
 
@@ -117,8 +117,8 @@ exports.changeTaskImportance = async (taskId, newImportance) => {
         console.log(`changeTaskImportance : Change task importance of id ${taskId} to value ${newImportance}`);
     }
     catch (e) {
-        console.log(e);
-        console.log(`changeTaskImportance : Error when tried to change importance value of id ${taskId} to value ${newImportance}`)
+        console.error(e);
+        console.error(`changeTaskImportance : Error when tried to change importance value of id ${taskId} to value ${newImportance}`)
     }
 }
 
@@ -130,8 +130,8 @@ exports.changeTaskWeeklyOccurences = async (taskId, newWeeklyOccurences) => {
         console.log(`changeTaskWeeklyOccurences : Change task weekly occurences of id ${taskId} to value ${newWeeklyOccurences}`);
     }
     catch (e) {
-        console.log(e);
-        console.log(`changeTaskWeeklyOccurences : Error when tried to change weekly occurences value of id ${taskId} to value ${newWeeklyOccurences}`)
+        console.error(e);
+        console.error(`changeTaskWeeklyOccurences : Error when tried to change weekly occurences value of id ${taskId} to value ${newWeeklyOccurences}`)
     }
 }
 
@@ -144,8 +144,8 @@ exports.deleteTaskById = async (taskId) => {
         console.log(`deleteTaskById : delete row with id ${taskId} in table ${TABLE_TASKS}`);
     }
     catch (e) {
-        console.log(e);
-        console.log(`deleteTaskById : Error when tried to delete rows referencing id ${taskId}`);
+        console.error(e);
+        console.error(`deleteTaskById : Error when tried to delete rows referencing id ${taskId}`);
     }
 }
 
@@ -157,8 +157,8 @@ exports.deleteWeekOfTask = async (taskId, week) => {
         console.log(`deleteWeekOfTask : delete row with id ${taskId} and week ${week} in table ${TABLE_TASKS_OCCURENCES}`);
     }
     catch (e) {
-        console.log(e);
-        console.log(`deleteWeekOfTask : Error when tried to delete row with id ${taskId} and week ${week} in table ${TABLE_TASKS_OCCURENCES}`);
+        console.error(e);
+        console.error(`deleteWeekOfTask : Error when tried to delete row with id ${taskId} and week ${week} in table ${TABLE_TASKS_OCCURENCES}`);
     }
 }
 
@@ -170,8 +170,8 @@ exports.deleteAllWeeksOfTask = async (taskId) => {
         console.log(`deleteAllWeeksOfTask : delete all weeks of task with id ${taskId} in table ${TABLE_TASKS_OCCURENCES}`);
     }
     catch (e) {
-        console.log(e);
-        console.log(`deleteAllWeeksOfTask : Error when tried to delete all weeks of task with id ${taskId} in table ${TABLE_TASKS_OCCURENCES}`);
+        console.error(e);
+        console.error(`deleteAllWeeksOfTask : Error when tried to delete all weeks of task with id ${taskId} in table ${TABLE_TASKS_OCCURENCES}`);
     }
 }
 
@@ -182,8 +182,8 @@ exports.getAllActiveTasks = async () => {
         return rows;
     }
     catch (e) {
-        console.log(e);
-        console.log(`getAllActiveTasks : Error when tried to access all active tasks in ${TABLE_TASKS}`);
+        console.error(e);
+        console.error(`getAllActiveTasks : Error when tried to access all active tasks in ${TABLE_TASKS}`);
         return null;
     }
 }
@@ -195,8 +195,8 @@ exports.getAllTasks = async () => {
         return rows;
     }
     catch (e) {
-        console.log(e);
-        console.log(`getAllTasks : Error when tried to access all tasks in ${TABLE_TASKS}`);
+        console.error(e);
+        console.error(`getAllTasks : Error when tried to access all tasks in ${TABLE_TASKS}`);
         return null;
     }
 }
@@ -208,20 +208,12 @@ exports.getTaskOccurences = async (taskId) => {
         return rows;
     }
     catch (e) {
-        console.log(e);
-        console.log(`getTaskOccurences : Error when tried to access tasks in ${TABLE_TASKS_OCCURENCES} with id = ${taskId}`);
+        console.error(e);
+        console.error(`getTaskOccurences : Error when tried to access tasks in ${TABLE_TASKS_OCCURENCES} with id = ${taskId}`);
         return null;
     }
 }
 
-
-exports.getTasksOfCurrentWeek = async (currentWeek) => {
-    // access weekly-tasks table and get all entries of the currentWeek
-}
-
-exports.setTasksOfCurrentWeek = async (currentWeek) => {
-    // access weekly-tasks and add all tasks that should be in at the currentWeek
-}
 
 
 exports.createUser = async (userName) => {
@@ -232,20 +224,20 @@ exports.createUser = async (userName) => {
         console.log(`createUser : Added row(${userName}) to table ${TABLE_USERS}`);
     }
     catch (e) {
-        console.log(e);
-        console.log(`createUser : Error when tried to add row(${userName}) to table ${TABLE_USERS}`);
+        console.error(e);
+        console.error(`createUser : Error when tried to add row(${userName}) to table ${TABLE_USERS}`);
     }
 }
 
 exports.getAllUsers = async () => {
     try {
-        let { rows } = await pool.query(`SELECT * FROM ${TABLE_USERS}`);
+        let { rows } = await pool.query(`SELECT * FROM ${TABLE_USERS} ORDER BY name`);
         console.log(`getAllUsers : get all users from table ${TABLE_USERS}`);
         return rows;
     }
     catch (e) {
-        console.log(e);
-        console.log(`getAllUsers : Error when tried to get all users from table ${TABLE_USERS}`);
+        console.error(e);
+        console.error(`getAllUsers : Error when tried to get all users from table ${TABLE_USERS}`);
     }
 }
 
@@ -257,8 +249,8 @@ exports.deleteUserById = async (userId) => {
         console.log(`deleteUserById : deleted user with id ${userId}`);
     }
     catch (e) {
-        console.log(e);
-        console.log(`deleteUserById : Error when tried to delete user with id ${userid}`);
+        console.error(e);
+        console.error(`deleteUserById : Error when tried to delete user with id ${userid}`);
     }
 }
 
@@ -270,8 +262,8 @@ exports.createTaskAccomplishmentsEntry = async (taskId, userId, calendarWeek, ye
         console.log(`createTaskAccomplishmentsEntry : Added row(${taskId},${userId},${calendarWeek},${year}`);
     }
     catch (e) {
-        console.log(e);
-        console.log(`createTaskAccomplishmentsEntry : Error when tried to add row(${taskId},${userId},${calendarWeek},${year}`);
+        console.error(e);
+        console.error(`createTaskAccomplishmentsEntry : Error when tried to add row(${taskId},${userId},${calendarWeek},${year}`);
     }
 }
 
@@ -282,8 +274,8 @@ exports.getTaskAccomplishmentsYears = async () => {
         return rows;
     }
     catch (e) {
-        console.log(e);
-        console.log(`getTaskAccomplishmentsYears : Error when tried to select all distinct years in ${TABLE_TASK_ACCOMPLISHMENTS}`);
+        console.error(e);
+        console.error(`getTaskAccomplishmentsYears : Error when tried to select all distinct years in ${TABLE_TASK_ACCOMPLISHMENTS}`);
     }
 }
 
@@ -296,8 +288,8 @@ exports.getTaskAccomplishmentsLatestCalendarWeekOfYear = async (year) => {
         return rows;
     }
     catch (e) {
-        console.log(e);
-        console.log(`getTaskAccomplishmentsCalendarWeekRangeOfYear : Error when tried to select latest calendar_week of year ${year} in ${TABLE_TASK_ACCOMPLISHMENTS}`);
+        console.error(e);
+        console.error(`getTaskAccomplishmentsCalendarWeekRangeOfYear : Error when tried to select latest calendar_week of year ${year} in ${TABLE_TASK_ACCOMPLISHMENTS}`);
     }
 }
 
@@ -310,8 +302,8 @@ exports.getDistinctTaskAccomplishmentsInCalendarWeekRangeOfYear = async (start, 
         return rows;
     }
     catch (e) {
-        console.log(e);
-        console.log(`getDistinctTaskAccomplishmentsInCalendarWeekRangeOfYear : Error when tried to select all distinct tasks in ${TABLE_TASK_ACCOMPLISHMENTS} taht occur in year ${year} from calendar week ${start} to ${end}`);
+        console.error(e);
+        console.error(`getDistinctTaskAccomplishmentsInCalendarWeekRangeOfYear : Error when tried to select all distinct tasks in ${TABLE_TASK_ACCOMPLISHMENTS} taht occur in year ${year} from calendar week ${start} to ${end}`);
     }
 }
 
@@ -324,8 +316,8 @@ exports.getTaskAccomplishmentsEntriesInCalendarWeekRangeOfYear = async (start, e
         return rows;
     }
     catch (e) {
-        console.log(e);
-        console.log(`getDistinctTaskAccomplishmentsInCalendarWeekRangeOfYear : Error when tried to select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year} from calendar week ${start} to ${end}`);
+        console.error(e);
+        console.error(`getDistinctTaskAccomplishmentsInCalendarWeekRangeOfYear : Error when tried to select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year} from calendar week ${start} to ${end}`);
     }
 }
 
@@ -339,8 +331,22 @@ exports.getTaskAccomplishmentsInYearOfUsers = async (year) => {
         return rows;
     }
     catch (e) {
-        console.log(e);
-        console.log(`getTaskAccomplishmentsInYearOfUsers : Error when tried to select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year} with respect to the given userIds`);
+        console.error(e);
+        console.error(`getTaskAccomplishmentsInYearOfUsers : Error when tried to select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year} with respect to the given userIds`);
+    }
+}
+
+
+exports.changeUsername = async (userId, newName) => {
+    try {
+        let queryText = `UPDATE ${TABLE_USERS} SET name = $2 WHERE id = $1`;
+        let queryValues = [userId,newName];
+        await pool.query(queryText,queryValues);
+        console.log(`changeUsername : Change name of user with id ${userId} to ${newName}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`changeUsername : Error when tried to change name of user with id ${id} to ${newName}`);
     }
 }
 

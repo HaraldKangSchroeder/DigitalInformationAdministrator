@@ -186,6 +186,13 @@ io.on("connection", (socket) => {
         socket.emit("taskAccomplishmentsInYear", {data:data});
         logDivider();
     });
+
+    socket.on('changeUserName', async ({userId,newName}) => {
+        await databaseManager.changeUsername(userId,newName);
+        let users = await databaseManager.getAllUsers();
+        socket.emit("allUsers", {users:users});
+        logDivider();
+    })
 });
 
 

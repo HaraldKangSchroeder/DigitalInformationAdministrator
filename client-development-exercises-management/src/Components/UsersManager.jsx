@@ -3,6 +3,7 @@ import { EntitiesSelection } from "./EntitiesSelection";
 import { DialogEntityDeletion } from "./DialogEntityDeletion";
 import { DialogCreateUser } from "./DialogCreateUser";
 import { UserCharts } from "./UserCharts";
+import { DialogChangeUserName } from "./DialogChangeUserName";
 import Grid from '@material-ui/core/Grid';
 import socket from "../socket.js";
 import Users from "../Classes/Users";
@@ -26,7 +27,7 @@ function UsersManager() {
 
     const changeSelectedUserById = (id) => {
         let selectedUsersCopy = selectedUsers.getCopy();
-        if(selectedUsersCopy.containsUserById(id)){
+        if (selectedUsersCopy.containsUserById(id)) {
             selectedUsersCopy.removeUserById(id);
             setSelectedUsers(selectedUsersCopy);
             return;
@@ -37,9 +38,9 @@ function UsersManager() {
     }
 
     const deleteSelectedUser = () => {
-        if(selectedUsers.containsExactlyOneUser()){
+        if (selectedUsers.containsExactlyOneUser()) {
             let id = selectedUsers.getUserList()[0].getId();
-            socket.emit("deleteUser", { id: id});
+            socket.emit("deleteUser", { id: id });
             let selectedUsersCopy = selectedUsers.getCopy();
             selectedUsersCopy.removeUserById(id);
         }
@@ -69,12 +70,17 @@ function UsersManager() {
                             deleteEntity={deleteSelectedUser}
                         />
                     </Grid>
-                    <Grid item xs={4} align="center" />
+                    <Grid item xs={4} align="center" >
+                        <DialogChangeUserName
+                            disabled={!selectedUsers.containsExactlyOneUser()}
+                            selectedUser={selectedUsers.containsExactlyOneUser() ? selectedUsers.getUserList()[0] : null}
+                        />
+                    </Grid>
                 </Grid>
                 {/* <Grid item xs={1} spacing={0} /> */}
                 <Grid container item xs={10} >
                     <Grid item xs={12}>
-                        <UserCharts selectedUsers={selectedUsers}/>
+                        <UserCharts selectedUsers={selectedUsers} />
                     </Grid>
                 </Grid>
                 {/* <Grid item xs={1} /> */}

@@ -70,8 +70,8 @@ export function DialogChangeUserName(props) {
                     <TextField
                         autoFocus
                         margin="dense"
-                        id="newTaskname"
-                        label={"New task name"}
+                        id="newUsername"
+                        label={"New Username"}
                         type="name"
                         onChange={handleChangeNameText}
                     />

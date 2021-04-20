@@ -1,4 +1,4 @@
-import React ,{ useState } from "react";
+import React, { useState } from "react";
 import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
@@ -24,12 +24,12 @@ const useStyles = makeStyles({
 })
 
 export function DialogCreateUser(props) {
-    const [dialogOpen,setDialogOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
     const [name, setName] = useState("");
 
     const handleDialogClose = () => {
         setName("");
-        setDialogOpen(false); 
+        setDialogOpen(false);
     }
 
     const handleDialogOpen = () => {
@@ -37,7 +37,7 @@ export function DialogCreateUser(props) {
     }
 
     const handleCreateUserSubmit = () => {
-        socket.emit("createUser",{name:name});
+        socket.emit("createUser", { name: name });
         setName("");
         setDialogOpen(false);
     }
@@ -70,7 +70,7 @@ export function DialogCreateUser(props) {
                         autoFocus
                         margin="dense"
                         id="newUsername"
-                        label={"Username"}
+                        label="Username"
                         type="name"
                         onChange={handleChangeNameText}
                     />

@@ -10,6 +10,8 @@ const databaseManager = require("./src/databaseManager");
 const app = express();
 app.use(cors());
 
+app.use(express.static(__dirname + '/public/build'));
+
 const server = http.createServer(app);
 const io = Server(server, {
     cors: {
@@ -21,7 +23,8 @@ const ip = process.env.SERVER_IP || configs.ip;
 const port = process.env.SERVER_PORT || configs.port;
 
 app.get("/", (req, res) => {
-    res.send("Hello World");
+    //res.send("Hello World");
+    res.sendFile(__dirname + '/public/build/index.html');
 })
 
 

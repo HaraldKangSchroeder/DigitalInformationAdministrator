@@ -1,12 +1,12 @@
 import React , { useEffect, useState } from "react";
-import { EntitiesSelection } from "./EntitiesSelection";
-import { DialogEntityDeletion } from "./DialogEntityDeletion";
+import { EntitiesSelection } from "../EntitiesSelection";
+import { DialogEntityDeletion } from "../DialogEntityDeletion";
 import { DialogCreateTask } from "./DialogCreateTask";
 import { DialogChangeTaskWeeklyRythm } from "./DialogChangeTaskWeeklyRythm";
 import { TaskInformation } from "./TaskInformation";
 import Grid from '@material-ui/core/Grid';
-import socket from "../socket.js";
-import Tasks from "../Classes/Tasks";
+import socket from "../../socket.js";
+import Tasks from "../../Classes/Tasks";
 
 export function TaskManager() {
     const [selectedTask,setSelectedTask] = useState(null);

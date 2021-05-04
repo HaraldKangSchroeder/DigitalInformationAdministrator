@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { EntitiesSelection } from "./EntitiesSelection";
-import { DialogEntityDeletion } from "./DialogEntityDeletion";
+import { EntitiesSelection } from "../EntitiesSelection";
+import { DialogEntityDeletion } from "../DialogEntityDeletion";
 import { DialogCreateUser } from "./DialogCreateUser";
 import { UserCharts } from "./UserCharts";
 import { DialogChangeUserName } from "./DialogChangeUserName";
 import Grid from '@material-ui/core/Grid';
-import socket from "../socket.js";
-import Users from "../Classes/Users";
+import socket from "../../socket.js";
+import Users from "../../Classes/Users";
 
 
 function UsersManager() {

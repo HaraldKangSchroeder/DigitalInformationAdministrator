@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { Line } from 'react-chartjs-2';
 import { ChartHeader } from "./ChartHeader";
-import socket from "../socket";
-import TaskAccomplishments from "../Classes/TaskAccomplishments";
-import Tasks from "../Classes/Tasks";
+import socket from "../../socket";
+import TaskAccomplishments from "../../Classes/TaskAccomplishments";
+import Tasks from "../../Classes/Tasks";
 
 const COLORS = [
     'rgba(0, 0, 255,1)',

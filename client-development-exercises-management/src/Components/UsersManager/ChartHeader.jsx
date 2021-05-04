@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core"
-import {SelectMenu} from "./SelectMenu";
+import {SelectMenu} from "../SelectMenu";
 import React from "react";
 import MultipleSelectTaskMenu from "./MultipleSelectTaskMenu";
 

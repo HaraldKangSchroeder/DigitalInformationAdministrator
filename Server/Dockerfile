@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE 8910
 
-CMD [ "npm", "start" ]
+CMD TESTENV=${TESTENV} npm start

@@ -1,12 +1,14 @@
 const pg = require("pg");
 const { configs } = require("../configs");
 const dotenv = require("dotenv");
+const { query } = require("express");
 dotenv.config();
 
 const TABLE_TASKS = "tasks";
 const TABLE_TASKS_OCCURENCES = "tasks_occurences";
 const TABLE_USERS = "users";
 const TABLE_TASK_ACCOMPLISHMENTS = "task_accomplishments";
+
 
 const pool = new pg.Pool({
     user: process.env.DATABASE_USERNAME,
@@ -216,6 +218,22 @@ exports.getTaskOccurences = async (taskId) => {
     }
 }
 
+exports.getTaskOccurencesWithWeeklyOccurencesOfWeek = async (week) => {
+    try {
+        let queryText = `
+            SELECT "to".*, (SELECT weekly_occurences AS "weeklyOccurences" FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "to".id) FROM ${TABLE_TASKS_OCCURENCES} AS "to" WHERE calendar_week = $1;
+        `;
+        let queryValues = [week];
+        let { rows } = await pool.query(queryText, queryValues);
+        console.log(`getTaskOccurencesOfWeek : get all Task Occurences Of week ${week}`);
+        return rows;
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`getTaskOccurencesOfWeek : Error when tried to get all Task Occurences Of week ${week}`);
+    }
+}
+
 
 
 exports.createUser = async (userName) => {
@@ -300,8 +318,8 @@ exports.getTaskAccomplishmentsInYearOfUsers = async (year) => {
 exports.changeUsername = async (userId, newName) => {
     try {
         let queryText = `UPDATE ${TABLE_USERS} SET name = $2 WHERE id = $1`;
-        let queryValues = [userId,newName];
-        await pool.query(queryText,queryValues);
+        let queryValues = [userId, newName];
+        await pool.query(queryText, queryValues);
         console.log(`changeUsername : Change name of user with id ${userId} to ${newName}`);
     }
     catch (e) {
@@ -310,17 +328,70 @@ exports.changeUsername = async (userId, newName) => {
     }
 }
 
+exports.getTasksAccomplishmentsOfWeekInYear = async (week, year) => {
+    try {
+        let queryText = `
+            SELECT * FROM ${TABLE_TASK_ACCOMPLISHMENTS} WHERE calendar_week = $1 AND year = $2
+        `;
+        let queryValues = [week, year];
+        let { rows } = await pool.query(queryText, queryValues);
+        console.log(`getTasksAccomplishmentsOfWeekInYear : get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
+        return rows;
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`getTasksAccomplishmentsOfWeekInYear : failed to get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
+    }
+}
 
-function getWeeksOfWeeklyRythm(weeklyRythm){
+exports.deleteTaskAccomplishmentsByWeekAndYear = async (week,year) => {
+    try {
+        let queryText = `
+            DELETE FROM ${TABLE_TASK_ACCOMPLISHMENTS} WHERE calendar_week = $1 AND year = $2;
+        `;
+        let queryValues = [week,year];
+        await pool.query(queryText,queryValues);
+        console.log(`deleteTaskAccomplishmentsByWeekAndYear`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`deleteTaskAccomplishmentsByWeekAndYear :  Error`);
+    }
+}
+
+exports.addTaskAccomplishments = async (taskAccomplishments) => {
+    for (let taskAccomplishment of taskAccomplishments) {
+        await addTaskAccomplishment(taskAccomplishment);
+    }
+}
+
+const addTaskAccomplishment = async (taskAccomplishment) => {
+    console.log(taskAccomplishment);
+    try {
+        let queryText = `
+            INSERT INTO ${TABLE_TASK_ACCOMPLISHMENTS}  (task_id,user_id,calendar_week,year) VALUES ($1,$2,$3,$4);
+        `;
+        let queryValues = [taskAccomplishment.taskId,taskAccomplishment.userId,taskAccomplishment.calendarWeek,taskAccomplishment.year];
+        await pool.query(queryText,queryValues);
+        console.log(`addTaskAccomplishment : added taskAccomplishment ${taskAccomplishment}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`addTaskAccomplishment : Failed to add taskAccomplishment ${taskAccomplishment}`);
+    }   
+}
+
+
+function getWeeksOfWeeklyRythm(weeklyRythm) {
     let weeks = [];
-    if(weeklyRythm === "weekly"){
-        weeks = Array(54).fill().map((x,i)=>i);
+    if (weeklyRythm === "weekly") {
+        weeks = Array(54).fill().map((x, i) => i);
     }
-    else if(weeklyRythm === "bi-weekly"){
-        weeks = Array(27).fill().map((x,i)=>i*2);
+    else if (weeklyRythm === "bi-weekly") {
+        weeks = Array(27).fill().map((x, i) => i * 2);
     }
-    else if(weeklyRythm === "three-week"){
-        weeks = Array(18).fill().map((x,i)=>i*3);
+    else if (weeklyRythm === "three-week") {
+        weeks = Array(18).fill().map((x, i) => i * 3);
     }
     return weeks;
 }

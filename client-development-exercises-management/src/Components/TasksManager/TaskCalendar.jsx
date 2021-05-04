@@ -7,7 +7,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { useEffect, useState } from "react";
-import socket from "../socket";
+import socket from "../../socket";
 
 
 const useStyle = makeStyles({

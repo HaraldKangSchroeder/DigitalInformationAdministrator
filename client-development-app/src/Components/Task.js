@@ -17,7 +17,7 @@ const useStyles = makeStyles({
         marginRight: "10px",
         height:"40px",
         widht:"40px",
-        fontSize:"1.3em",
+        fontSize:"1.2em",
     },
     taskPendingAvatar : {
         backgroundColor : "rgb(200,200,200)",
@@ -31,7 +31,7 @@ const useStyles = makeStyles({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        fontSize:"1.3em",
+        fontSize:"1.2em",
         color:"rgb(50,50,50)"
     }
 })

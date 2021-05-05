@@ -40,7 +40,7 @@ function App() {
   const classes = useStyles();
   return (
     <div className="App">
-      <Grid container spacing={1}>
+      <Grid container alignItems="flex-start">
         <Grid item xs={1}>
           {/* SHOULD BECOME NAVBAR */}
           <Paper className={classes.paper}>xs=12 xs=12 xs=12 xs=12 xs=12 xs=12 xs=12 xs=12 </Paper>
@@ -50,7 +50,7 @@ function App() {
           <TasksPresentation tasks={state.tasks}/>
         </Grid>
         {/* SHOULD BECOME LIST OF USERS */}
-        <Grid item xs={2}>
+        <Grid container item xs={2}>
           <UsersPresentation users={state.users} />
         </Grid>
       </Grid>

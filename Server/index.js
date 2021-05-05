@@ -5,6 +5,7 @@ const Server = require("socket.io");
 const cors = require("cors");
 const databaseManager = require("./src/databaseManager");
 const tasksManager = require("./src/tasks/tasksManager");
+const utils = require("./src/utils");
 
 console.log("Testenv : " + process.env.TESTENV);
 
@@ -207,7 +208,17 @@ io.on("connection", (socket) => {
         let users = await databaseManager.getAllUsers();
         socket.emit("allUsers", {users:users});
         logDivider();
-    })
+    });
+
+    socket.on('getUsersAndTasksOfCurrentWeek', async () => {
+        let dateToday = new Date();
+        let currentYear = dateToday.getFullYear();
+        let currentWeek = utils.getWeekNumberByDate(dateToday);
+        let tasks = await databaseManager.getPendingTasksOfWeekInYear(currentWeek,currentYear);
+        let users = await databaseManager.getAllUsers();
+        let res = {tasks:tasks, users:users}
+        socket.emit("usersAndTasksOfCurrentWeek", res);
+    });
 });
 
 

@@ -1,3 +1,4 @@
+const utils = require("../utils");
 
 const databaseManager = require("../databaseManager");
 
@@ -16,7 +17,7 @@ exports.startUpdateTaskAccomplishments = async () => {
 async function updateTaskaccomplishments() {
     let dateToday = new Date();
     let currentYear = dateToday.getFullYear();
-    let currentWeek = getWeekNumberByDate(dateToday);
+    let currentWeek = utils.getWeekNumberByDate(dateToday);
 
     let tasksAccomplishmentsOfWeekInYear = await databaseManager.getTasksAccomplishmentsOfWeekInYear(currentWeek, currentYear);
     let tasksAccomplishmentsExistent = tasksAccomplishmentsOfWeekInYear.length > 0;
@@ -35,7 +36,7 @@ async function updateTaskaccomplishments() {
 exports.resetTaskAccomplishmentsOfCurrentWeek = async () => {
     let dateToday = new Date();
     let currentYear = dateToday.getFullYear();
-    let currentWeek = getWeekNumberByDate(dateToday);
+    let currentWeek = utils.getWeekNumberByDate(dateToday);
     await databaseManager.deleteTaskAccomplishmentsByWeekAndYear(currentWeek,currentYear);
     updateTaskaccomplishments();
 }
@@ -54,10 +55,3 @@ function getTasksAccomplishmentEntriesByTaskOccurences(taskOccurences, currentWe
     }
     return taskAccomplishmentEntries;
 }
-
-
-function getWeekNumberByDate(d) {
-    var onejan = new Date(d.getFullYear(), 0, 1);
-    var millisecsInDay = 86400000;
-    return Math.ceil((((d - onejan) / millisecsInDay) + onejan.getDay() + 1) / 7);
-};

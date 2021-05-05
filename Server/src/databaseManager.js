@@ -344,6 +344,22 @@ exports.getTasksAccomplishmentsOfWeekInYear = async (week, year) => {
     }
 }
 
+exports.getPendingTasksOfWeekInYear = async (week, year) => {
+    try {
+        let queryText = `
+            SELECT "ta".*, (SELECT "t".label FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id) FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS "ta" WHERE "ta".calendar_week = $1 AND "ta".year = $2
+        `;
+        let queryValues = [week, year];
+        let { rows } = await pool.query(queryText, queryValues);
+        console.log(`getTasksAccomplishmentsOfWeekInYear : get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
+        return rows;
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`getTasksAccomplishmentsOfWeekInYear : failed to get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
+    }
+}
+
 exports.deleteTaskAccomplishmentsByWeekAndYear = async (week,year) => {
     try {
         let queryText = `

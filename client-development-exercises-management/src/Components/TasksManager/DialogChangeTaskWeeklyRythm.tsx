@@ -26,9 +26,9 @@ const useStyles = makeStyles({
     }
 })
 
-export function DialogChangeTaskWeeklyRythm(props) {
+export function DialogChangeTaskWeeklyRythm(props : any) {
     const classes = useStyles();
-    const [openDialog, setOpenDialog] = useState(false);
+    const [openDialog, setOpenDialog] = useState<boolean>(false);
     const [state, setState] = useState({
         weeklyRythm: "",
         day: ""
@@ -46,14 +46,14 @@ export function DialogChangeTaskWeeklyRythm(props) {
         setOpenDialog(false);
     };
 
-    const handleChangeWeeklyRythm = (e) => {
+    const handleChangeWeeklyRythm = (e : any) => {
         setState({
             ...state,
             weeklyRythm: e.target.value
         })
     }
 
-    const handleChangeDay = (e) => {
+    const handleChangeDay = (e : any) => {
         setState({
             ...state,
             day: e.target.value

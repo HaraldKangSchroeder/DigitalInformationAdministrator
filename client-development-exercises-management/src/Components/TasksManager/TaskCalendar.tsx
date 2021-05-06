@@ -101,10 +101,10 @@ const datesInYearPerMonth = getDatesInYearPerMonth(currentYear);
 const calendarWeeksInYearPerMonth = getCalendarWeeksInYearPerMonth(currentYear);
 
 
-function getCalendarWeeksInYearPerMonth(year) {
+function getCalendarWeeksInYearPerMonth(year : number) {
     let calendarWeeksInYearPerMonth = [];
     for (let month = 0; month < NUM_MONTHS; month++) {
-        let calendarWeeksInMonth = [];
+        let calendarWeeksInMonth : any[] = [];
         let datesInMonth = getDatesInMonth(year, month);
         datesInMonth.forEach(date => {
             let calendarWeek = getWeekNumberByDate(date);
@@ -117,7 +117,7 @@ function getCalendarWeeksInYearPerMonth(year) {
     return calendarWeeksInYearPerMonth;
 }
 
-function getDatesInYearPerMonth(year) {
+function getDatesInYearPerMonth(year : number) {
     let datesInYearPerMonth = [];
     for (let month = 0; month < 12; month++) {
         datesInYearPerMonth[month] = getDatesInMonth(year, month);
@@ -125,7 +125,7 @@ function getDatesInYearPerMonth(year) {
     return datesInYearPerMonth;
 }
 
-function getDatesInMonth(year, month) {
+function getDatesInMonth(year : number, month : number) {
     var date = new Date(year, month, 1);
     var days = [];
     while (date.getMonth() === month) {
@@ -136,17 +136,23 @@ function getDatesInMonth(year, month) {
 }
 
 
-function getWeekNumberByDate(d) {
+function getWeekNumberByDate(d : Date) {
     var onejan = new Date(d.getFullYear(), 0, 1);
     var millisecsInDay = 86400000;
-    return Math.ceil((((d - onejan) / millisecsInDay) + onejan.getDay() + 1) / 7);
+    return Math.ceil((((d.getTime() - onejan.getTime()) / millisecsInDay) + onejan.getDay() + 1) / 7);
 };
 
-function getCalendarRowsData(days, calendarWeeks) {
+interface CalendarRowData {
+    cw : number;
+    days : Date[];
+} 
+
+function getCalendarRowsData(days : Date[], calendarWeeks : number[]) {
     let startIndex = days[0].getDay();
     let rows = [];
     for (let i = 0; i < CALENDAR_ROWS; i++) {
-        rows.push({ cw: i < calendarWeeks.length ? calendarWeeks[i] : null, days: [] });
+        let calendarRowData : CalendarRowData = { cw: i < calendarWeeks.length ? calendarWeeks[i] : null, days : [] };
+        rows.push(calendarRowData);
     }
 
     for (let i = 0; i < CALENDAR_ROWS * CALENDAR_COLUMNS; i++) {
@@ -160,7 +166,7 @@ function getCalendarRowsData(days, calendarWeeks) {
 }
 
 
-export function TaskCalendar(props) {
+export function TaskCalendar(props : any) {
 
     const classes = useStyle();
     let datesInMonth = datesInYearPerMonth[props.month];
@@ -202,7 +208,7 @@ export function TaskCalendar(props) {
                                                 />
                                             </TableCell>
                                     }
-                                    {calendarRow.days.map(date => {
+                                    {calendarRow.days.map((date : Date) => {
                                         if (date == null) {
                                             return (
                                                 <TableCell className={classes.tableCellDefault} align="center">
@@ -231,7 +237,7 @@ export function TaskCalendar(props) {
     );
 }
 
-export function TaskCalendarDayEntry(props) {
+export function TaskCalendarDayEntry(props : any) {
     const [isTaskDay, setIsTaskDay] = useState(props.calendarWeek != null && props.taskOccurences.containsWeekAndDay(props.calendarWeek, props.day));
 
     useEffect(() => {
@@ -240,7 +246,7 @@ export function TaskCalendarDayEntry(props) {
         setIsTaskDay(isCalendarWeekExistent && isTaskOccurentOnCalendarWeekAndDay);
     }, [props.calendarWeek, props.taskOccurences, props.day]);
 
-    const handleOnClick = (e) => {
+    const handleOnClick = (e : any) => {
         if (isTaskDay) {
             socket.emit("removeDayOfWeek", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek });
             return;
@@ -266,7 +272,7 @@ export function TaskCalendarEmptyEntry() {
 }
 
 
-export function TaskCalendarWeekEntry(props) {
+export function TaskCalendarWeekEntry(props : any) {
     const [isTaskWeek, setIsTaskWeek] = useState(props.taskOccurences.containsWeek(props.calendarWeek));
 
     useEffect(() => {

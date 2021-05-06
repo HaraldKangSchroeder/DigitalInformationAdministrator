@@ -32,9 +32,9 @@ const useStyles = makeStyles({
 });
 
 
-export function DialogChangeTaskValue(props) {
-    const [isDialogOpen,setIsDialogOpen] = useState(false);
-    const [newValue, setNewValue] = useState("");
+export function DialogChangeTaskValue(props : any) {
+    const [isDialogOpen,setIsDialogOpen] = useState<boolean>(false);
+    const [newValue, setNewValue] = useState<string>("");
 
     const handleDialogClose = () => {
         setNewValue("");
@@ -51,7 +51,7 @@ export function DialogChangeTaskValue(props) {
         setIsDialogOpen(false);
     }
 
-    const handleChangeValue = (e) => {
+    const handleChangeValue = (e : any) => {
         setNewValue(e.target.value);
     }
 

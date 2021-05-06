@@ -7,14 +7,15 @@ import { TaskInformation } from "./TaskInformation";
 import Grid from '@material-ui/core/Grid';
 import socket from "../../socket";
 import Tasks from "../../Classes/Tasks";
+import Task from "../../Classes/Task";
 
 export function TaskManager() {
-    const [selectedTask,setSelectedTask] = useState(null);
-    const [tasks, setTasks] = useState(new Tasks());
+    const [selectedTask,setSelectedTask] = useState<Task>(null);
+    const [tasks, setTasks] = useState<Tasks>(new Tasks(null));
 
     useEffect(() => {
         socket.connect();
-        socket.on("allActiveTasks", (res) => {
+        socket.on("allActiveTasks", (res : any) => {
             setTasks(new Tasks(res.tasks));
         });
         socket.emit("getAllActiveTasks");
@@ -33,7 +34,7 @@ export function TaskManager() {
         }
     }, [tasks])
 
-    const changeSelectedTaskById = (id) => {
+    const changeSelectedTaskById = (id : number) => {
         if(selectedTask == null || selectedTask.getId() !== id){
             let newSelectedTask = tasks.getTaskById(id);
             setSelectedTask(newSelectedTask);
@@ -52,7 +53,7 @@ export function TaskManager() {
     let isTaskSelected = selectedTask != null;
     return (
         <React.Fragment>
-            <Grid container spacing={0} alignItems="flex-start">
+            <Grid container alignItems="flex-start">
                 <Grid container item xs={2} spacing={1} style={{ marginTop: "1vh", paddingLeft: "2vw" }}>
                     <Grid item xs={12}>
                         <EntitiesSelection
@@ -62,10 +63,10 @@ export function TaskManager() {
                             changeSelectedEntitiesIds={changeSelectedTaskById}
                         />
                     </Grid>
-                    <Grid item xs={4} align="center">
+                    <Grid item xs={4}>
                         <DialogCreateTask />
                     </Grid>
-                    <Grid item xs={4} align="center">
+                    <Grid item xs={4}>
                         <DialogEntityDeletion
                             disabled={!isTaskSelected}
                             entityType="Task"
@@ -73,22 +74,20 @@ export function TaskManager() {
                             deleteEntity={deleteSelectedTask}
                         />
                     </Grid>
-                    <Grid item xs={4} align="center">
+                    <Grid item xs={4}>
                         <DialogChangeTaskWeeklyRythm
                             disabled={!isTaskSelected}
                             selectedTask={selectedTask}
                         />
                     </Grid>
                 </Grid>
-                <Grid item xs={1}>
-                </Grid>
+                <Grid item xs={1} />
 
                 <Grid container item xs={9} spacing={5} justify="space-evenly" style={{ marginTop: "1vh", maxHeight: "93vh", overflowY: "auto" }}>
                     <TaskInformation
                         selectedTask={selectedTask}
                     />
                 </Grid>
-
             </Grid>
         </React.Fragment>
     );

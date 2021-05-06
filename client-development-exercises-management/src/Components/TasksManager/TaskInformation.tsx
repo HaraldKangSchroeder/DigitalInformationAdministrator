@@ -24,8 +24,8 @@ const useStyles = makeStyles({
 })
 
 
-export function TaskInformation(props) {
-    const [taskOccurences, setTaskOccurences] = useState(new TaskOccurences());
+export function TaskInformation(props : any) {
+    const [taskOccurences, setTaskOccurences] = useState<TaskOccurences>(new TaskOccurences(null));
 
     useEffect(() => {
         socket.on("taskOccurences", (res) => {

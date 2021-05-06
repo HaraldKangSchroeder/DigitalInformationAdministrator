@@ -29,10 +29,10 @@ const useStyles = makeStyles({
 })
 
 
-export function DialogCreateTask(props) {
+export function DialogCreateTask(props : any) {
     const classes = useStyles();
 
-    const [openAddTask, setOpenAddTask] = useState(false);
+    const [openAddTask, setOpenAddTask] = useState<boolean>(false);
     const [state, setState] = useState({
         name: "",
         score: "",
@@ -58,42 +58,42 @@ export function DialogCreateTask(props) {
         setOpenAddTask(false);
     };
 
-    const handleChangeScore = (e) => {
+    const handleChangeScore = (e : any) => {
         setState({
             ...state,
             score: e.target.value
         });
     }
 
-    const handleChangeImportance = (e) => {
+    const handleChangeImportance = (e : any) => {
         setState({
             ...state,
             importance: e.target.value
         })
     }
 
-    const handleChangeWeeklyRythm = (e) => {
+    const handleChangeWeeklyRythm = (e : any) => {
         setState({
             ...state,
             weeklyRythm: e.target.value
         })
     }
 
-    const handleChangeDay = (e) => {
+    const handleChangeDay = (e : any) => {
         setState({
             ...state,
             day: e.target.value
         })
     }
 
-    const handleChangeText = (e) => {
+    const handleChangeText = (e : any) => {
         setState({
             ...state,
             name: e.target.value
         })
     }
 
-    const handleChangeWeeklyOccurences = (e) => {
+    const handleChangeWeeklyOccurences = (e : any) => {
         setState({
             ...state,
             weeklyOccurences: e.target.value

@@ -23,7 +23,7 @@ const useStyles = makeStyles({
     }
 })
 
-export function DialogCreateUser(props) {
+export function DialogCreateUser(props : any) {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [name, setName] = useState("");
 
@@ -42,7 +42,7 @@ export function DialogCreateUser(props) {
         setDialogOpen(false);
     }
 
-    const handleChangeNameText = (e) => {
+    const handleChangeNameText = (e : any) => {
         setName(e.target.value);
     }
 

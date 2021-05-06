@@ -16,7 +16,7 @@ const useStyles = makeStyles({
 })
 
 
-export function ChartHeader(props){
+export function ChartHeader(props : any){
     
 
     const classes = useStyles();

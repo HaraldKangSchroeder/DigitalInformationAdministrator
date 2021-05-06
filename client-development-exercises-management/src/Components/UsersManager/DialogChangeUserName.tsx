@@ -23,9 +23,9 @@ const useStyles = makeStyles({
     }
 })
 
-export function DialogChangeUserName(props) {
-    const [isDialogOpen,setIsDialogOpen] = useState(false);
-    const [newName, setNewName] = useState("");
+export function DialogChangeUserName(props : any) {
+    const [isDialogOpen,setIsDialogOpen] = useState<boolean>(false);
+    const [newName, setNewName] = useState<string>("");
 
     const handleChangeNameClose = () => {
         setNewName("");
@@ -42,7 +42,7 @@ export function DialogChangeUserName(props) {
         setIsDialogOpen(false);
     }
 
-    const handleChangeNameText = (e) => {
+    const handleChangeNameText = (e : any) => {
         setNewName(e.target.value);
     }
 

@@ -1,24 +1,30 @@
 export default class TaskAccomplishment {
-    constructor(taskId,userId,calendarWeek,year){
+
+    taskId : number;
+    userId : number;
+    calendarWeek : number;
+    year : number;
+
+    constructor(taskId : number,userId : number,calendarWeek : number,year : number){
         this.taskId = taskId;
         this.userId = userId;
         this.calendarWeek = calendarWeek;
         this.year = year;
     }
 
-    getTaskId(){
+    getTaskId() : number {
         return this.taskId;
     }
 
-    getUserId(){
+    getUserId() : number {
         return this.userId;
     }
 
-    getCalendarWeek(){
+    getCalendarWeek() : number {
         return this.calendarWeek;
     }
 
-    getYear(){
+    getYear() : number {
         return this.year;
     }
 }

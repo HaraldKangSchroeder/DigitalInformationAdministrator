@@ -1,23 +1,26 @@
 import TaskAccomplishment from "./TaskAccomplishment";
 
 export default class TaskAccomplishments {
-    constructor(dataset){
+
+    taskAccomplishmentList : TaskAccomplishment[];
+
+    constructor(dataset : any){
         this.taskAccomplishmentList = [];
         if(dataset != null){
             this.readDataset(dataset);
         }
     }
 
-    getTaskAccomplishmentList(){
+    getTaskAccomplishmentList() : TaskAccomplishment[]{
         return this.taskAccomplishmentList;
     }
 
-    addTaskAccomplishment(taskAccomplishment){
+    addTaskAccomplishment(taskAccomplishment : TaskAccomplishment){
         this.taskAccomplishmentList.push(taskAccomplishment);
     }
 
-    getTaskIdsInCalendarWeekRange(calendarWeekStart,calendarWeekEnd){
-        let ids = [];
+    getTaskIdsInCalendarWeekRange(calendarWeekStart : number,calendarWeekEnd : number) : number[]{
+        let ids : number[] = [];
         for(let taskAccomplishment of this.taskAccomplishmentList){
             if(taskAccomplishment.getCalendarWeek() >= calendarWeekStart && taskAccomplishment.getCalendarWeek() <= calendarWeekEnd && !ids.includes(taskAccomplishment.getTaskId())){
                 ids.push(taskAccomplishment.getTaskId());
@@ -26,7 +29,7 @@ export default class TaskAccomplishments {
         return ids;
     }
 
-    readDataset(dataset){
+    readDataset(dataset : any){
         for(let datasetEntry of dataset){
             let taskAccomplishment = new TaskAccomplishment(datasetEntry.task_id,datasetEntry.user_id,datasetEntry.calendar_week,datasetEntry.year);
             this.addTaskAccomplishment(taskAccomplishment);

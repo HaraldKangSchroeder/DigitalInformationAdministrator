@@ -1,7 +1,10 @@
 import Task from "./Task";
 
 export default class Tasks {
-    constructor(dataset) {
+
+    taskList : Task[];
+
+    constructor(dataset : any) {
         this.taskList = [];
         if(dataset != null){
             this.readDataset(dataset);
@@ -16,19 +19,19 @@ export default class Tasks {
         return jsonList;
     }
 
-    getTasksByIds(ids){
-        let newTasks = new Tasks();
+    getTasksByIds(ids : number[]) : Tasks{
+        let newTasks = new Tasks(null);
         for(let taskId of ids){
             newTasks.addTask(this.getTaskById(taskId));
         }
         return newTasks;
     }
 
-    getTaskList(){
+    getTaskList() : Task[]{
         return this.taskList;
     }
 
-    getTaskById(id){
+    getTaskById(id : number) : Task{
         for(let task of this.taskList){
             if(task.getId() === id){
                 return task;
@@ -37,7 +40,7 @@ export default class Tasks {
         return null;
     }
 
-    getTaskIds(){
+    getTaskIds() : number[]{
         let ids = [];
         for(let task of this.taskList){
             ids.push(task.getId());
@@ -45,8 +48,8 @@ export default class Tasks {
         return ids;
     }
 
-    getTaskLabelsByIds(ids){
-        let labels = [];
+    getTaskLabelsByIds(ids : number[]) : string[]{
+        let labels : string[] = [];
         for(let taskId of ids){
             let task = this.getTaskById(taskId);
             if(task != null){
@@ -56,11 +59,11 @@ export default class Tasks {
         return labels;
     }
 
-    addTask(task){
+    addTask(task : Task){
         this.taskList.push(task);
     }
 
-    containsTaskById(taskId){
+    containsTaskById(taskId : number) : boolean{
         for(let task of this.taskList){
             if(task.getId() === taskId){
                 return true;
@@ -69,7 +72,7 @@ export default class Tasks {
         return false;
     }
 
-    readDataset(dataset){
+    readDataset(dataset : any){
         for(let datasetEntry of dataset){
             let task = new Task(datasetEntry.id,datasetEntry.label,datasetEntry.score,datasetEntry.importance,datasetEntry.weekly_occurences,datasetEntry.active);
             this.addTask(task);    

@@ -1,19 +1,24 @@
 export default class TaskOccurence {
-    constructor(id, calendarWeek, day) {
+
+    id : number;
+    calendarWeek : number;
+    day : number;
+
+    constructor(id : number, calendarWeek : number, day : number) {
         this.id = id;
         this.calendarWeek = calendarWeek;
         this.day = day;
     }
 
-    getId(){
+    getId() : number{
         return this.id;
     }
 
-    getCalendarWeek(){
+    getCalendarWeek() : number {
         return this.calendarWeek;
     }
 
-    getDay(){
+    getDay() : number{
         return this.day;
     }
 }

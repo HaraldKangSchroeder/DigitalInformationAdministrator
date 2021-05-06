@@ -9,7 +9,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { SelectMenu } from '../SelectMenu';
 import { MENU_ITEMS_WEEKLY_RYTHMS, MENU_ITEMS_DAYS} from '../../constants';
-import socket from "../../socket.js";
+import socket from "../../socket";
 
 
 

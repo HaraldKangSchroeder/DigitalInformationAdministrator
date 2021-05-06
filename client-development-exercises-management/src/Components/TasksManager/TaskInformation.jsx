@@ -1,7 +1,7 @@
 import { TaskCalendar } from "./TaskCalendar";
 import Grid from '@material-ui/core/Grid';
 import React, { useEffect, useState } from "react";
-import socket from "../../socket.js";
+import socket from "../../socket";
 import { DialogChangeTaskName } from "./DialogChangeTaskName";
 import { DialogChangeTaskValue } from "./DialogChangeTaskValue";
 import { MENU_ITEMS_SCORES, MENU_ITEMS_IMPORTANCES, MENU_ITEMS_WEEKLY_OCCURENCES } from '../../constants';

@@ -5,7 +5,7 @@ import { DialogCreateTask } from "./DialogCreateTask";
 import { DialogChangeTaskWeeklyRythm } from "./DialogChangeTaskWeeklyRythm";
 import { TaskInformation } from "./TaskInformation";
 import Grid from '@material-ui/core/Grid';
-import socket from "../../socket.js";
+import socket from "../../socket";
 import Tasks from "../../Classes/Tasks";
 
 export function TaskManager() {

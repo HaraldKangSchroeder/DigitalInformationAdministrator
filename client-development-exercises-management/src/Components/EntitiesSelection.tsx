@@ -17,13 +17,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export function EntitiesSelection(props) {
+export function EntitiesSelection(props : any) {
     const classes = useStyles();
 
     return (
         <Paper className={classes.root} elevation={1}>
             <List subheader={<ListSubheader disableSticky={true}>{props.entityType}</ListSubheader>}>
-                {props.entities.map(entity => {
+                {props.entities.map((entity : any) => {
                     let isEntitySelected = props.selectedEntitiesIds.includes(entity.id);
                     return (
                         <ListItem

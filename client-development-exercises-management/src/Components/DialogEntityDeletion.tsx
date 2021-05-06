@@ -18,8 +18,8 @@ const useStyles = makeStyles({
     }
 })
 
-export function DialogEntityDeletion(props) {
-    const [openDialog, setOpenDialog] = useState(false);
+export function DialogEntityDeletion(props : any) {
+    const [openDialog, setOpenDialog] = useState<boolean>(false);
 
     const handleCloseDialog = () => {
         setOpenDialog(false);

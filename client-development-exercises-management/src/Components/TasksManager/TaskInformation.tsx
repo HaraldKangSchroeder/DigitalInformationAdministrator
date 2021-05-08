@@ -33,18 +33,18 @@ export function TaskInformation(props : Props) {
     const [taskOccurences, setTaskOccurences] = useState<TaskOccurences>(new TaskOccurences(null));
 
     useEffect(() => {
-        socket.on("taskOccurences", (res) => {
-            let newTaskOccurences = new TaskOccurences(res);
+        socket.on("taskOccurenceEntries", (taskOccurenceEntries) => {
+            let newTaskOccurences = new TaskOccurences(taskOccurenceEntries);
             setTaskOccurences(newTaskOccurences);
         })
         return () => {
-            socket.off("taskOccurences");
+            socket.off("taskOccurenceEntries");
         }
     }, [])
 
     useEffect(() => {
         if (props.selectedTask != null) {
-            socket.emit("getTaskOccurences", { taskId: props.selectedTask.getId() });
+            socket.emit("getTaskOccurenceEntries", { taskId: props.selectedTask.getId() });
         }
     }, [props.selectedTask]);
 
@@ -69,7 +69,7 @@ export function TaskInformation(props : Props) {
                     <DialogChangeTaskValue
                         menuItems={MENU_ITEMS_WEEKLY_OCCURENCES}
                         type="Weekly Occurence"
-                        messageId="changeTaskWeeklyOccurences"
+                        messageId="updateTaskEntryWithWeeklyOccurence"
                         selectedTask={props.selectedTask}
                     />
                 </div>
@@ -80,7 +80,7 @@ export function TaskInformation(props : Props) {
                     <DialogChangeTaskValue
                         menuItems={MENU_ITEMS_SCORES}
                         type="Score"
-                        messageId="changeTaskScore"
+                        messageId="updateTaskEntryWithScore"
                         selectedTask={props.selectedTask}
                     />
                 </div>
@@ -91,7 +91,7 @@ export function TaskInformation(props : Props) {
                     <DialogChangeTaskValue
                         menuItems={MENU_ITEMS_IMPORTANCES}
                         type="Importance"
-                        messageId="changeTaskImportance"
+                        messageId="updateTaskEntryWithImportance"
                         selectedTask={props.selectedTask}
                     />
                 </div>

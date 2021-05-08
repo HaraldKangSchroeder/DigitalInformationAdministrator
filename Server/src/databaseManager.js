@@ -18,211 +18,210 @@ const pool = new pg.Pool({
     port: configs.databasePort,
 });
 
-exports.createTask = async (taskLabel, score, importance, weeklyOccurences) => {
+exports.createTaskEntry = async (taskLabel, score, importance, weeklyOccurences) => {
     try {
         let queryText = `INSERT INTO ${TABLE_TASKS} (label,score,importance,weekly_occurences,active) VALUES ($1,$2,$3,$4,TRUE) RETURNING id;`;
         let queryValues = [taskLabel, score, importance, weeklyOccurences];
         let res = await pool.query(queryText, queryValues);
-        console.log(`createTask : Added row(${taskLabel},${score},${importance},${weeklyOccurences}) to table ${TABLE_TASKS}`);
+        console.log(`createTaskEntry : Added row(${taskLabel},${score},${importance},${weeklyOccurences}) to table ${TABLE_TASKS}`);
         return res.rows[0].id;
     }
     catch (e) {
         console.error(e);
-        console.error(`createTask : Error when tried to add ${taskLabel} , ${score}, ${importance},${weeklyOccurences}`);
+        console.error(`createTaskEntry : Error when tried to add ${taskLabel} , ${score}, ${importance},${weeklyOccurences}`);
     }
 }
 
-async function addWeekToTask(taskId, week) {
+async function createTaskOccurenceEntryWithWeek(taskId, week) {
     try {
         let queryText = `INSERT INTO ${TABLE_TASKS_OCCURENCES} VALUES ($1,$2,null);`;
         let queryValues = [taskId, week];
         await pool.query(queryText, queryValues);
-        console.log(`addWeekToTask : Added row(${taskId},${week},null) to table ${TABLE_TASKS_OCCURENCES}`);
+        console.log(`createTaskOccurenceEntryWithWeek : Added row(${taskId},${week},null) to table ${TABLE_TASKS_OCCURENCES}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`addWeekToTask : Error when tried to add ${taskId} , ${week}`);
+        console.error(`createTaskOccurenceEntryWithWeek : Error when tried to add ${taskId} , ${week}`);
     }
 }
-exports.addWeekToTask = addWeekToTask;
+exports.createTaskOccurenceEntryWithWeek = createTaskOccurenceEntryWithWeek;
 
-exports.addWeeksToTask = async (taskId, weeklyRythm) => {
+exports.createTaskOccurenceEntriesWithWeeks = async (taskId, weeklyRythm) => {
     let weeks = getWeeksOfWeeklyRythm(weeklyRythm);
     for (let week of weeks) {
-        await addWeekToTask(taskId, week);
+        await createTaskOccurenceEntryWithWeek(taskId, week);
     }
 }
 
-async function addWeekAndDayToTask(taskId, week, dayOfWeek) {
+async function createTaskOccurenceEntryWithWeekAndDay(taskId, week, dayOfWeek) {
     try {
         let queryText = `INSERT INTO ${TABLE_TASKS_OCCURENCES} VALUES ($1,$2,$3);`;
         let queryValues = [taskId, week, dayOfWeek];
         await pool.query(queryText, queryValues);
-        console.log(`addWeekAndDayToTask : Added row(${taskId},${week},${dayOfWeek}) to table ${TABLE_TASKS_OCCURENCES}`);
+        console.log(`createTaskOccurenceEntryWithWeekAndDay : Added row(${taskId},${week},${dayOfWeek}) to table ${TABLE_TASKS_OCCURENCES}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`addWeekAndDayToTask : Error when tried to add ${taskId} , ${week}, ${dayOfWeek}`);
+        console.error(`createTaskOccurenceEntryWithWeekAndDay : Error when tried to add ${taskId} , ${week}, ${dayOfWeek}`);
     }
 }
-exports.addWeekAndDayToTask = addWeekAndDayToTask;
+exports.createTaskOccurenceEntryWithWeekAndDay = createTaskOccurenceEntryWithWeekAndDay;
 
-exports.addWeeksWithDayToTask = async (taskId, weeklyRythm, dayOfWeek) => {
+exports.createTaskOccurenceEntriesWithWeeksAndDay = async (taskId, weeklyRythm, dayOfWeek) => {
     let weeks = getWeeksOfWeeklyRythm(weeklyRythm);
     for (let week of weeks) {
-        await addWeekAndDayToTask(taskId, week, dayOfWeek);
+        await createTaskOccurenceEntryWithWeekAndDay(taskId, week, dayOfWeek);
     }
 }
 
-exports.updateDayOfWeekOfTask = async (taskId, week, dayOfWeek) => {
+exports.updateTaskOccurenceEntryWithWeekAndDay = async (taskId, week, dayOfWeek) => {
     try {
         let queryText = `UPDATE ${TABLE_TASKS_OCCURENCES} SET day_of_week = $3 WHERE id = $1 AND calendar_week = $2;`;
         let queryValues = [taskId, week, dayOfWeek];
         await pool.query(queryText, queryValues);
-        console.log(`updateDayOfWeekOfTask : Updated to row(${taskId},${week},${dayOfWeek}) in table ${TABLE_TASKS_OCCURENCES}`);
+        console.log(`updateTaskOccurenceEntryWithWeekAndDay : Updated to row(${taskId},${week},${dayOfWeek}) in table ${TABLE_TASKS_OCCURENCES}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`updateDayOfWeekOfTask : Error when tried to update with ${taskId} , ${week} , ${dayOfWeek}`);
+        console.error(`updateTaskOccurenceEntryWithWeekAndDay : Error when tried to update with ${taskId} , ${week} , ${dayOfWeek}`);
     }
 }
 
-exports.changeTaskName = async (taskId, newName) => {
+exports.updateTaskEntryWithName = async (taskId, newName) => {
     try {
         let queryText = `UPDATE ${TABLE_TASKS} SET label = $2 WHERE id = $1;`;
         let queryValues = [taskId, newName];
         await pool.query(queryText, queryValues);
-        console.log(`changeTaskName : Change task name of id ${taskId} to name ${newName}`);
+        console.log(`updateTaskEntryWithName : Change task name of id ${taskId} to name ${newName}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`changeTaskName : Error when tried to change task name of id ${taskId} to name ${newName}`)
+        console.error(`updateTaskEntryWithName : Error when tried to change task name of id ${taskId} to name ${newName}`)
     }
 }
 
-exports.changeTaskScore = async (taskId, newScore) => {
+exports.updateTaskEntryWithScore = async (taskId, newScore) => {
     try {
         let queryText = `UPDATE ${TABLE_TASKS} SET score = $2 WHERE id = $1;`;
         let queryValues = [taskId, newScore];
         await pool.query(queryText, queryValues);
-        console.log(`changeTaskScore : Change task score of id ${taskId} to value ${newScore}`);
+        console.log(`updateTaskEntryWithScore : Change task score of id ${taskId} to value ${newScore}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`changeTaskScore : Error when tried to change score value of id ${taskId} to value ${newScore}`)
+        console.error(`updateTaskEntryWithScore : Error when tried to change score value of id ${taskId} to value ${newScore}`)
     }
 }
 
-exports.changeTaskImportance = async (taskId, newImportance) => {
+exports.updateTaskEntryWithImportance = async (taskId, newImportance) => {
     try {
         let queryText = `UPDATE ${TABLE_TASKS} SET importance = $2 WHERE id = $1;`;
         let queryValues = [taskId, newImportance];
         await pool.query(queryText, queryValues);
-        console.log(`changeTaskImportance : Change task importance of id ${taskId} to value ${newImportance}`);
+        console.log(`updateTaskEntryWithImportance : Change task importance of id ${taskId} to value ${newImportance}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`changeTaskImportance : Error when tried to change importance value of id ${taskId} to value ${newImportance}`)
+        console.error(`updateTaskEntryWithImportance : Error when tried to change importance value of id ${taskId} to value ${newImportance}`)
     }
 }
 
-exports.changeTaskWeeklyOccurences = async (taskId, newWeeklyOccurences) => {
+exports.updateTaskEntryWithWeeklyOccurence = async (taskId, newWeeklyOccurences) => {
     try {
         let queryText = `UPDATE ${TABLE_TASKS} SET weekly_occurences = $2 WHERE id = $1;`;
         let queryValues = [taskId, newWeeklyOccurences];
         await pool.query(queryText, queryValues);
-        console.log(`changeTaskWeeklyOccurences : Change task weekly occurences of id ${taskId} to value ${newWeeklyOccurences}`);
+        console.log(`updateTaskEntryWithWeeklyOccurence : Change task weekly occurences of id ${taskId} to value ${newWeeklyOccurences}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`changeTaskWeeklyOccurences : Error when tried to change weekly occurences value of id ${taskId} to value ${newWeeklyOccurences}`)
+        console.error(`updateTaskEntryWithWeeklyOccurence : Error when tried to change weekly occurences value of id ${taskId} to value ${newWeeklyOccurences}`)
     }
 }
 
-exports.deleteTaskById = async (taskId) => {
+exports.deleteTaskEntry = async (taskId) => {
     try {
         // TODO check table tasks accomplishments whether the taskId was solved by someone. If not, simply delete (on cascase is set on other table). Else set active to false so that it is still referenceable
         queryText = `DELETE FROM ${TABLE_TASKS} WHERE id = $1`;
         queryValues = [taskId];
         await pool.query(queryText, queryValues);
-        console.log(`deleteTaskById : delete row with id ${taskId} in table ${TABLE_TASKS}`);
+        console.log(`deleteTaskEntry : delete row with id ${taskId} in table ${TABLE_TASKS}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`deleteTaskById : Error when tried to delete rows referencing id ${taskId}`);
+        console.error(`deleteTaskEntry : Error when tried to delete rows referencing id ${taskId}`);
     }
 }
 
-exports.deleteWeekOfTask = async (taskId, week) => {
+exports.deleteTaskOccurenceEntryByWeek = async (taskId, week) => {
     try {
         let queryText = `DELETE FROM ${TABLE_TASKS_OCCURENCES} WHERE id = $1 AND calendar_week = $2`;
         let queryValues = [taskId, week];
         await pool.query(queryText, queryValues);
-        console.log(`deleteWeekOfTask : delete row with id ${taskId} and week ${week} in table ${TABLE_TASKS_OCCURENCES}`);
+        console.log(`deleteTaskOccurenceEntryByWeek : delete row with id ${taskId} and week ${week} in table ${TABLE_TASKS_OCCURENCES}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`deleteWeekOfTask : Error when tried to delete row with id ${taskId} and week ${week} in table ${TABLE_TASKS_OCCURENCES}`);
+        console.error(`deleteTaskOccurenceEntryByWeek : Error when tried to delete row with id ${taskId} and week ${week} in table ${TABLE_TASKS_OCCURENCES}`);
     }
 }
 
-exports.deleteAllWeeksOfTask = async (taskId) => {
+exports.deleteAllTaskOccurenceEntriesOfTask = async (taskId) => {
     try {
         let queryText = `DELETE FROM ${TABLE_TASKS_OCCURENCES} WHERE id = $1`;
         let queryValues = [taskId];
         await pool.query(queryText, queryValues);
-        console.log(`deleteAllWeeksOfTask : delete all weeks of task with id ${taskId} in table ${TABLE_TASKS_OCCURENCES}`);
+        console.log(`deleteAllTaskOccurenceEntriesOfTask : delete all weeks of task with id ${taskId} in table ${TABLE_TASKS_OCCURENCES}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`deleteAllWeeksOfTask : Error when tried to delete all weeks of task with id ${taskId} in table ${TABLE_TASKS_OCCURENCES}`);
+        console.error(`deleteAllTaskOccurenceEntriesOfTask : Error when tried to delete all weeks of task with id ${taskId} in table ${TABLE_TASKS_OCCURENCES}`);
     }
 }
 
-exports.getAllActiveTasks = async () => {
+exports.getActiveTaskEntries = async () => {
     try {
         let { rows } = await pool.query(`SELECT id, label, score, importance, weekly_occurences AS "weeklyOccurences", active FROM ${TABLE_TASKS} WHERE active IS TRUE ORDER BY label;`);
-        console.log(`getAllActiveTasks : get all active tasks ${TABLE_TASKS}`);
+        console.log(`getActiveTaskEntries : get all active tasks ${TABLE_TASKS}`);
         return rows;
     }
     catch (e) {
         console.error(e);
-        console.error(`getAllActiveTasks : Error when tried to access all active tasks in ${TABLE_TASKS}`);
+        console.error(`getActiveTaskEntries : Error when tried to access all active tasks in ${TABLE_TASKS}`);
         return null;
     }
 }
 
-exports.getAllTasks = async () => {
+exports.getTaskEntries = async () => {
     try {
         let { rows } = await pool.query(`SELECT id, label, score, importance, weekly_occurences AS "weeklyOccurences", active FROM ${TABLE_TASKS} ORDER BY label;`);
-        console.log(`getAllTasks : get all tasks ${TABLE_TASKS}`);
+        console.log(`getTaskEntries : get all tasks ${TABLE_TASKS}`);
         return rows;
     }
     catch (e) {
         console.error(e);
-        console.error(`getAllTasks : Error when tried to access all tasks in ${TABLE_TASKS}`);
+        console.error(`getTaskEntries : Error when tried to access all tasks in ${TABLE_TASKS}`);
         return null;
     }
 }
 
-exports.getTaskOccurences = async (taskId) => {
+exports.getTaskOccurenceEntries = async (taskId) => {
     try {
         let { rows } = await pool.query(`SELECT id, calendar_week AS "calendarWeek", day_of_week AS "dayOfWeek" FROM ${TABLE_TASKS_OCCURENCES} WHERE id = ${taskId};`);
-        console.log(`getTaskOccurences : get all tasks from ${TABLE_TASKS_OCCURENCES} with id = ${taskId}`);
+        console.log(`getTaskOccurenceEntries : get all tasks from ${TABLE_TASKS_OCCURENCES} with id = ${taskId}`);
         return rows;
     }
     catch (e) {
         console.error(e);
-        console.error(`getTaskOccurences : Error when tried to access tasks in ${TABLE_TASKS_OCCURENCES} with id = ${taskId}`);
+        console.error(`getTaskOccurenceEntries : Error when tried to access tasks in ${TABLE_TASKS_OCCURENCES} with id = ${taskId}`);
         return null;
     }
 }
 
-exports.getTaskOccurencesWithWeeklyOccurencesOfWeek = async (week) => {
+exports.getTaskOccurenceEntriesOfWeek = async (week) => {
     try {
         let queryText = `
-            SELECT  "to".id,"to".calendar_week AS "calendarWeek","to".day_of_week AS "dayOfWeek", 
-                    (SELECT weekly_occurences AS "weeklyOccurences" FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "to".id) 
+            SELECT  "to".id,"to".calendar_week AS "calendarWeek","to".day_of_week AS "dayOfWeek"
             FROM ${TABLE_TASKS_OCCURENCES} AS "to" 
             WHERE calendar_week = $1;
         `;
@@ -239,41 +238,41 @@ exports.getTaskOccurencesWithWeeklyOccurencesOfWeek = async (week) => {
 
 
 
-exports.createUser = async (userName) => {
+exports.createUserEntry = async (userName) => {
     try {
         let queryText = `INSERT INTO ${TABLE_USERS} (name) VALUES ($1);`;
         let queryValues = [userName];
         await pool.query(queryText, queryValues);
-        console.log(`createUser : Added row(${userName}) to table ${TABLE_USERS}`);
+        console.log(`createUserEntry : Added row(${userName}) to table ${TABLE_USERS}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`createUser : Error when tried to add row(${userName}) to table ${TABLE_USERS}`);
+        console.error(`createUserEntry : Error when tried to add row(${userName}) to table ${TABLE_USERS}`);
     }
 }
 
-exports.getAllUsers = async () => {
+exports.getUserEntries = async () => {
     try {
         let { rows } = await pool.query(`SELECT id, name FROM ${TABLE_USERS} ORDER BY name`);
-        console.log(`getAllUsers : get all users from table ${TABLE_USERS}`);
+        console.log(`getUserEntries : get all users from table ${TABLE_USERS}`);
         return rows;
     }
     catch (e) {
         console.error(e);
-        console.error(`getAllUsers : Error when tried to get all users from table ${TABLE_USERS}`);
+        console.error(`getUserEntries : Error when tried to get all users from table ${TABLE_USERS}`);
     }
 }
 
-exports.deleteUserById = async (userId) => {
+exports.deleteUserEntry = async (userId) => {
     try {
         let queryText = `DELETE FROM ${TABLE_USERS} WHERE id = $1;`;
         let queryValues = [userId];
         await pool.query(queryText, queryValues);
-        console.log(`deleteUserById : deleted user with id ${userId}`);
+        console.log(`deleteUserEntry : deleted user with id ${userId}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`deleteUserById : Error when tried to delete user with id ${userid}`);
+        console.error(`deleteUserEntry : Error when tried to delete user with id ${userid}`);
     }
 }
 
@@ -290,20 +289,20 @@ exports.createTaskAccomplishmentsEntry = async (taskId, userId, calendarWeek, ye
     }
 }
 
-exports.getTaskAccomplishmentsYears = async () => {
+exports.getYearsOfTaskAccomplishmentEntries = async () => {
     try {
         let { rows } = await pool.query(`SELECT DISTINCT year FROM ${TABLE_TASK_ACCOMPLISHMENTS} ORDER BY year;`);
-        console.log(`getTaskAccomplishmentsYears : Select all distinct years in ${TABLE_TASK_ACCOMPLISHMENTS}`);
+        console.log(`getYearsOfTaskAccomplishmentEntries : Select all distinct years in ${TABLE_TASK_ACCOMPLISHMENTS}`);
         return rows;
     }
     catch (e) {
         console.error(e);
-        console.error(`getTaskAccomplishmentsYears : Error when tried to select all distinct years in ${TABLE_TASK_ACCOMPLISHMENTS}`);
+        console.error(`getYearsOfTaskAccomplishmentEntries : Error when tried to select all distinct years in ${TABLE_TASK_ACCOMPLISHMENTS}`);
     }
 }
 
 
-exports.getTaskAccomplishmentsInYearOfUsers = async (year) => {
+exports.getTaskAccomplishmentEntriesByYear = async (year) => {
     try {
         let queryText = `
         SELECT  id,
@@ -315,30 +314,30 @@ exports.getTaskAccomplishmentsInYearOfUsers = async (year) => {
         WHERE year = $1 ORDER BY calendar_week;`;
         let queryValues = [year];
         let { rows } = await pool.query(queryText, queryValues);
-        console.log(`getTaskAccomplishmentsInYearOfUsers : Select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year} with respect to the given userIds`);
+        console.log(`getTaskAccomplishmentEntriesByYear : Select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year} with respect to the given userIds`);
         return rows;
     }
     catch (e) {
         console.error(e);
-        console.error(`getTaskAccomplishmentsInYearOfUsers : Error when tried to select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year} with respect to the given userIds`);
+        console.error(`getTaskAccomplishmentEntriesByYear : Error when tried to select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year} with respect to the given userIds`);
     }
 }
 
 
-exports.changeUsername = async (userId, newName) => {
+exports.updateUserEntryWithName = async (userId, newName) => {
     try {
         let queryText = `UPDATE ${TABLE_USERS} SET name = $2 WHERE id = $1`;
         let queryValues = [userId, newName];
         await pool.query(queryText, queryValues);
-        console.log(`changeUsername : Change name of user with id ${userId} to ${newName}`);
+        console.log(`updateUserEntryWithName : Change name of user with id ${userId} to ${newName}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`changeUsername : Error when tried to change name of user with id ${id} to ${newName}`);
+        console.error(`updateUserEntryWithName : Error when tried to change name of user with id ${id} to ${newName}`);
     }
 }
 
-exports.getTasksAccomplishmentsOfWeekInYear = async (week, year) => {
+exports.getTaskAccomplishmentEntriesOfWeekInYear = async (week, year) => {
     try {
         let queryText = `
         SELECT  
@@ -352,16 +351,16 @@ exports.getTasksAccomplishmentsOfWeekInYear = async (week, year) => {
         `;
         let queryValues = [week, year];
         let { rows } = await pool.query(queryText, queryValues);
-        console.log(`getTasksAccomplishmentsOfWeekInYear : get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
+        console.log(`getTaskAccomplishmentEntriesOfWeekInYear : get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
         return rows;
     }
     catch (e) {
         console.error(e);
-        console.error(`getTasksAccomplishmentsOfWeekInYear : failed to get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
+        console.error(`getTaskAccomplishmentEntriesOfWeekInYear : failed to get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
     }
 }
 
-exports.getPendingTasksOfWeekInYear = async (week, year) => {
+exports.getPendingTaskEntriesOfWeekInYear = async (week, year) => {
     try {
         let queryText = `
             SELECT 
@@ -376,37 +375,37 @@ exports.getPendingTasksOfWeekInYear = async (week, year) => {
         `;
         let queryValues = [week, year];
         let { rows } = await pool.query(queryText, queryValues);
-        console.log(`getTasksAccomplishmentsOfWeekInYear : get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
+        console.log(`getTaskAccomplishmentEntriesOfWeekInYear : get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
         return rows;
     }
     catch (e) {
         console.error(e);
-        console.error(`getTasksAccomplishmentsOfWeekInYear : failed to get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
+        console.error(`getTaskAccomplishmentEntriesOfWeekInYear : failed to get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
     }
 }
 
-exports.deleteTaskAccomplishmentsByWeekAndYear = async (week, year) => {
+exports.deleteTaskAccomplishmentEntriesByWeekAndYear = async (week, year) => {
     try {
         let queryText = `
             DELETE FROM ${TABLE_TASK_ACCOMPLISHMENTS} WHERE calendar_week = $1 AND year = $2;
         `;
         let queryValues = [week, year];
         await pool.query(queryText, queryValues);
-        console.log(`deleteTaskAccomplishmentsByWeekAndYear`);
+        console.log(`deleteTaskAccomplishmentEntriesByWeekAndYear`);
     }
     catch (e) {
         console.error(e);
-        console.error(`deleteTaskAccomplishmentsByWeekAndYear :  Error`);
+        console.error(`deleteTaskAccomplishmentEntriesByWeekAndYear :  Error`);
     }
 }
 
-exports.addTaskAccomplishments = async (taskAccomplishments) => {
+exports.createTaskAccomplishmentEntries = async (taskAccomplishments) => {
     for (let taskAccomplishment of taskAccomplishments) {
-        await addTaskAccomplishment(taskAccomplishment);
+        await createTaskAccomplishmentEntry(taskAccomplishment);
     }
 }
 
-const addTaskAccomplishment = async (taskAccomplishment) => {
+const createTaskAccomplishmentEntry = async (taskAccomplishment) => {
     console.log(taskAccomplishment);
     try {
         let queryText = `
@@ -414,11 +413,11 @@ const addTaskAccomplishment = async (taskAccomplishment) => {
         `;
         let queryValues = [taskAccomplishment.taskId, taskAccomplishment.userId, taskAccomplishment.calendarWeek, taskAccomplishment.year];
         await pool.query(queryText, queryValues);
-        console.log(`addTaskAccomplishment : added taskAccomplishment ${taskAccomplishment}`);
+        console.log(`createTaskAccomplishmentEntry : added taskAccomplishment ${taskAccomplishment}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`addTaskAccomplishment : Failed to add taskAccomplishment ${taskAccomplishment}`);
+        console.error(`createTaskAccomplishmentEntry : Failed to add taskAccomplishment ${taskAccomplishment}`);
     }
 }
 

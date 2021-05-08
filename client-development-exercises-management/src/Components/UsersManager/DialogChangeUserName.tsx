@@ -43,7 +43,7 @@ export function DialogChangeUserName(props : Props) {
     }
 
     const handleChangeNameSubmit = () => {
-        socket.emit("changeUserName",{userId:props.selectedUser.getId(), newName:newName});
+        socket.emit("updateUserEntryWithName",{userId:props.selectedUser.getId(), newName:newName});
         setNewName("");
         setIsDialogOpen(false);
     }

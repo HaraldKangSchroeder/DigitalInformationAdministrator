@@ -46,7 +46,7 @@ export function DialogChangeTaskName(props : Props) {
     }
 
     const handleChangeNameSubmit = () => {
-        socket.emit("changeTaskName",{taskId:props.selectedTask.getId(), newName:newName});
+        socket.emit("updateTaskEntryWithName",{taskId:props.selectedTask.getId(), newName:newName});
         setNewName("");
         setIsDialogOpen(false);
     }

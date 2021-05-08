@@ -6,10 +6,10 @@ const TEST_USERS = ["Harald", "Inge", "Magnus"];
 
 async function createTestDataset(){
     for (var task of TEST_TASKS){
-        await tasksDatabaseManager.createTask(task,1,1,1);
+        await tasksDatabaseManager.createTaskEntry(task,1,1,1);
     }
     for (var user of TEST_USERS){
-        await tasksDatabaseManager.createUser(user);
+        await tasksDatabaseManager.createUserEntry(user);
     }
     
 

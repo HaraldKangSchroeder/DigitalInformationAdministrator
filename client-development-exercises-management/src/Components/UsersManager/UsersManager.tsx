@@ -15,13 +15,13 @@ function UsersManager() {
 
     useEffect(() => {
         socket.connect();
-        socket.on("allUsers", (res) => {
-            setUsers(new Users(res.users));
+        socket.on("userEntries", (userEntries) => {
+            setUsers(new Users(userEntries));
         });
-        socket.emit("getAllUsers");
+        socket.emit("getUserEntries");
 
         return () => {
-            socket.off("allUsers");
+            socket.off("userEntries");
         }
     }, [])
 
@@ -40,7 +40,7 @@ function UsersManager() {
     const deleteSelectedUser = () => {
         if (selectedUsers.containsExactlyOneUser()) {
             let id = selectedUsers.getUserList()[0].getId();
-            socket.emit("deleteUser", { id: id });
+            socket.emit("deleteUserEntry", { id: id });
             let selectedUsersCopy = selectedUsers.getCopy();
             selectedUsersCopy.removeUserById(id);
         }

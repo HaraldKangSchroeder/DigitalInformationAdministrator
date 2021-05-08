@@ -51,10 +51,10 @@ export function TaskCalendarDayEntry(props : Props) {
 
     const handleOnClick = (e : any) => {
         if (isTaskDay) {
-            socket.emit("removeDayOfWeek", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek });
+            socket.emit("updateTaskOccurenceEntryByRemovingDayOfWeek", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek });
             return;
         }
-        socket.emit("addWeekAndDay", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek, dayOfWeek: props.dayOfWeek });
+        socket.emit("createTaskOccurenceEntryWithWeekAndDay", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek, dayOfWeek: props.dayOfWeek });
     }
 
     const classes = useStyle();

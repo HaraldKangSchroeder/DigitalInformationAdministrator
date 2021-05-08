@@ -11,19 +11,19 @@ import Task from "../../Classes/Task";
 
 export function TaskManager() {
     const [selectedTask,setSelectedTask] = useState<Task>(null);
-    const [tasks, setTasks] = useState<Tasks>(new Tasks(null));
+    const [tasks, setTasks] = useState(new Tasks(null));
 
     useEffect(() => {
         socket.connect();
-        socket.on("allActiveTasks", (res : any) => {
-            setTasks(new Tasks(res.tasks));
+        socket.on("activeTaskEntries", (activeTaskEntries) => {
+            setTasks(new Tasks(activeTaskEntries));
         });
-        socket.emit("getAllActiveTasks");
+        socket.emit("getActiveTaskEntries");
 
         // remove listening on this specific event when leaving this page. else, it will just add one more listener when mounting again which
         // would result in multiple setTasks invocations
         return () => {
-            socket.off("allActiveTasks");
+            socket.off("activeTaskEntries");
         }
     }, [])
 
@@ -45,7 +45,7 @@ export function TaskManager() {
 
     const deleteSelectedTask = () => {
         if(selectedTask == null) return;
-        socket.emit("deleteTask", {id:selectedTask.getId()});
+        socket.emit("deleteTaskEntry", {id:selectedTask.getId()});
         setSelectedTask(null);
     }
 

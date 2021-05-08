@@ -67,7 +67,7 @@ export function DialogChangeTaskWeeklyRythm(props : Props) {
     }
 
     const handleSubmit = () => {
-        socket.emit("changeTaskWeeklyRythm", {taskId: props.selectedTask.getId() , ...state});
+        socket.emit("updateTaskWeeklyRythm", {taskId: props.selectedTask.getId() , ...state});
         setState({
             weeklyRythm: "",
             dayOfWeek: "",

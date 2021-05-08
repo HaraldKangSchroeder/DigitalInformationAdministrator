@@ -49,36 +49,36 @@ export function UserCharts(props: Props) {
     const [selectedTasks, setSelectedTasks] = useState(new Tasks(null));
     const [year, setYear] = useState(0);
     const [years, setYears] = useState<number[]>([]);
-    const [calendarWeekRange, setCalendarWeekRange] = useState({ start: 0, end: 0 });
+    const [calendarWeekRange, setCalendarWeekRange] = useState({ start: 1, end: 1 });
     const [visualizationData, setVisualizationData] = useState({});
     const [visualizationMode, setVisualizationMode] = useState<string>(VISUALIZATION_MODES[0]);
 
     useEffect(() => {
-        socket.on("taskAccomplishmentsYears", ({ years }) => {
+        socket.on("yearsOfTaskAccomplishmentEntries", (years) => {
             let yearsArray = [];
             for (let element of years) yearsArray.push(element.year);
             setYears(yearsArray);
         });
 
-        socket.on("taskAccomplishmentsInYear", ({ data }) => {
-            if (data.length == 0) return;
-            let newTaskAccomplishments = new TaskAccomplishments(data);
+        socket.on("taskAccomplishmentEntries", (taskAccomplishmentEntries) => {
+            if (taskAccomplishmentEntries.length == 0) return;
+            let newTaskAccomplishments = new TaskAccomplishments(taskAccomplishmentEntries);
             setTaskAccomplishments(newTaskAccomplishments);
         });
 
-        socket.on("allTasks", ({ tasks }) => {
-            if (tasks.length == 0) return;
-            let newTasks = new Tasks(tasks);
+        socket.on("taskEntries", (taskEntries) => {
+            if (taskEntries.length == 0) return;
+            let newTasks = new Tasks(taskEntries);
             setTasks(newTasks);
         });
 
-        socket.emit("getAllTasks");
-        socket.emit("getTaskAccomplishmentsYears");
+        socket.emit("getTaskEntries");
+        socket.emit("getYearsOfTaskAccomplishmentEntries");
 
         return () => {
-            socket.off("taskAccomplishmentsYears");
-            socket.off("taskAccomplishmentsInYearOfUsers");
-            socket.off("allTasks");
+            socket.off("yearsOfTaskAccomplishmentEntries");
+            socket.off("taskAccomplishmentEntries");
+            socket.off("taskEntries");
         }
     }, [])
 
@@ -92,7 +92,7 @@ export function UserCharts(props: Props) {
     useEffect(() => {
         let isYearSet = year !== 0;
         if (!isYearSet) return;
-        socket.emit("getTaskAccomplishmentsInYear", { year: year, userIds: props.selectedUsers.getUserIds() });
+        socket.emit("getTaskAccomplishmentEntriesInYear", { year: year, userIds: props.selectedUsers.getUserIds() });
     }, [year])
 
     useEffect(() => {

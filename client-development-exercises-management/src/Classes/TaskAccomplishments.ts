@@ -31,7 +31,7 @@ export default class TaskAccomplishments {
 
     readDataset(dataset: any) {
         for (let datasetEntry of dataset) {
-            let taskAccomplishment = new TaskAccomplishment(datasetEntry.task_id, datasetEntry.user_id, datasetEntry.calendar_week, datasetEntry.year);
+            let taskAccomplishment = new TaskAccomplishment(datasetEntry.taskId, datasetEntry.userId, datasetEntry.calendarWeek, datasetEntry.year);
             this.addTaskAccomplishment(taskAccomplishment);
         }
     }

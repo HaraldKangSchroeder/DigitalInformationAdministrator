@@ -37,7 +37,7 @@ export function DialogCreateUser() {
     }
 
     const handleCreateUserSubmit = () => {
-        socket.emit("createUser", { name: name });
+        socket.emit("createUserEntry", { name: name });
         setName("");
         setDialogOpen(false);
     }

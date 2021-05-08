@@ -101,7 +101,7 @@ export function DialogCreateTask() {
     }
 
     const handleSubmit = () => {
-        socket.emit("createTask", state);
+        socket.emit("createTaskEntry", state);
         setState({
             name: "",
             score: "",

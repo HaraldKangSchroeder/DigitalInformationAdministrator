@@ -18,39 +18,50 @@ async function updateTaskaccomplishments() {
     let currentYear = dateToday.getFullYear();
     let currentWeek = utils.getWeekNumberByDate(dateToday);
 
-    let tasksAccomplishmentsOfWeekInYear = await databaseManager.getTasksAccomplishmentsOfWeekInYear(currentWeek, currentYear);
-    let tasksAccomplishmentsExistent = tasksAccomplishmentsOfWeekInYear.length > 0;
+    let tasksAccomplishmentEntriesOfWeekInYear = await databaseManager.getTaskAccomplishmentEntriesOfWeekInYear(currentWeek, currentYear);
+    let tasksAccomplishmentsExistent = tasksAccomplishmentEntriesOfWeekInYear.length > 0;
 
     if (tasksAccomplishmentsExistent) return;
 
-    let taskOccurencesOfCurrentWeek = await databaseManager.getTaskOccurencesWithWeeklyOccurencesOfWeek(currentWeek);
-    let taskAccomplishmentEntries = getTasksAccomplishmentEntriesByTaskOccurences(taskOccurencesOfCurrentWeek, currentWeek,currentYear);
+    let taskOccurencesEntriesOfCurrentWeek = await databaseManager.getTaskOccurenceEntriesOfWeek(currentWeek);
+    let taskEntries = await databaseManager.getActiveTaskEntries();
+    let taskAccomplishmentEntries = createTasksAccomplishmentEntries(taskOccurencesEntriesOfCurrentWeek, taskEntries,currentYear);
 
     let tasksPending = taskAccomplishmentEntries.length > 0;
     if(!tasksPending) return;
 
-    await databaseManager.addTaskAccomplishments(taskAccomplishmentEntries);
+    await databaseManager.createTaskAccomplishmentEntries(taskAccomplishmentEntries);
 }
 
 exports.resetTaskAccomplishmentsOfCurrentWeek = async () => {
     let dateToday = new Date();
     let currentYear = dateToday.getFullYear();
     let currentWeek = utils.getWeekNumberByDate(dateToday);
-    await databaseManager.deleteTaskAccomplishmentsByWeekAndYear(currentWeek,currentYear);
+    await databaseManager.deleteTaskAccomplishmentEntriesByWeekAndYear(currentWeek,currentYear);
     updateTaskaccomplishments();
 }
 
-function getTasksAccomplishmentEntriesByTaskOccurences(taskOccurences, currentWeek, currentYear){
+function createTasksAccomplishmentEntries(taskOccurenceEntries, taskEntries, year){
     let taskAccomplishmentEntries = [];
-    for(let taskOccurence of taskOccurences){
-        for(let i = 0; i < taskOccurence.weeklyOccurences; i++){
+    for(let taskOccurenceEntry of taskOccurenceEntries){
+        let weeklyOccurences = getWeeklyOccurences(taskOccurenceEntry.id,taskEntries);
+        for(let i = 0; i < weeklyOccurences; i++){
             let taskAccomplishmentEntry = {};
-            taskAccomplishmentEntry["taskId"] = taskOccurence.id;
+            taskAccomplishmentEntry["taskId"] = taskOccurenceEntry.id;
             taskAccomplishmentEntry["userId"] = null;
-            taskAccomplishmentEntry["calendarWeek"] = currentWeek;
-            taskAccomplishmentEntry["year"] = currentYear;
+            taskAccomplishmentEntry["calendarWeek"] = taskOccurenceEntry.calendarWeek;
+            taskAccomplishmentEntry["year"] = year;
             taskAccomplishmentEntries.push(taskAccomplishmentEntry);
         }
     }
     return taskAccomplishmentEntries;
+}
+
+function getWeeklyOccurences(taskId, taskEntries){
+    for(let taskEntry of taskEntries){
+        if(taskEntry.id === taskId){
+            return taskEntry.weeklyOccurences;
+        }
+    }
+    return 0;
 }

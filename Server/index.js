@@ -3,9 +3,9 @@ const http = require("http");
 const { configs } = require("./configs");
 const Server = require("socket.io");
 const cors = require("cors");
-const databaseManager = require("./src/databaseManager");
+const databaseManager = require("./src/tasks/databaseManager");
 const tasksManager = require("./src/tasks/tasksManager");
-const utils = require("./src/utils");
+const utils = require("./src/tasks/utils");
 
 const app = express();
 app.use(cors());

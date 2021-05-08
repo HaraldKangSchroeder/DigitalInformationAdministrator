@@ -1,6 +1,6 @@
-const utils = require("../utils");
+const utils = require("./utils");
 
-const databaseManager = require("../databaseManager");
+const databaseManager = require("./databaseManager");
 
 const UPDATE_TIME_STEP = 300000;
 

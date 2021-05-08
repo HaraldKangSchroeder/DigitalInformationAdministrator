@@ -25,13 +25,6 @@ const useStyles = makeStyles({
     userAvatar: {
         backgroundColor: "green",
     },
-    text: {
-        float: "left",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        fontSize: "1.2em",
-    }
 })
 
 interface Props {
@@ -43,12 +36,12 @@ export default function UserPresentation(props : Props) {
     return (
         <div className={classes.root}>
 
-            <div className={classes.text}>
+            <div>
                 <ListItem>
                     <ListItemAvatar>
                         <Avatar className={`${classes.avatar} ${classes.userAvatar}`}>Ha</Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={props.user.getName()} secondary="Wp 100, Op 10000000" />
+                    <ListItemText primary={props.user.getName()} secondary={<div><div>Wp 100</div><div>Op 10000000</div></div>} />
                 </ListItem>
             </div>
         </div>

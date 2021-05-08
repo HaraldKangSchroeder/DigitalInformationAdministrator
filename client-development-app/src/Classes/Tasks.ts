@@ -8,7 +8,7 @@ export default class Tasks {
         this.taskList = [];
         if (tasks == null) return;
         for (let task of tasks) {
-            let a = new Task(task.id, task.taskId, task.userId, task.label);
+            let a = new Task(task.id, task.taskId, task.userId, task.label, task.score);
             console.log(a);
             this.taskList.push(a);
         }

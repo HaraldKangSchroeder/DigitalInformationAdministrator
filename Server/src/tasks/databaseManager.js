@@ -369,7 +369,8 @@ exports.getPendingTaskEntriesOfWeekInYear = async (week, year) => {
                 "ta".user_id AS "userId",
                 "ta".calendar_week AS "calendarWeek",
                 "ta".year,
-                (SELECT "t".label FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id) 
+                (SELECT "t".label FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id),
+                (SELECT "t".score FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id) 
             FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS "ta" 
             WHERE "ta".calendar_week = $1 AND "ta".year = $2
         `;

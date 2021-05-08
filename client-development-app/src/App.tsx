@@ -6,20 +6,10 @@ import { useEffect, useState } from 'react';
 import socket from "./socket";
 import TasksPresentation from "./Components/TasksPresentation";
 import UsersPresentation from "./Components/UsersPresentation";
+import NavBar from './Components/NavBar';
 import Tasks from "./Classes/Tasks";
 import Users from "./Classes/Users";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    background:"rgb(70,70,70)",
-    height:"100vh",
-  },
-}));
 
 function App() {
   const [selectedUser,setSelectedUser] = useState(null);
@@ -37,20 +27,18 @@ function App() {
     socket.emit("getUsersAndTasksOfCurrentWeek");
   },[]);
 
-  const classes = useStyles();
   return (
     <div className="App">
       <Grid container alignItems="flex-start">
         <Grid item xs={1}>
-          {/* SHOULD BECOME NAVBAR */}
-          <Paper className={classes.paper}>xs=12 xs=12 xs=12 xs=12 xs=12 xs=12 xs=12 xs=12 </Paper>
+          <NavBar />
         </Grid>
         <Grid item xs={9}>
           {/* SHOULD BECOME LIST OF Tasks OF CURRENT WEEK */}
           <TasksPresentation tasks={state.tasks}/>
         </Grid>
         {/* SHOULD BECOME LIST OF USERS */}
-        <Grid style={{background:"rgb(70,70,70)",height:"100vh"}}container item xs={2}>
+        <Grid container item xs={2}>
           <UsersPresentation users={state.users} />
         </Grid>
       </Grid>

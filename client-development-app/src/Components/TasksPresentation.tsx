@@ -2,9 +2,12 @@ import TaskPresentation from "./TaskPresentation";
 import { makeStyles } from "@material-ui/core"
 import React from "react";
 import Tasks from "../Classes/Tasks";
+import { classicNameResolver } from "typescript";
 
 const useStyles = makeStyles({
-    
+    root : {
+        paddingLeft : "1vw",
+    }
 })
 
 interface Props {
@@ -12,13 +15,14 @@ interface Props {
 }
 
 export default function TasksPresentation(props : Props){
+    const classes = useStyles();
     return (
-        <React.Fragment>
+        <div className={classes.root}>
             {
                 props.tasks.getTaskList().map((task) => {
                     return <TaskPresentation task={task}/>
                 })
             }
-        </React.Fragment>
+        </div>
     )
 }

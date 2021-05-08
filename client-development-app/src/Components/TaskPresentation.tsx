@@ -48,12 +48,12 @@ export default function TaskPresentation(props : Props) {
     const classes = useStyles();
     const c = 120;
     return (
-        <div className={classes.root} style={{background:`rgb(${c + Math.random() * (255-c)},${c + Math.random() * (255-c)},${c + Math.random() * (255-c)})`}}>
+        <div className={classes.root} style={{background:`rgba(${c + Math.random() * (255-c)},${c + Math.random() * (255-c)},${c + Math.random() * (255-c)},1)`}}>
             <ListItem>
                 <ListItemAvatar>
                     <Avatar className={`${classes.avatar} ${classes.taskPendingAvatar}`}> </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={props.task.getLabel()} secondary="Score 100" />
+                <ListItemText primary={props.task.getLabel()} secondary={"Score " + props.task.getScore()}/>
             </ListItem>
         </div>
     )

@@ -9,6 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import socket from "../../socket";
+import User from "../../Classes/User";
 
 const useStyles = makeStyles({
     root: {
@@ -23,9 +24,14 @@ const useStyles = makeStyles({
     }
 })
 
-export function DialogChangeUserName(props : any) {
-    const [isDialogOpen,setIsDialogOpen] = useState<boolean>(false);
-    const [newName, setNewName] = useState<string>("");
+interface Props {
+    selectedUser : User;
+    disabled : boolean;
+}
+
+export function DialogChangeUserName(props : Props) {
+    const [isDialogOpen,setIsDialogOpen] = useState(false);
+    const [newName, setNewName] = useState("");
 
     const handleChangeNameClose = () => {
         setNewName("");

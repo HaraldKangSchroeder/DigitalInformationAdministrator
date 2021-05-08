@@ -10,8 +10,8 @@ import Users from "../../Classes/Users";
 
 
 function UsersManager() {
-    const [users, setUsers] = useState(new Users());
-    const [selectedUsers, setSelectedUsers] = useState(new Users());
+    const [users, setUsers] = useState(new Users(null));
+    const [selectedUsers, setSelectedUsers] = useState(new Users(null));
 
     useEffect(() => {
         socket.connect();
@@ -25,7 +25,7 @@ function UsersManager() {
         }
     }, [])
 
-    const changeSelectedUserById = (id) => {
+    const changeSelectedUserById = (id : number) => {
         let selectedUsersCopy = selectedUsers.getCopy();
         if (selectedUsersCopy.containsUserById(id)) {
             selectedUsersCopy.removeUserById(id);
@@ -58,11 +58,11 @@ function UsersManager() {
                             changeSelectedEntitiesIds={changeSelectedUserById}
                         />
                     </Grid>
-                    <Grid item xs={4} align="center">
+                    <Grid item xs={4}>
                         <DialogCreateUser />
 
                     </Grid>
-                    <Grid item xs={4} align="center">
+                    <Grid item xs={4}>
                         <DialogEntityDeletion
                             disabled={!selectedUsers.containsExactlyOneUser()}
                             entityType="User"
@@ -70,20 +70,18 @@ function UsersManager() {
                             deleteEntity={deleteSelectedUser}
                         />
                     </Grid>
-                    <Grid item xs={4} align="center" >
+                    <Grid item xs={4}>
                         <DialogChangeUserName
                             disabled={!selectedUsers.containsExactlyOneUser()}
                             selectedUser={selectedUsers.containsExactlyOneUser() ? selectedUsers.getUserList()[0] : null}
                         />
                     </Grid>
                 </Grid>
-                {/* <Grid item xs={1} spacing={0} /> */}
                 <Grid container item xs={10} >
                     <Grid item xs={12}>
                         <UserCharts selectedUsers={selectedUsers} />
                     </Grid>
                 </Grid>
-                {/* <Grid item xs={1} /> */}
 
             </Grid>
         </React.Fragment>

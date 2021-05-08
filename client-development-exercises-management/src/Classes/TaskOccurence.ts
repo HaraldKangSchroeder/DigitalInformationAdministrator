@@ -2,12 +2,12 @@ export default class TaskOccurence {
 
     id : number;
     calendarWeek : number;
-    day : number;
+    dayOfWeek : number;
 
-    constructor(id : number, calendarWeek : number, day : number) {
+    constructor(id : number, calendarWeek : number, dayOfWeek : number) {
         this.id = id;
         this.calendarWeek = calendarWeek;
-        this.day = day;
+        this.dayOfWeek = dayOfWeek;
     }
 
     getId() : number{
@@ -18,7 +18,7 @@ export default class TaskOccurence {
         return this.calendarWeek;
     }
 
-    getDay() : number{
-        return this.day;
+    getDayOfWeek() : number{
+        return this.dayOfWeek;
     }
 }

@@ -29,16 +29,16 @@ const useStyles = makeStyles({
 })
 
 
-export function DialogCreateTask(props : any) {
+export function DialogCreateTask() {
     const classes = useStyles();
 
-    const [openAddTask, setOpenAddTask] = useState<boolean>(false);
+    const [openAddTask, setOpenAddTask] = useState(false);
     const [state, setState] = useState({
         name: "",
         score: "",
         importance: "",
         weeklyRythm: "",
-        day: "",
+        dayOfWeek: "",
         weeklyOccurences: "1"
     });
 
@@ -52,7 +52,7 @@ export function DialogCreateTask(props : any) {
             score: "",
             importance: "",
             weeklyRythm: "",
-            day: "",
+            dayOfWeek: "",
             weeklyOccurences: "1"
         })
         setOpenAddTask(false);
@@ -82,7 +82,7 @@ export function DialogCreateTask(props : any) {
     const handleChangeDay = (e : any) => {
         setState({
             ...state,
-            day: e.target.value
+            dayOfWeek: e.target.value
         })
     }
 
@@ -107,7 +107,7 @@ export function DialogCreateTask(props : any) {
             score: "",
             importance: "",
             weeklyRythm: "",
-            day: "",
+            dayOfWeek: "",
             weeklyOccurences: "1"
         })
         setOpenAddTask(false);
@@ -183,10 +183,10 @@ export function DialogCreateTask(props : any) {
                     />
 
                     <DialogContentText className={classes.informationText}>
-                        Optional : If the Task is day dependant, you can select the respective day which gets attached to the Task name in the presentation view
+                        Optional : If the Task is dayOfWeek dependant, you can select the respective dayOfWeek which gets attached to the Task name in the presentation view
                     </DialogContentText>
                     <SelectMenu
-                        value={state.day}
+                        value={state.dayOfWeek}
                         label={"Day"}
                         menuItems={MENU_ITEMS_DAYS}
                         handleChange={handleChangeDay}

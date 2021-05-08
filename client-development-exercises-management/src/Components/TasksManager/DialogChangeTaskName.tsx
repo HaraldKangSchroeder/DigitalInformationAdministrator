@@ -9,6 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import socket from "../../socket";
+import Task from "../../Classes/Task";
 
 const useStyles = makeStyles({
     root: {
@@ -27,7 +28,11 @@ const useStyles = makeStyles({
     }
 })
 
-export function DialogChangeTaskName(props : any) {
+interface Props {
+    selectedTask : Task;
+}
+
+export function DialogChangeTaskName(props : Props) {
     const [isDialogOpen,setIsDialogOpen] = useState<boolean>(false);
     const [newName, setNewName] = useState<string>("");
 

@@ -68,9 +68,9 @@ io.on("connection", (socket) => {
         let taskId = await databaseManager.createTask(task.name,task.score,task.importance, task.weeklyOccurences);
         let isWeeklyRythmSet = task.week !== "";
         if(isWeeklyRythmSet){
-            let isDaySet = task.day !== "";
+            let isDaySet = task.dayOfWeek !== "";
             if (isDaySet) {
-                await databaseManager.addWeeksWithDayToTask(taskId, task.weeklyRythm, task.day);
+                await databaseManager.addWeeksWithDayToTask(taskId, task.weeklyRythm, task.dayOfWeek);
             }
             else{
                 await databaseManager.addWeeksToTask(taskId, task.weeklyRythm);
@@ -92,7 +92,7 @@ io.on("connection", (socket) => {
 
     socket.on('addWeekAndDay', async (data) => {
         await databaseManager.deleteWeekOfTask(data.taskId,data.calendarWeek);
-        await databaseManager.addWeekAndDayToTask(data.taskId,data.calendarWeek, data.day);
+        await databaseManager.addWeekAndDayToTask(data.taskId,data.calendarWeek, data.dayOfWeek);
         await tasksManager.resetTaskAccomplishmentsOfCurrentWeek();
         let taskOccurences = await databaseManager.getTaskOccurences(data.taskId);
         socket.emit('taskOccurences',taskOccurences);
@@ -156,9 +156,9 @@ io.on("connection", (socket) => {
         await databaseManager.deleteAllWeeksOfTask(data.taskId);
         let isWeeklyRythmSet = data.weeklyRythm !== "";
         if(isWeeklyRythmSet){
-            let isDaySet = data.day !== "";
+            let isDaySet = data.dayOfWeek !== "";
             if (isDaySet) {
-                await databaseManager.addWeeksWithDayToTask(data.taskId, data.weeklyRythm, data.day);
+                await databaseManager.addWeeksWithDayToTask(data.taskId, data.weeklyRythm, data.dayOfWeek);
             }
             else{
                 await databaseManager.addWeeksToTask(data.taskId, data.weeklyRythm);
@@ -185,7 +185,6 @@ io.on("connection", (socket) => {
 
     socket.on('deleteUser', async (data) => {
         await databaseManager.deleteUserById(data.id);
-        // TODO : also need to delete rows in table with tasks in case this specific user solved tasks as well ( do it automatically with previous sql req by using foreign key)
         let users = await databaseManager.getAllUsers();
         socket.emit("allUsers", {users:users});
         logDivider();

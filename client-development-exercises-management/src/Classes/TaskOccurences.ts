@@ -21,7 +21,8 @@ export default class TaskOccurences {
 
     readDataset(dataset : any){
         for(let datasetEntry of dataset){
-            let taskOccurence = new TaskOccurence(datasetEntry.id, datasetEntry.calendar_week,datasetEntry.day);
+            console.log(datasetEntry);
+            let taskOccurence = new TaskOccurence(datasetEntry.id, datasetEntry.calendarWeek,datasetEntry.dayOfWeek);
             this.addTaskOdccurence(taskOccurence);
         }
     }
@@ -35,9 +36,9 @@ export default class TaskOccurences {
         return false;
     }
 
-    containsWeekAndDay(week : number, day : number) : boolean{
+    containsWeekAndDay(week : number, dayOfWeek : number) : boolean{
         for(let taskOccurence of this.taskOccurenceList){
-            if(taskOccurence.getCalendarWeek() === week && taskOccurence.getDay() === day){
+            if(taskOccurence.getCalendarWeek() === week && taskOccurence.getDayOfWeek() === dayOfWeek){
                 return true;
             }
         }

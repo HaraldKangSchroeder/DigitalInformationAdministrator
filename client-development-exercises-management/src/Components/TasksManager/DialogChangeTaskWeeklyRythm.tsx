@@ -10,6 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { SelectMenu } from '../SelectMenu';
 import { MENU_ITEMS_WEEKLY_RYTHMS, MENU_ITEMS_DAYS} from '../../constants';
 import socket from "../../socket";
+import Task from "../../Classes/Task";
 
 
 
@@ -26,12 +27,17 @@ const useStyles = makeStyles({
     }
 })
 
-export function DialogChangeTaskWeeklyRythm(props : any) {
+interface Props {
+    disabled : boolean;
+    selectedTask : Task;
+}
+
+export function DialogChangeTaskWeeklyRythm(props : Props) {
     const classes = useStyles();
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const [state, setState] = useState({
         weeklyRythm: "",
-        day: ""
+        dayOfWeek: ""
     });
 
     const handleOpenDialog = () => {
@@ -41,7 +47,7 @@ export function DialogChangeTaskWeeklyRythm(props : any) {
     const handleCloseDialog = () => {
         setState({
             weeklyRythm: "",
-            day: "",
+            dayOfWeek: "",
         })
         setOpenDialog(false);
     };
@@ -56,7 +62,7 @@ export function DialogChangeTaskWeeklyRythm(props : any) {
     const handleChangeDay = (e : any) => {
         setState({
             ...state,
-            day: e.target.value
+            dayOfWeek: e.target.value
         })
     }
 
@@ -64,7 +70,7 @@ export function DialogChangeTaskWeeklyRythm(props : any) {
         socket.emit("changeTaskWeeklyRythm", {taskId: props.selectedTask.getId() , ...state});
         setState({
             weeklyRythm: "",
-            day: "",
+            dayOfWeek: "",
         })
         setOpenDialog(false);
     }
@@ -98,10 +104,10 @@ export function DialogChangeTaskWeeklyRythm(props : any) {
                     />
 
                     <DialogContentText className={classes.informationText}>
-                        If the Task is day dependant, you can select the respective day which gets attached to the Task name in the presentation view
+                        If the Task is dayOfWeek dependant, you can select the respective dayOfWeek which gets attached to the Task name in the presentation view
                     </DialogContentText>
                     <SelectMenu
-                        value={state.day}
+                        value={state.dayOfWeek}
                         label={"Day"}
                         menuItems={MENU_ITEMS_DAYS}
                         handleChange={handleChangeDay}

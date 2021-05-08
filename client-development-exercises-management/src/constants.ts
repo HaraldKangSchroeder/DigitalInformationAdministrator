@@ -1,4 +1,9 @@
-export const MENU_ITEMS_SCORES = [
+interface ValueLabel {
+    value : any;
+    label : any;
+}
+
+export const MENU_ITEMS_SCORES : ValueLabel[] = [
     { value: 1, label: 1 },
     { value: 2, label: 2 },
     { value: 3, label: 3 },
@@ -11,19 +16,19 @@ export const MENU_ITEMS_SCORES = [
     { value: 10, label: 10 },
 ];
 
-export const MENU_ITEMS_IMPORTANCES = [
+export const MENU_ITEMS_IMPORTANCES : ValueLabel[] = [
     { value: 1, label: 1 },
     { value: 2, label: 2 },
     { value: 3, label: 3 },
 ]
 
-export const MENU_ITEMS_WEEKLY_RYTHMS = [
+export const MENU_ITEMS_WEEKLY_RYTHMS : ValueLabel[] = [
     { value: "weekly", label: "weekly" },
     { value: "bi-weekly", label: "bi-weekly" },
     { value: "three-week", label: "three-week" }
 ]
 
-export const MENU_ITEMS_DAYS = [
+export const MENU_ITEMS_DAYS : ValueLabel[] = [
     { value: 0, label: "Sunday" },
     { value: 1, label: "Monday" },
     { value: 2, label: "Tuesday" },
@@ -33,7 +38,7 @@ export const MENU_ITEMS_DAYS = [
     { value: 6, label: "Saturday" },
 ]
 
-export const MENU_ITEMS_WEEKLY_OCCURENCES = [
+export const MENU_ITEMS_WEEKLY_OCCURENCES : ValueLabel[] = [
     { value: 1, label: 1 },
     { value: 2, label: 2 },
     { value: 3, label: 3 },
@@ -46,7 +51,7 @@ export const MENU_ITEMS_WEEKLY_OCCURENCES = [
     { value: 10, label: 10 },
 ]
 
-export const X_AXIS_LABEL_DATA = [
+export const X_AXIS_LABEL_DATA : ValueLabel[] = [
     { value: "MONTH", label: "Month" },
     { value: "CALENDAR_WEEK", label: "Calendar Week" },
 ]

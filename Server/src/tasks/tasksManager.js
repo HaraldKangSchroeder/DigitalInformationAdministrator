@@ -6,7 +6,6 @@ const UPDATE_TIME_STEP = 300000;
 
 let interval = null;
 
-
 exports.startUpdateTaskAccomplishments = async () => {
     updateTaskaccomplishments();
     interval = setInterval(() => {
@@ -47,7 +46,7 @@ function getTasksAccomplishmentEntriesByTaskOccurences(taskOccurences, currentWe
         for(let i = 0; i < taskOccurence.weeklyOccurences; i++){
             let taskAccomplishmentEntry = {};
             taskAccomplishmentEntry["taskId"] = taskOccurence.id;
-            taskAccomplishmentEntry["userId"] = -1;
+            taskAccomplishmentEntry["userId"] = null;
             taskAccomplishmentEntry["calendarWeek"] = currentWeek;
             taskAccomplishmentEntry["year"] = currentYear;
             taskAccomplishmentEntries.push(taskAccomplishmentEntry);

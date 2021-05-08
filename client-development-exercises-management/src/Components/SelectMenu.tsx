@@ -4,9 +4,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import { ChangeEvent } from 'react';
+import { ReactNode } from 'react';
 
 const useStyles = makeStyles({
-    formControl: (props : any) => ({
+    formControl: (props : Props) => ({
         minWidth: props.minWidth || 200,
         padding:0,
         height:34,
@@ -15,8 +17,18 @@ const useStyles = makeStyles({
     }),
 })
 
+interface Props {
+    minWidth? : number;
+    marginSide ?: number;
+    disabled? : boolean;
+    label : string;
+    value : any;
+    noNone? : boolean;
+    menuItems : any[];
+    handleChange : Function;
+}
 
-export function SelectMenu(props : any) {
+export function SelectMenu(props : Props) {
     const classes = useStyles(props);
 
     return (
@@ -29,7 +41,7 @@ export function SelectMenu(props : any) {
             <InputLabel>{props.label}</InputLabel>
             <Select
                 value={props.value}
-                onChange={props.handleChange}
+                onChange={(e : any) => {props.handleChange(e)}}
                 label={props.label}
             >
                 {props.noNone ? <div></div> : 

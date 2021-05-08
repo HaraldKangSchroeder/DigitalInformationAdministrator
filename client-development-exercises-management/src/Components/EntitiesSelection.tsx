@@ -17,7 +17,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export function EntitiesSelection(props : any) {
+interface Props {
+    entities : any;
+    entityType : string;
+    selectedEntitiesIds : number[];
+    changeSelectedEntitiesIds : Function;
+}
+
+export function EntitiesSelection(props : Props) {
     const classes = useStyles();
 
     return (

@@ -5,6 +5,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import Task from '../../Classes/Task';
+import { Interface } from 'readline';
+import Tasks from '../../Classes/Tasks';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -25,7 +27,13 @@ const MenuProps = {
 };
 
 
-export default function MultipleSelectTaskMenu(props : any) {
+interface Props {
+    selectedTasks : Tasks;
+    tasks : Tasks;
+    changeSelectedTasksByIds : Function;
+}
+
+export default function MultipleSelectTaskMenu(props : Props) {
     const classes = useStyles();
 
     const handleChange = (e : any) => {
@@ -45,7 +53,7 @@ export default function MultipleSelectTaskMenu(props : any) {
                     value={props.selectedTasks.getTaskIds()}
                     label={label}
                     onChange={handleChange}
-                    renderValue={(ids) => props.tasks.getTaskLabelsByIds(ids).join(', ')}
+                    renderValue={(ids : any) => props.tasks.getTaskLabelsByIds(ids).join(', ')}
                     MenuProps={MenuProps}
                 >
                     {props.tasks.getTaskList().map((task : Task) => (

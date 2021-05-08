@@ -1,4 +1,4 @@
-import { TaskCalendar } from "./TaskCalendar";
+import { TaskCalendar } from "./TaskCalendar/TaskCalendar";
 import Grid from '@material-ui/core/Grid';
 import React, { useEffect, useState } from "react";
 import socket from "../../socket";
@@ -7,6 +7,7 @@ import { DialogChangeTaskValue } from "./DialogChangeTaskValue";
 import { MENU_ITEMS_SCORES, MENU_ITEMS_IMPORTANCES, MENU_ITEMS_WEEKLY_OCCURENCES } from '../../constants';
 import { makeStyles } from "@material-ui/core";
 import TaskOccurences from "../../Classes/TaskOccurences";
+import Task from "../../Classes/Task";
 
 
 const useStyles = makeStyles({
@@ -23,8 +24,12 @@ const useStyles = makeStyles({
     }
 })
 
+interface Props {
+    selectedTask : Task;
+}
 
-export function TaskInformation(props : any) {
+
+export function TaskInformation(props : Props) {
     const [taskOccurences, setTaskOccurences] = useState<TaskOccurences>(new TaskOccurences(null));
 
     useEffect(() => {

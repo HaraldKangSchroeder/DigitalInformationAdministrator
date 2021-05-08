@@ -24,7 +24,7 @@ CREATE TABLE tasks_occurences
 (
     id INT NOT NULL,
     calendar_week week_num NOT NULL,
-    day day_num,
+    day_of_week day_num,
     UNIQUE(id,calendar_week),
     FOREIGN KEY (id) REFERENCES tasks(id) ON DELETE CASCADE
 );
@@ -43,6 +43,6 @@ CREATE TABLE task_accomplishments
     user_id INT,
     calendar_week week_num NOT NULL,
     year INT NOT NULL,
-    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
-    -- FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

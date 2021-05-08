@@ -1,4 +1,4 @@
-import React ,{ useState } from "react";
+import React, { useState } from "react";
 import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
@@ -8,17 +8,18 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import socket from "../../socket";
-import {SelectMenu} from "../SelectMenu";
+import { SelectMenu } from "../SelectMenu";
+import Task from "../../Classes/Task";
 
 
 const useStyles = makeStyles({
     root: {
-        marginLeft:'20px',
-        maxWidth: '30px', 
-        maxHeight: '30px', 
-        minWidth: '30px', 
+        marginLeft: '20px',
+        maxWidth: '30px',
+        maxHeight: '30px',
+        minWidth: '30px',
         minHeight: '30px',
-        color:"grey",
+        color: "grey",
     },
     informationText: {
         marginBottom: "20px"
@@ -27,18 +28,24 @@ const useStyles = makeStyles({
         margin: 0
     },
     size: {
-        
+
     }
 });
 
+interface Props {
+    messageId: string;
+    selectedTask: Task;
+    type: string;
+    menuItems: any[];
+}
 
-export function DialogChangeTaskValue(props : any) {
-    const [isDialogOpen,setIsDialogOpen] = useState<boolean>(false);
-    const [newValue, setNewValue] = useState<string>("");
+export function DialogChangeTaskValue(props: Props) {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [newValue, setNewValue] = useState("");
 
     const handleDialogClose = () => {
         setNewValue("");
-        setIsDialogOpen(false); 
+        setIsDialogOpen(false);
     }
 
     const handleDialogOpen = () => {
@@ -46,12 +53,12 @@ export function DialogChangeTaskValue(props : any) {
     }
 
     const handleSubmit = () => {
-        socket.emit(props.messageId ,{taskId:props.selectedTask.getId(), newValue:newValue});
+        socket.emit(props.messageId, { taskId: props.selectedTask.getId(), newValue: newValue });
         setNewValue("");
         setIsDialogOpen(false);
     }
 
-    const handleChangeValue = (e : any) => {
+    const handleChangeValue = (e: any) => {
         setNewValue(e.target.value);
     }
 
@@ -61,7 +68,7 @@ export function DialogChangeTaskValue(props : any) {
     return (
         <React.Fragment>
             <Button
-                classes={{ startIcon: classes.startIcon}}
+                classes={{ startIcon: classes.startIcon }}
                 className={classes.root}
                 startIcon={<EditIcon />}
                 onClick={handleDialogOpen}

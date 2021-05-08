@@ -23,7 +23,7 @@ const useStyles = makeStyles({
     }
 })
 
-export function DialogCreateUser(props : any) {
+export function DialogCreateUser() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [name, setName] = useState("");
 

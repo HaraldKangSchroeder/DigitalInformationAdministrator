@@ -39,15 +39,19 @@ const useStyles = makeStyles({
     }
 })
 
-export function UserCharts(props: any) {
-    const [taskAccomplishments, setTaskAccomplishments] = useState<TaskAccomplishments>(new TaskAccomplishments(null));
+interface Props {
+    selectedUsers : Users;
+}
+
+export function UserCharts(props: Props) {
+    const [taskAccomplishments, setTaskAccomplishments] = useState(new TaskAccomplishments(null));
     const [tasks, setTasks] = useState(new Tasks(null));
     const [selectedTasks, setSelectedTasks] = useState(new Tasks(null));
     const [year, setYear] = useState(0);
     const [years, setYears] = useState<number[]>([]);
     const [calendarWeekRange, setCalendarWeekRange] = useState({ start: 0, end: 0 });
     const [visualizationData, setVisualizationData] = useState({});
-    const [visualizationMode, setVisualizationMode] = useState(VISUALIZATION_MODES[0]);
+    const [visualizationMode, setVisualizationMode] = useState<string>(VISUALIZATION_MODES[0]);
 
     useEffect(() => {
         socket.on("taskAccomplishmentsYears", ({ years }) => {

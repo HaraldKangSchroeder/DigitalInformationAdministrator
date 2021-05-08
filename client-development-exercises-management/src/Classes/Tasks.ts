@@ -74,7 +74,7 @@ export default class Tasks {
 
     readDataset(dataset : any){
         for(let datasetEntry of dataset){
-            let task = new Task(datasetEntry.id,datasetEntry.label,datasetEntry.score,datasetEntry.importance,datasetEntry.weekly_occurences,datasetEntry.active);
+            let task = new Task(datasetEntry.id,datasetEntry.label,datasetEntry.score,datasetEntry.importance,datasetEntry.weeklyOccurences,datasetEntry.active);
             this.addTask(task);    
         }
     }

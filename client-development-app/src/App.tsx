@@ -4,8 +4,8 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import socket from "./socket";
-import TasksPresentation from "./Components/Tasks";
-import UsersPresentation from "./Components/Users";
+import TasksPresentation from "./Components/TasksPresentation";
+import UsersPresentation from "./Components/UsersPresentation";
 import Tasks from "./Classes/Tasks";
 import Users from "./Classes/Users";
 
@@ -14,21 +14,21 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   paper: {
-    padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
-    background:"red"
+    background:"rgb(70,70,70)",
+    height:"100vh",
   },
 }));
 
 function App() {
   const [selectedUser,setSelectedUser] = useState(null);
   const [state,setState] = useState({
-    tasks:new Tasks(),
-    users:new Users()
+    tasks:new Tasks(null),
+    users:new Users(null)
   })
 
-  useEffect(async () => {
+  useEffect(() => {
     // request taskaccomplishments of current week and users and set state respectively
     socket.on("usersAndTasksOfCurrentWeek", ({tasks,users}) => {
       console.log(new Users(users));
@@ -50,7 +50,7 @@ function App() {
           <TasksPresentation tasks={state.tasks}/>
         </Grid>
         {/* SHOULD BECOME LIST OF USERS */}
-        <Grid container item xs={2}>
+        <Grid style={{background:"rgb(70,70,70)",height:"100vh"}}container item xs={2}>
           <UsersPresentation users={state.users} />
         </Grid>
       </Grid>

@@ -1,24 +1,30 @@
 export default class Task {
-    constructor(id,taskId,userId, label) {
+
+    id: number;
+    taskId: number;
+    userId: number;
+    label: string;
+
+    constructor(id: number, taskId: number, userId: number, label: string) {
         this.id = id;
         this.taskId = taskId;
         this.userId = userId;
         this.label = label;
     }
 
-    getId(){
+    getId(): number {
         return this.id;
     }
 
-    getTaskId(){
+    getTaskId(): number {
         return this.taskId;
     }
 
-    getUserId(){
+    getUserId(): number {
         return this.userId;
     }
 
-    getLabel(){
+    getLabel(): string {
         return this.label;
     }
 }

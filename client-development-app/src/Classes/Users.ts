@@ -1,7 +1,10 @@
 import User from "./User";
 
 export default class Users {
-    constructor(users){
+
+    userList : User[];
+
+    constructor(users : any){
         this.userList = [];
         if(users == null) return;
         for(let user of users){
@@ -9,7 +12,7 @@ export default class Users {
         }
     }
 
-    getUserList(){
+    getUserList() : User[]{
         return this.userList;
     }
 }

@@ -3,14 +3,15 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
+import User from "../Classes/User";
 
 const useStyles = makeStyles({
     root: {
         display: "inline-block",
         paddingRight: "10px",
         margin: "10px",
-        background: "rgb(125,125,125)",
-        borderRadius: "100px",
+        background: "rgb(220,220,220)",
+        borderRadius : "10px",
         justifyContent: "center",
         fontFamily: "Calibri"
     },
@@ -30,11 +31,14 @@ const useStyles = makeStyles({
         justifyContent: "center",
         alignItems: "center",
         fontSize: "1.2em",
-        color: "rgb(50,50,50)"
     }
 })
 
-export default function User(props) {
+interface Props {
+    user : User;
+}
+
+export default function UserPresentation(props : Props) {
     const classes = useStyles();
     return (
         <div className={classes.root}>

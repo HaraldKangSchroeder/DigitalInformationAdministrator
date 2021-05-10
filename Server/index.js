@@ -209,11 +209,24 @@ io.on("connection", (socket) => {
         let currentYear = dateToday.getFullYear();
         let currentWeek = utils.getWeekNumberByDate(dateToday);
         let tasks = await databaseManager.getPendingTaskEntriesOfWeekInYear(currentWeek, currentYear);
-        let users = await databaseManager.getUserEntries();
+        let users = await databaseManager.getUserEntriesWithPoints(currentWeek,currentYear);
         let res = { tasks: tasks, users: users }
         socket.emit("usersAndTasksOfCurrentWeek", res);
         logDivider();
     });
+
+    socket.on('updateTaskAccomplishment', async ({id, userId}) => {
+        console.log("hi");
+        await databaseManager.updateTaskAccomplishmentEntryWithUserId(id,userId);
+        let dateToday = new Date();
+        let currentYear = dateToday.getFullYear();
+        let currentWeek = utils.getWeekNumberByDate(dateToday);
+        let tasks = await databaseManager.getPendingTaskEntriesOfWeekInYear(currentWeek, currentYear);
+        let users = await databaseManager.getUserEntriesWithPoints(currentWeek,currentYear);
+        let res = { tasks: tasks, users: users }
+        socket.emit("usersAndTasksOfCurrentWeek", res);
+        logDivider();
+    })
 });
 
 

@@ -263,6 +263,45 @@ exports.getUserEntries = async () => {
     }
 }
 
+exports.getUserEntriesWithPoints = async (week, year) => {
+    try {
+        let queryText = `
+            SELECT 
+                "u".id, 
+                "u".name,
+                (
+                    SELECT 
+                    COALESCE(sum((
+                            SELECT "t".score 
+                            FROM ${TABLE_TASKS} AS t 
+                            WHERE "t".id = "ta".task_id
+                            )),0)
+                    FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS ta WHERE "u".id = "ta".user_id AND "ta".calendar_week = $1 AND "ta".year = $2
+                ) AS "scoreOfWeek",
+                (
+                    SELECT 
+                    COALESCE(sum((
+                            SELECT "t".score 
+                            FROM ${TABLE_TASKS} AS t 
+                            WHERE "t".id = "ta".task_id
+                            )),0)
+                    FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS ta WHERE "u".id = "ta".user_id AND "ta".year = $2
+                ) AS "scoreOfYear"
+            FROM 
+                ${TABLE_USERS} AS u
+            ;
+        `;
+
+
+        let queryValues = [week, year];
+        let { rows } = await pool.query(queryText,queryValues);
+        return rows;
+    }
+    catch (e) {
+        console.error(e);
+    }
+}
+
 exports.deleteUserEntry = async (userId) => {
     try {
         let queryText = `DELETE FROM ${TABLE_USERS} WHERE id = $1;`;
@@ -373,6 +412,7 @@ exports.getPendingTaskEntriesOfWeekInYear = async (week, year) => {
                 (SELECT "t".score FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id) 
             FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS "ta" 
             WHERE "ta".calendar_week = $1 AND "ta".year = $2
+            ORDER BY "ta".id;
         `;
         let queryValues = [week, year];
         let { rows } = await pool.query(queryText, queryValues);
@@ -407,7 +447,6 @@ exports.createTaskAccomplishmentEntries = async (taskAccomplishments) => {
 }
 
 const createTaskAccomplishmentEntry = async (taskAccomplishment) => {
-    console.log(taskAccomplishment);
     try {
         let queryText = `
             INSERT INTO ${TABLE_TASK_ACCOMPLISHMENTS}  (task_id,user_id,calendar_week,year) VALUES ($1,$2,$3,$4);
@@ -419,6 +458,19 @@ const createTaskAccomplishmentEntry = async (taskAccomplishment) => {
     catch (e) {
         console.error(e);
         console.error(`createTaskAccomplishmentEntry : Failed to add taskAccomplishment ${taskAccomplishment}`);
+    }
+}
+
+exports.updateTaskAccomplishmentEntryWithUserId = async (id,userId) => {
+    try {
+        let queryText = `
+            UPDATE ${TABLE_TASK_ACCOMPLISHMENTS} SET user_id = $2 WHERE id = $1;
+        `;
+        let queryValues = [id,userId];
+        await pool.query(queryText,queryValues);
+    }
+    catch (e) {
+        console.error(e);
     }
 }
 

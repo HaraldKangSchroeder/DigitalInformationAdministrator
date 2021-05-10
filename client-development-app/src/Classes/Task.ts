@@ -5,13 +5,15 @@ export default class Task {
     userId: number;
     label: string;
     score: number;
+    color : string;
 
-    constructor(id: number, taskId: number, userId: number, label: string, score: number) {
+    constructor(id: number, taskId: number, userId: number, label: string, score: number, color : string) {
         this.id = id;
         this.taskId = taskId;
         this.userId = userId;
         this.label = label;
         this.score = score;
+        this.color = color;
     }
 
     getId(): number {
@@ -32,5 +34,9 @@ export default class Task {
 
     getScore(): number {
         return this.score;
+    }
+
+    getColor() : string {
+        return this.color;
     }
 }

@@ -7,6 +7,8 @@ import React from "react";
 
 interface Props {
     users: Users;
+    changeSelectedUser : Function;
+    selectedUser : User;
 }
 
 const useStyles = makeStyles({
@@ -25,7 +27,11 @@ export default function UsersPresentation(props: Props) {
             {
                 props.users.getUserList().map((user: User) =>
                     <Grid item xs={12}>
-                        <UserPresentation user={user} />
+                        <UserPresentation 
+                            isUserSelected={props.selectedUser != null && props.selectedUser.getId() === user.getId()} 
+                            changeSelectedUser={props.changeSelectedUser} 
+                            user={user} 
+                        />
                     </Grid>
                 )
             }

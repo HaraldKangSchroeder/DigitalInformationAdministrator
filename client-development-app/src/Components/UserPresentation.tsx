@@ -15,33 +15,38 @@ const useStyles = makeStyles({
         justifyContent: "center",
         fontFamily: "Calibri"
     },
-    avatar: {
+    avatar: (props : Props) => ({
         float: "left",
         marginRight: "20px",
         height: "40px",
         widht: "40px",
         fontSize: "1.2em",
-    },
-    userAvatar: {
-        backgroundColor: "green",
-    },
+        borderStyle : "solid",
+        borderColor : props.isUserSelected ? "rgba(250,250,250,1)" : "rgba(250,250,250,0)",
+        backgroundColor : props.user.getAvatarColor(),
+    })
 })
 
 interface Props {
     user : User;
+    changeSelectedUser : Function;
+    isUserSelected : boolean;
 }
 
 export default function UserPresentation(props : Props) {
-    const classes = useStyles();
+    console.log(props.isUserSelected);
+    const classes = useStyles(props);
     return (
         <div className={classes.root}>
 
             <div>
                 <ListItem>
+                    <div onClick={(e) => {props.changeSelectedUser(props.user)}}>
                     <ListItemAvatar>
-                        <Avatar className={`${classes.avatar} ${classes.userAvatar}`}>Ha</Avatar>
+                        <Avatar className={classes.avatar}>{props.user.getNameCode()}</Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={props.user.getName()} secondary={<div><div>Wp 100</div><div>Op 10000000</div></div>} />
+                    </div>
+                    <ListItemText primary={props.user.getName()} secondary={<div><div>Wp: {props.user.getScoreOfWeek()}</div><div>Oyp: {props.user.getScoreOfYear()}</div></div>} />
                 </ListItem>
             </div>
         </div>

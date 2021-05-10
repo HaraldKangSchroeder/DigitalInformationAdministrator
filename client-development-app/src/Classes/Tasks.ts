@@ -1,3 +1,4 @@
+import { getHslList } from "../utils";
 import Task from "./Task";
 
 export default class Tasks {
@@ -7,10 +8,12 @@ export default class Tasks {
     constructor(tasks: any) {
         this.taskList = [];
         if (tasks == null) return;
-        for (let task of tasks) {
-            let a = new Task(task.id, task.taskId, task.userId, task.label, task.score);
-            console.log(a);
-            this.taskList.push(a);
+        let lightness = 80;
+        let meanSaturation = 93;
+        let hslList = getHslList(tasks.length, lightness, meanSaturation);
+        for(let i = 0; i < tasks.length; i++){
+            let task = new Task(tasks[i].id, tasks[i].taskId, tasks[i].userId, tasks[i].label, tasks[i].score, hslList[i]);
+            this.taskList.push(task);
         }
     }
 

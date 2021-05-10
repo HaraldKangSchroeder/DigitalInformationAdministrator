@@ -216,7 +216,6 @@ io.on("connection", (socket) => {
     });
 
     socket.on('updateTaskAccomplishment', async ({id, userId}) => {
-        console.log("hi");
         await databaseManager.updateTaskAccomplishmentEntryWithUserId(id,userId);
         let dateToday = new Date();
         let currentYear = dateToday.getFullYear();

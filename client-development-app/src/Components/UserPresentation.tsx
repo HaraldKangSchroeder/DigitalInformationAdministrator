@@ -22,7 +22,7 @@ const useStyles = makeStyles({
         widht: "40px",
         fontSize: "1.2em",
         borderStyle : "solid",
-        borderColor : props.isUserSelected ? "rgba(250,250,250,1)" : "rgba(250,250,250,0)",
+        borderColor : props.isUserSelected ? "rgba(250,250,250,1)" : "rgb(220,220,220)",
         backgroundColor : props.user.getAvatarColor(),
     })
 })

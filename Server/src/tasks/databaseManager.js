@@ -409,10 +409,11 @@ exports.getPendingTaskEntriesOfWeekInYear = async (week, year) => {
                 "ta".calendar_week AS "calendarWeek",
                 "ta".year,
                 (SELECT "t".label FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id),
-                (SELECT "t".score FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id) 
+                (SELECT "t".score FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id),
+                (SELECT "t".importance FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id) AS importance
             FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS "ta" 
             WHERE "ta".calendar_week = $1 AND "ta".year = $2
-            ORDER BY "ta".id;
+            ORDER BY importance,"ta".task_id, "ta".id;
         `;
         let queryValues = [week, year];
         let { rows } = await pool.query(queryText, queryValues);

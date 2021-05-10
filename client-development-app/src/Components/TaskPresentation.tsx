@@ -35,6 +35,9 @@ const useStyles = makeStyles({
         if (props.task.userId == null) return {};
         return {
             backgroundColor: props.users.getUserById(props.task.getUserId()).getAvatarColor(),
+            borderStyle: "solid",
+            borderColor: "rgba(0,0,0,0)",
+            borderWidth: "1px",
         }
     },
     text: {
@@ -51,28 +54,32 @@ const useStyles = makeStyles({
 interface Props {
     task: Task;
     users: Users;
-    selectedUser : User;
+    selectedUser: User;
 }
 
 export default function TaskPresentation(props: Props) {
 
     const handleClick = () => {
         let isUserSelected = props.selectedUser != null;
-        if(isUserSelected){
-            socket.emit("updateTaskAccomplishment", {id:props.task.getId(), userId:props.selectedUser.getId()});
+        if (isUserSelected) {
+            let isTaskAlreadyAssignedToUser = props.task.getUserId() != null;
+            if (isTaskAlreadyAssignedToUser && props.task.getUserId() === props.selectedUser.getId()) {
+                socket.emit("updateTaskAccomplishment", { id: props.task.getId(), userId: null });
+                return;
+            }
+            socket.emit("updateTaskAccomplishment", { id: props.task.getId(), userId: props.selectedUser.getId() });
             return;
         }
-        socket.emit("updateTaskAccomplishment", {id:props.task.getId(), userId:null});
+        socket.emit("updateTaskAccomplishment", { id: props.task.getId(), userId: null });
     }
 
     const classes = useStyles(props);
-    console.log(props.task.getUserId());
     let hasUserDoneTask = props.task.getUserId() != null;
     const avatarClass = hasUserDoneTask ? `${classes.avatar} ${classes.userAvatar}` : `${classes.avatar} ${classes.taskPendingAvatar}`;
     return (
         <div className={classes.root}>
             <ListItem>
-                <div onClick={(e) => {handleClick();}}>
+                <div onClick={(e) => { handleClick(); }}>
                     <ListItemAvatar>
                         <Avatar className={avatarClass}>{hasUserDoneTask ? props.users.getUserById(props.task.getUserId()).getNameCode() : " "}</Avatar>
                     </ListItemAvatar>

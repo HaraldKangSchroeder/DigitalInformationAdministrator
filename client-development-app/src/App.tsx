@@ -34,10 +34,8 @@ function App() {
           <NavBar />
         </Grid>
         <Grid item xs={9}>
-          {/* SHOULD BECOME LIST OF Tasks OF CURRENT WEEK */}
           <TasksPresentation tasks={state.tasks}/>
         </Grid>
-        {/* SHOULD BECOME LIST OF USERS */}
         <Grid container item xs={2}>
           <UsersPresentation users={state.users} />
         </Grid>

@@ -7,6 +7,8 @@ import { classicNameResolver } from "typescript";
 const useStyles = makeStyles({
     root : {
         paddingLeft : "1vw",
+        height: "99.9vh",
+        overflowY: "auto",
     }
 })
 

@@ -13,7 +13,8 @@ const useStyles = makeStyles({
     root : {
         background:"rgb(70,70,70)",
         height:"99.9vh",
-        width:"100%"
+        width:"100%",
+        overflowY: "auto",
     }
 })
 

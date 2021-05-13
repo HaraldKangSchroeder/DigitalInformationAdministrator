@@ -36,7 +36,7 @@ export default class TaskAccomplishments {
         }
     }
 
-    getLatestCalendarWeek() {
+    getLatestCalendarWeek()  : number{
         if (this.taskAccomplishmentList.length === 0) return 0;
         return this.taskAccomplishmentList[this.taskAccomplishmentList.length - 1].getCalendarWeek(); // this is right, because it is ordered by calendar_week on serverside
     }

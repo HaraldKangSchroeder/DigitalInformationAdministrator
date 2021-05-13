@@ -99,9 +99,10 @@ export function UserCharts(props: Props) {
         let latestCalendarWeek = taskAccomplishments.getLatestCalendarWeek();
         let isCalendarWeekEndSet = calendarWeekRange.end !== 0;
         let isCalendarWeekEndWithingNewRange = calendarWeekRange.end <= latestCalendarWeek;
+        let newCalendarWeekEnd = isCalendarWeekEndSet && isCalendarWeekEndWithingNewRange ? calendarWeekRange.end : latestCalendarWeek;
         setCalendarWeekRange({
             ...calendarWeekRange,
-            end: !isCalendarWeekEndSet || !isCalendarWeekEndWithingNewRange ? latestCalendarWeek : calendarWeekRange.end,
+            end: newCalendarWeekEnd ,
         });
     }, [taskAccomplishments]);
 

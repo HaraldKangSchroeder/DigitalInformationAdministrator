@@ -35,9 +35,7 @@ export default class Users {
 
     getJsonListWithIdAndLabel() {
         let jsonList = [];
-        console.log(this.userList);
         for (let userEntry of this.userList) {
-            console.log(userEntry);
             jsonList.push({ id: userEntry.getId(), label: userEntry.getName() });
         }
         return jsonList;
@@ -76,7 +74,6 @@ export default class Users {
                 break;
             }
         }
-        console.log(index);
         if (index != -1) {
             this.userList.splice(index, 1);
         }

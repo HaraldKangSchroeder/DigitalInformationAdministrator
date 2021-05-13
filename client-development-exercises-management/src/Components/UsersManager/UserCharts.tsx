@@ -139,7 +139,6 @@ export function UserCharts(props: Props) {
     }
 
     const handleChangeVisualizationMode = (e: any) => {
-        console.log(e.target.value);
         setVisualizationMode(e.target.value);
     }
 
@@ -280,6 +279,7 @@ function getVisualizationDataset(user: User, data: any) {
         {
             label: user.getName(),
             data: data,
+            lineTension: 0,
             backgroundColor: [
                 'rgba(255, 255, 255, 0)',
             ],

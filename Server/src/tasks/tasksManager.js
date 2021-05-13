@@ -38,7 +38,7 @@ exports.resetTaskAccomplishmentsOfCurrentWeek = async () => {
     let currentYear = dateToday.getFullYear();
     let currentWeek = utils.getWeekNumberByDate(dateToday);
     await databaseManager.deleteTaskAccomplishmentEntriesByWeekAndYear(currentWeek,currentYear);
-    updateTaskaccomplishments();
+    await updateTaskaccomplishments();
 }
 
 function createTasksAccomplishmentEntries(taskOccurenceEntries, taskEntries, year){

@@ -25,7 +25,7 @@ function UsersManager() {
         }
     }, [])
 
-    const changeSelectedUserById = (id : number) => {
+    const changeSelectedUsersById = (id: number) => {
         let selectedUsersCopy = selectedUsers.getCopy();
         if (selectedUsersCopy.containsUserById(id)) {
             selectedUsersCopy.removeUserById(id);
@@ -38,12 +38,13 @@ function UsersManager() {
     }
 
     const deleteSelectedUser = () => {
-        if (selectedUsers.containsExactlyOneUser()) {
-            let id = selectedUsers.getUserList()[0].getId();
-            socket.emit("deleteUserEntry", { id: id });
-            let selectedUsersCopy = selectedUsers.getCopy();
-            selectedUsersCopy.removeUserById(id);
-        }
+        if (!selectedUsers.containsExactlyOneUser()) return ;
+
+        let id = selectedUsers.getUserList()[0].getId();
+        socket.emit("deleteUserEntry", { id: id });
+        let selectedUsersCopy = selectedUsers.getCopy();
+        selectedUsersCopy.removeUserById(id);
+        setSelectedUsers(selectedUsersCopy);
     }
 
     return (
@@ -55,7 +56,7 @@ function UsersManager() {
                             entityType="Users"
                             entities={users.getJsonListWithIdAndLabel()}
                             selectedEntitiesIds={selectedUsers.getUserIds()}
-                            changeSelectedEntitiesIds={changeSelectedUserById}
+                            changeSelectedEntitiesIds={changeSelectedUsersById}
                         />
                     </Grid>
                     <Grid item xs={4}>

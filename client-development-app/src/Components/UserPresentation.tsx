@@ -10,7 +10,7 @@ const useStyles = makeStyles({
         display: "inline-block",
         paddingRight: "10px",
         margin: "10px",
-        background: "rgb(220,220,220)",
+        background: "rgb(190,190,190)",
         borderRadius : "10px",
         justifyContent: "center",
         fontFamily: "Calibri"
@@ -19,10 +19,11 @@ const useStyles = makeStyles({
         float: "left",
         marginRight: "20px",
         height: "40px",
-        widht: "40px",
+        width: "40px",
         fontSize: "1.2em",
         borderStyle : "solid",
-        borderColor : props.isUserSelected ? "rgba(250,250,250,1)" : "rgb(220,220,220)",
+        borderWidth: "3px",
+        borderColor : props.isUserSelected ? "rgba(250,250,250,1)" : "rgb(190,190,190)",
         backgroundColor : props.user.getAvatarColor(),
     })
 })

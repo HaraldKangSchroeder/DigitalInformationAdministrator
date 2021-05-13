@@ -21,7 +21,6 @@ export default class TaskOccurences {
 
     readDataset(dataset : any){
         for(let datasetEntry of dataset){
-            console.log(datasetEntry);
             let taskOccurence = new TaskOccurence(datasetEntry.id, datasetEntry.calendarWeek,datasetEntry.dayOfWeek);
             this.addTaskOdccurence(taskOccurence);
         }

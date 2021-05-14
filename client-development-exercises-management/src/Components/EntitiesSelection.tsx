@@ -21,7 +21,7 @@ interface Props {
     entities : any;
     entityType : string;
     selectedEntitiesIds : number[];
-    changeSelectedEntitiesIds : Function;
+    changeSelectedEntitiesById : Function;
 }
 
 export function EntitiesSelection(props : Props) {
@@ -36,7 +36,7 @@ export function EntitiesSelection(props : Props) {
                         <ListItem
                             button
                             key={`${entity.label}${entity.id}`}
-                            onClick={() => { props.changeSelectedEntitiesIds(entity.id) }}
+                            onClick={() => { props.changeSelectedEntitiesById(entity.id) }}
                             selected={isEntitySelected}
                         >
 

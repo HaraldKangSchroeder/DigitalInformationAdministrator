@@ -60,7 +60,7 @@ export function TaskManager() {
                             entityType="Tasks"
                             entities={tasks.getJsonListWithIdAndLabel()}
                             selectedEntitiesIds={isTaskSelected ? [selectedTask.getId()] : []}
-                            changeSelectedEntitiesIds={changeSelectedTaskById}
+                            changeSelectedEntitiesById={changeSelectedTaskById}
                         />
                     </Grid>
                     <Grid item xs={4}>

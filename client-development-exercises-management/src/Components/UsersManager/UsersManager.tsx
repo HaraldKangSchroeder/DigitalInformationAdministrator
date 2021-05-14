@@ -56,7 +56,7 @@ function UsersManager() {
                             entityType="Users"
                             entities={users.getJsonListWithIdAndLabel()}
                             selectedEntitiesIds={selectedUsers.getUserIds()}
-                            changeSelectedEntitiesIds={changeSelectedUsersById}
+                            changeSelectedEntitiesById={changeSelectedUsersById}
                         />
                     </Grid>
                     <Grid item xs={4}>

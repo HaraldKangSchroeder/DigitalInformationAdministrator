@@ -8,6 +8,8 @@ const TABLE_TASKS = "tasks";
 const TABLE_TASKS_OCCURENCES = "tasks_occurences";
 const TABLE_USERS = "users";
 const TABLE_TASK_ACCOMPLISHMENTS = "task_accomplishments";
+const TABLE_GROCERIES = "groceries";
+const TABLE_GROCERY_TYPES = "grocery_types";
 
 
 const pool = new pg.Pool({
@@ -473,6 +475,60 @@ exports.updateTaskAccomplishmentEntryWithUserId = async (id,userId) => {
     catch (e) {
         console.error(e);
     }
+}
+
+exports.createGroceryEntry = async (name, type) => {
+    try {
+        let queryText = `
+            INSERT INTO ${TABLE_GROCERIES} VALUES ($1,$2);
+        `;
+        let queryValues = [name,type];
+        await pool.query(queryText,queryValues);
+        console.log(`createGroceryEntry : with ${name} and ${type}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`createGroceryEntry : Failed with ${name} and ${type}`);
+    }
+}
+
+exports.updateGroceryEntryWithName = async (oldName, newName) {
+
+}
+
+exports.updateGroceryEntryWithType = async (name, newType) {
+
+}
+
+exports.deleteGroceryEntry = async (name) => {
+
+}
+
+exports.createGroceryTypeEntry = async (type, color) => {
+    try {
+        let queryText = `
+            INSERT INTO ${TABLE_GROCERY_TYPES} VALUES ($1,$2);
+        `;
+        let queryValues = [type,color];
+        await pool.query(queryText,queryValues);
+        console.log(`createGroceryTypeEntry : with ${type} and ${color}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`createGroceryTypeEntry : Failed with ${type} and ${color}`);
+    }
+}
+
+exports.updateGroceryTypeEntryWithType = async (oldType, newType) {
+
+}
+
+exports.updateGroceryTypeEntryWithColor = async (type, newColor) {
+
+}
+
+exports.deleteGroceryTypeEntry = async (type) => {
+    
 }
 
 

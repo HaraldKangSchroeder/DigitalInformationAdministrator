@@ -6,24 +6,22 @@ import Avatar from '@material-ui/core/Avatar';
 import User from "../Classes/User";
 
 const useStyles = makeStyles({
-    root: {
+    root: (props : Props) => ({
         display: "inline-block",
         paddingRight: "10px",
         margin: "10px",
-        background: "rgb(190,190,190)",
+        background: props.isUserSelected ? "rgba(250,250,250,1)" : "rgb(190,190,190)",
         borderRadius : "10px",
         justifyContent: "center",
         fontFamily: "Calibri"
-    },
+    }),
     avatar: (props : Props) => ({
         float: "left",
         marginRight: "20px",
         height: "40px",
         width: "40px",
         fontSize: "1.2em",
-        borderStyle : "solid",
-        borderWidth: "3px",
-        borderColor : props.isUserSelected ? "rgba(250,250,250,1)" : "rgb(190,190,190)",
+        cursor:"pointer",
         backgroundColor : props.user.getAvatarColor(),
     })
 })

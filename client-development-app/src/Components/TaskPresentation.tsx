@@ -24,6 +24,7 @@ const useStyles = makeStyles({
         height: "40px",
         width: "40px",
         fontSize: "1.2em",
+        cursor:"pointer",
     },
     taskPendingAvatar: {
         backgroundColor: "rgba(200,200,200,0)",

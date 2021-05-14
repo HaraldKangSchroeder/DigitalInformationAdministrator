@@ -1,4 +1,4 @@
-const utils = require("./utils");
+const {logDivider,getWeekNumberByDate} = require("./utils");
 
 const databaseManager = require("./databaseManager");
 
@@ -6,17 +6,17 @@ const UPDATE_TIME_STEP = 300000;
 
 let interval = null;
 
-exports.startUpdateTaskAccomplishments = async () => {
-    updateTaskaccomplishments();
-    interval = setInterval(() => {
-        updateTaskaccomplishments();
+exports.startUpdateTaskAccomplishments = async (io) => {
+    await updateTaskaccomplishments(io);
+    interval = setInterval(async () => {
+        await updateTaskaccomplishments(io);
     }, UPDATE_TIME_STEP);
 }
 
-async function updateTaskaccomplishments() {
+async function updateTaskaccomplishments(io) {
     let dateToday = new Date();
     let currentYear = dateToday.getFullYear();
-    let currentWeek = utils.getWeekNumberByDate(dateToday);
+    let currentWeek = getWeekNumberByDate(dateToday);
 
     let tasksAccomplishmentEntriesOfWeekInYear = await databaseManager.getTaskAccomplishmentEntriesOfWeekInYear(currentWeek, currentYear);
     let tasksAccomplishmentsExistent = tasksAccomplishmentEntriesOfWeekInYear.length > 0;
@@ -25,27 +25,247 @@ async function updateTaskaccomplishments() {
 
     let taskOccurencesEntriesOfCurrentWeek = await databaseManager.getTaskOccurenceEntriesOfWeek(currentWeek);
     let taskEntries = await databaseManager.getActiveTaskEntries();
-    let taskAccomplishmentEntries = createTasksAccomplishmentEntries(taskOccurencesEntriesOfCurrentWeek, taskEntries,currentYear);
-
-    let tasksPending = taskAccomplishmentEntries.length > 0;
-    if(!tasksPending) return;
+    let taskAccomplishmentEntries = createTasksAccomplishmentEntries(taskOccurencesEntriesOfCurrentWeek, taskEntries, currentYear);
 
     await databaseManager.createTaskAccomplishmentEntries(taskAccomplishmentEntries);
+    let res = await getTasksAndUsersOfCurrentWeek();
+    io.emit("usersAndTasksOfCurrentWeek", res);
+    logDivider();
 }
 
-exports.resetTaskAccomplishmentsOfCurrentWeek = async () => {
+exports.resetTaskAccomplishmentsOfCurrentWeek = async (io) => {
     let dateToday = new Date();
     let currentYear = dateToday.getFullYear();
-    let currentWeek = utils.getWeekNumberByDate(dateToday);
-    await databaseManager.deleteTaskAccomplishmentEntriesByWeekAndYear(currentWeek,currentYear);
-    await updateTaskaccomplishments();
+    let currentWeek = getWeekNumberByDate(dateToday);
+    await databaseManager.deleteTaskAccomplishmentEntriesByWeekAndYear(currentWeek, currentYear);
+    await updateTaskaccomplishments(io);
 }
 
-function createTasksAccomplishmentEntries(taskOccurenceEntries, taskEntries, year){
+
+exports.setUpSocketListeners = async (io, socket) => {
+    socket.on('getActiveTaskEntries', async () => {
+        let activeTaskEntries = await databaseManager.getActiveTaskEntries();
+        socket.emit('activeTaskEntries', activeTaskEntries);
+        logDivider();
+    });
+
+    socket.on('getTaskEntries', async () => {
+        let taskEntries = await databaseManager.getTaskEntries();
+        socket.emit('taskEntries', taskEntries);
+        logDivider();
+    });
+
+    socket.on('getTaskOccurenceEntries', async (data) => {
+        let taskOccurenceEntries = await databaseManager.getTaskOccurenceEntries(data.taskId);
+        socket.emit('taskOccurenceEntries', taskOccurenceEntries);
+        logDivider();
+    });
+
+    socket.on('createTaskEntry', async (task) => {
+        let taskId = await databaseManager.createTaskEntry(task.name, task.score, task.importance, task.weeklyOccurences);
+        let isWeeklyRythmSet = task.week !== "";
+        if (isWeeklyRythmSet) {
+            let isDaySet = task.dayOfWeek !== "";
+            if (isDaySet) {
+                await databaseManager.createTaskOccurenceEntriesWithWeeksAndDay(taskId, task.weeklyRythm, task.dayOfWeek);
+            }
+            else {
+                await databaseManager.createTaskOccurenceEntriesWithWeeks(taskId, task.weeklyRythm);
+            }
+        }
+        let activeTaskEntries = await databaseManager.getActiveTaskEntries();
+        socket.emit('activeTaskEntries', activeTaskEntries);
+        logDivider();
+
+        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+    });
+
+    socket.on('deleteTaskEntry', async (task) => {
+        await databaseManager.deleteTaskEntry(task.id);
+        let activeTaskEntries = await databaseManager.getActiveTaskEntries();
+        socket.emit('activeTaskEntries', activeTaskEntries);
+        logDivider();
+
+        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+    });
+
+    socket.on('createTaskOccurenceEntryWithWeekAndDay', async (data) => {
+        await databaseManager.deleteTaskOccurenceEntryByWeek(data.taskId, data.calendarWeek);
+        await databaseManager.createTaskOccurenceEntryWithWeekAndDay(data.taskId, data.calendarWeek, data.dayOfWeek);
+        let taskOccurenceEntries = await databaseManager.getTaskOccurenceEntries(data.taskId);
+        socket.emit('taskOccurenceEntries', taskOccurenceEntries);
+        logDivider();
+
+        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+    });
+
+    socket.on('updateTaskOccurenceEntryByRemovingDayOfWeek', async (data) => {
+        await databaseManager.updateTaskOccurenceEntryWithWeekAndDay(data.taskId, data.calendarWeek, null);
+        let taskOccurenceEntries = await databaseManager.getTaskOccurenceEntries(data.taskId);
+        socket.emit('taskOccurenceEntries', taskOccurenceEntries);
+        logDivider();
+
+        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+    });
+
+    socket.on('createTaskOccurenceEntryWithWeek', async (data) => {
+        await databaseManager.createTaskOccurenceEntryWithWeek(data.taskId, data.calendarWeek);
+        let taskOccurenceEntries = await databaseManager.getTaskOccurenceEntries(data.taskId);
+        socket.emit('taskOccurenceEntries', taskOccurenceEntries);
+        logDivider();
+
+        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+    });
+
+    socket.on('deleteTaskOccurenceEntryByWeek', async (data) => {
+        await databaseManager.deleteTaskOccurenceEntryByWeek(data.taskId, data.calendarWeek);
+        let taskOccurenceEntries = await databaseManager.getTaskOccurenceEntries(data.taskId);
+        socket.emit('taskOccurenceEntries', taskOccurenceEntries);
+        logDivider();
+
+        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+    });
+
+    socket.on('updateTaskEntryWithName', async (data) => {
+        await databaseManager.updateTaskEntryWithName(data.taskId, data.newName);
+        let activeTaskEntries = await databaseManager.getActiveTaskEntries();
+        socket.emit('activeTaskEntries', activeTaskEntries);
+        logDivider();
+
+        let res = await getTasksAndUsersOfCurrentWeek();
+        io.emit("usersAndTasksOfCurrentWeek", res);
+        logDivider();
+    });
+
+    socket.on('updateTaskEntryWithScore', async (data) => {
+        await databaseManager.updateTaskEntryWithScore(data.taskId, data.newValue);
+        let activeTaskEntries = await databaseManager.getActiveTaskEntries();
+        socket.emit('activeTaskEntries', activeTaskEntries);
+        logDivider();
+
+        let res = await getTasksAndUsersOfCurrentWeek();
+        io.emit("usersAndTasksOfCurrentWeek", res);
+        logDivider();
+    });
+
+    socket.on('updateTaskEntryWithImportance', async (data) => {
+        await databaseManager.updateTaskEntryWithImportance(data.taskId, data.newValue);
+        let activeTaskEntries = await databaseManager.getActiveTaskEntries();
+        socket.emit('activeTaskEntries', activeTaskEntries);
+        logDivider();
+
+        let res = await getTasksAndUsersOfCurrentWeek();
+        io.emit("usersAndTasksOfCurrentWeek", res);
+        logDivider();
+    });
+
+    socket.on('updateTaskEntryWithWeeklyOccurence', async (data) => {
+        await databaseManager.updateTaskEntryWithWeeklyOccurence(data.taskId, data.newValue);
+        let activeTaskEntries = await databaseManager.getActiveTaskEntries();
+        socket.emit('activeTaskEntries', activeTaskEntries);
+        logDivider();
+
+        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+    });
+
+    socket.on('updateTaskWeeklyRythm', async (data) => {
+        await databaseManager.deleteAllTaskOccurenceEntriesOfTask(data.taskId);
+        let isWeeklyRythmSet = data.weeklyRythm !== "";
+        if (isWeeklyRythmSet) {
+            let isDaySet = data.dayOfWeek !== "";
+            if (isDaySet) {
+                await databaseManager.createTaskOccurenceEntriesWithWeeksAndDay(data.taskId, data.weeklyRythm, data.dayOfWeek);
+            }
+            else {
+                await databaseManager.createTaskOccurenceEntriesWithWeeks(data.taskId, data.weeklyRythm);
+            }
+        }
+        let taskOccurenceEntries = await databaseManager.getTaskOccurenceEntries(data.taskId);
+        socket.emit('taskOccurenceEntries', taskOccurenceEntries);
+        logDivider();
+
+        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+    });
+
+    socket.on('createUserEntry', async (data) => {
+        await databaseManager.createUserEntry(data.name);
+        let userEntries = await databaseManager.getUserEntries();
+        socket.emit("userEntries", userEntries);
+        logDivider();
+
+        let res = await getTasksAndUsersOfCurrentWeek();
+        io.emit("usersAndTasksOfCurrentWeek", res);
+        logDivider();
+    });
+
+    socket.on('getUserEntries', async () => {
+        let userEntries = await databaseManager.getUserEntries();
+        socket.emit("userEntries", userEntries);
+        logDivider();
+    });
+
+    socket.on('deleteUserEntry', async (data) => {
+        await databaseManager.deleteUserEntry(data.id);
+        let userEntries = await databaseManager.getUserEntries();
+        socket.emit("userEntries", userEntries);
+        logDivider();
+
+        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+    })
+
+    socket.on('getYearsOfTaskAccomplishmentEntries', async () => {
+        let years = await databaseManager.getYearsOfTaskAccomplishmentEntries();
+        socket.emit("yearsOfTaskAccomplishmentEntries", years);
+        logDivider();
+    });
+
+    socket.on('getTaskAccomplishmentEntriesInYear', async ({ year }) => {
+        let taskAccomplishmentEntries = await databaseManager.getTaskAccomplishmentEntriesByYear(year);
+        socket.emit("taskAccomplishmentEntries", taskAccomplishmentEntries);
+        logDivider();
+    });
+
+    socket.on('updateUserEntryWithName', async ({ userId, newName }) => {
+        await databaseManager.updateUserEntryWithName(userId, newName);
+        let userEntries = await databaseManager.getUserEntries();
+        socket.emit("userEntries", userEntries);
+        logDivider();
+        let res = await getTasksAndUsersOfCurrentWeek();
+        io.emit("usersAndTasksOfCurrentWeek", res);
+        logDivider();
+    });
+
+    socket.on('getUsersAndTasksOfCurrentWeek', async () => {
+        let res = await getTasksAndUsersOfCurrentWeek();
+        socket.emit("usersAndTasksOfCurrentWeek", res);
+        logDivider();
+    });
+
+    socket.on('updateTaskAccomplishment', async ({ id, userId }) => {
+        await databaseManager.updateTaskAccomplishmentEntryWithUserId(id, userId);
+        let res = await getTasksAndUsersOfCurrentWeek();
+        socket.emit("usersAndTasksOfCurrentWeek", res);
+        logDivider();
+    })
+}
+
+async function getTasksAndUsersOfCurrentWeek() {
+    let dateToday = new Date();
+    let currentYear = dateToday.getFullYear();
+    let currentWeek = getWeekNumberByDate(dateToday);
+    let tasks = await databaseManager.getPendingTaskEntriesOfWeekInYear(currentWeek, currentYear);
+    let users = await databaseManager.getUserEntriesWithPoints(currentWeek, currentYear);
+    let res = { tasks: tasks, users: users }
+    return res;
+}
+
+
+
+function createTasksAccomplishmentEntries(taskOccurenceEntries, taskEntries, year) {
     let taskAccomplishmentEntries = [];
-    for(let taskOccurenceEntry of taskOccurenceEntries){
-        let weeklyOccurences = getWeeklyOccurences(taskOccurenceEntry.id,taskEntries);
-        for(let i = 0; i < weeklyOccurences; i++){
+    for (let taskOccurenceEntry of taskOccurenceEntries) {
+        let weeklyOccurences = getWeeklyOccurences(taskOccurenceEntry.id, taskEntries);
+        for (let i = 0; i < weeklyOccurences; i++) {
             let taskAccomplishmentEntry = {};
             taskAccomplishmentEntry["taskId"] = taskOccurenceEntry.id;
             taskAccomplishmentEntry["userId"] = null;
@@ -57,9 +277,9 @@ function createTasksAccomplishmentEntries(taskOccurenceEntries, taskEntries, yea
     return taskAccomplishmentEntries;
 }
 
-function getWeeklyOccurences(taskId, taskEntries){
-    for(let taskEntry of taskEntries){
-        if(taskEntry.id === taskId){
+function getWeeklyOccurences(taskId, taskEntries) {
+    for (let taskEntry of taskEntries) {
+        if (taskEntry.id === taskId) {
             return taskEntry.weeklyOccurences;
         }
     }

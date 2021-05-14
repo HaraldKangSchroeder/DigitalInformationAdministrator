@@ -3,3 +3,7 @@ exports.getWeekNumberByDate = (d) => {
     var millisecsInDay = 86400000;
     return Math.ceil((((d - onejan) / millisecsInDay) + onejan.getDay() + 1) / 7);
 };
+
+exports.logDivider = () => {
+    console.log("------------------------");
+}

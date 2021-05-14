@@ -11,6 +11,14 @@ export default class Users {
         }
     }
 
+    contains(otherUser : User) : boolean {
+        for(let user of this.userList){
+            if(user.getId() === otherUser.getId()){
+                return true;
+            }
+        }
+        return false;
+    }
 
     getUserIds(): number[] {
         let ids: number[] = [];
@@ -20,7 +28,7 @@ export default class Users {
         return ids;
     }
 
-    getUserList(): User[] {
+    getList(): User[] {
         return this.userList;
     }
 

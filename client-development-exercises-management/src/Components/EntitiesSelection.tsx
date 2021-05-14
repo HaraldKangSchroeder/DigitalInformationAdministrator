@@ -20,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
     entities : any;
     entityType : string;
-    selectedEntitiesIds : number[];
-    changeSelectedEntitiesById : Function;
+    selectedEntities : any;
+    changeSelectedEntities : Function;
 }
 
 export function EntitiesSelection(props : Props) {
@@ -30,17 +30,21 @@ export function EntitiesSelection(props : Props) {
     return (
         <Paper className={classes.root} elevation={1}>
             <List subheader={<ListSubheader disableSticky={true}>{props.entityType}</ListSubheader>}>
-                {props.entities.map((entity : any) => {
-                    let isEntitySelected = props.selectedEntitiesIds.includes(entity.id);
+                {props.entities.getList().map((entity : any) => {
+                    let isEntitySelected = props.selectedEntities.contains(entity);
                     return (
                         <ListItem
                             button
-                            key={`${entity.label}${entity.id}`}
-                            onClick={() => { props.changeSelectedEntitiesById(entity.id) }}
+                            // key={`${entity.getLabel() || entity.getName()}${entity.getId() || entity.getName()}`}
+                            onClick={() => { props.changeSelectedEntities(entity) }}
                             selected={isEntitySelected}
                         >
 
-                            <ListItemText primary={entity.label || entity.name} />
+                            <ListItemText 
+                                primary={
+                                    typeof entity.getLabel != 'undefined' ? entity.getLabel() : entity.getName()
+                                } 
+                            />
                         </ListItem>
                     );
                 })}

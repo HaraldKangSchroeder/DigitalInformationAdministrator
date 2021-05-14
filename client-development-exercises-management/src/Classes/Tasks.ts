@@ -11,6 +11,15 @@ export default class Tasks {
         }
     }
 
+    contains(otherTask : Task) : boolean {
+        for(let task of this.taskList){
+            if(task.getId() === otherTask.getId()){
+                return true;
+            }
+        }
+        return false;
+    }
+
     getJsonListWithIdAndLabel(){
         let jsonList = [];
         for(let taskEntry of this.taskList){
@@ -27,7 +36,7 @@ export default class Tasks {
         return newTasks;
     }
 
-    getTaskList() : Task[]{
+    getList() : Task[]{
         return this.taskList;
     }
 

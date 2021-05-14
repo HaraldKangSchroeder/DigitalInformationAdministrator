@@ -7,6 +7,7 @@ import { DialogChangeUserName } from "./DialogChangeUserName";
 import Grid from '@material-ui/core/Grid';
 import socket from "../../socket";
 import Users from "../../Classes/Users";
+import User from "../../Classes/User";
 
 
 function UsersManager() {
@@ -25,14 +26,13 @@ function UsersManager() {
         }
     }, [])
 
-    const changeSelectedUsersById = (id: number) => {
+    const changeSelectedUsers = (user: User) => {
         let selectedUsersCopy = selectedUsers.getCopy();
-        if (selectedUsersCopy.containsUserById(id)) {
-            selectedUsersCopy.removeUserById(id);
+        if (selectedUsersCopy.contains(user)) {
+            selectedUsersCopy.removeUserById(user.getId());
             setSelectedUsers(selectedUsersCopy);
             return;
         }
-        let user = users.getUserById(id);
         selectedUsersCopy.addUser(user);
         setSelectedUsers(selectedUsersCopy);
     }
@@ -40,7 +40,7 @@ function UsersManager() {
     const deleteSelectedUser = () => {
         if (!selectedUsers.containsExactlyOneUser()) return ;
 
-        let id = selectedUsers.getUserList()[0].getId();
+        let id = selectedUsers.getList()[0].getId();
         socket.emit("deleteUserEntry", { id: id });
         let selectedUsersCopy = selectedUsers.getCopy();
         selectedUsersCopy.removeUserById(id);
@@ -54,9 +54,9 @@ function UsersManager() {
                     <Grid item xs={12}>
                         <EntitiesSelection
                             entityType="Users"
-                            entities={users.getJsonListWithIdAndLabel()}
-                            selectedEntitiesIds={selectedUsers.getUserIds()}
-                            changeSelectedEntitiesById={changeSelectedUsersById}
+                            entities={users}
+                            selectedEntities={selectedUsers}
+                            changeSelectedEntities={changeSelectedUsers}
                         />
                     </Grid>
                     <Grid item xs={4}>
@@ -67,14 +67,14 @@ function UsersManager() {
                         <DialogEntityDeletion
                             disabled={!selectedUsers.containsExactlyOneUser()}
                             entityType="User"
-                            entityLabel={selectedUsers.containsExactlyOneUser() ? selectedUsers.getUserList()[0].getName() : ""}
+                            entityLabel={selectedUsers.containsExactlyOneUser() ? selectedUsers.getList()[0].getName() : ""}
                             deleteEntity={deleteSelectedUser}
                         />
                     </Grid>
                     <Grid item xs={4}>
                         <DialogChangeUserName
                             disabled={!selectedUsers.containsExactlyOneUser()}
-                            selectedUser={selectedUsers.containsExactlyOneUser() ? selectedUsers.getUserList()[0] : null}
+                            selectedUser={selectedUsers.containsExactlyOneUser() ? selectedUsers.getList()[0] : null}
                         />
                     </Grid>
                 </Grid>

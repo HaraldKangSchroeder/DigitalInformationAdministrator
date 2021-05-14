@@ -213,7 +213,7 @@ function getVisualizationData(
         visualizationData.labels.push(calendarWeek);
     }
     visualizationData.datasets = [];
-    for (let user of users.getUserList()) {
+    for (let user of users.getList()) {
         let userVisualizationData = getVisualizationDatasetOfUser(user, tasks, selectedTasks, taskAccomplishments, calendarWeekStart, calendarWeekEnd, visualizationMode);
         visualizationData.datasets.push(userVisualizationData);
     }
@@ -307,7 +307,7 @@ function getSummedScoreInCalendarWeekByUserId(
     for (let taskAccomplishment of taskAccomplishments.getTaskAccomplishmentList()) {
         let isEntryInCalendarWeek = taskAccomplishment.getCalendarWeek() === calendarWeek;
         let isEntryOfUser = userId === taskAccomplishment.getUserId();
-        let isSelectedTask = selectedTasks.getTaskList().length == 0 ? true : selectedTasks.containsTaskById(taskAccomplishment.getTaskId());
+        let isSelectedTask = selectedTasks.getList().length == 0 ? true : selectedTasks.containsTaskById(taskAccomplishment.getTaskId());
         if (isEntryInCalendarWeek && isEntryOfUser && isSelectedTask) {
             score_sum += tasks.getTaskById(taskAccomplishment.getTaskId()).getScore();
         }

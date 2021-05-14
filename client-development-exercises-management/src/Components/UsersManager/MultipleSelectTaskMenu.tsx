@@ -40,7 +40,7 @@ export default function MultipleSelectTaskMenu(props : Props) {
         let ids = e.target.value;
         props.changeSelectedTasksByIds(ids);
     };
-    let label = props.selectedTasks.getTaskList().length > 0 ? "Selected Tasks" : "All Tasks in year";
+    let label = props.selectedTasks.getList().length > 0 ? "Selected Tasks" : "All Tasks in year";
     return (
             <FormControl
                 size="small"
@@ -56,7 +56,7 @@ export default function MultipleSelectTaskMenu(props : Props) {
                     renderValue={(ids : any) => props.tasks.getTaskLabelsByIds(ids).join(', ')}
                     MenuProps={MenuProps}
                 >
-                    {props.tasks.getTaskList().map((task : Task) => (
+                    {props.tasks.getList().map((task : Task) => (
                         <MenuItem key={task.getId()} value={task.getId()}>
                             <Checkbox checked={props.selectedTasks.containsTaskById(task.getId())} />
                             {task.getLabel()}

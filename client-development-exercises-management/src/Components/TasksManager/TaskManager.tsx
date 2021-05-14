@@ -34,13 +34,13 @@ export function TaskManager() {
         }
     }, [tasks])
 
-    const changeSelectedTaskById = (id : number) => {
-        if(selectedTask == null || selectedTask.getId() !== id){
-            let newSelectedTask = tasks.getTaskById(id);
-            setSelectedTask(newSelectedTask);
+    const changeSelectedTask = (task : Task) => {
+        let isTaskSelected = selectedTask != null;
+        if(isTaskSelected && selectedTask.getId() === task.getId()){
+            setSelectedTask(null);
             return;
         }
-        setSelectedTask(null);
+        setSelectedTask(task);
     }
 
     const deleteSelectedTask = () => {
@@ -49,8 +49,11 @@ export function TaskManager() {
         setSelectedTask(null);
     }
 
-
+    let selectedTasks = new Tasks(null);
     let isTaskSelected = selectedTask != null;
+    if(isTaskSelected){
+        selectedTasks.addTask(selectedTask);
+    }
     return (
         <React.Fragment>
             <Grid container alignItems="flex-start">
@@ -58,9 +61,9 @@ export function TaskManager() {
                     <Grid item xs={12}>
                         <EntitiesSelection
                             entityType="Tasks"
-                            entities={tasks.getJsonListWithIdAndLabel()}
-                            selectedEntitiesIds={isTaskSelected ? [selectedTask.getId()] : []}
-                            changeSelectedEntitiesById={changeSelectedTaskById}
+                            entities={tasks}
+                            selectedEntities={selectedTasks}
+                            changeSelectedEntities={changeSelectedTask}
                         />
                     </Grid>
                     <Grid item xs={4}>

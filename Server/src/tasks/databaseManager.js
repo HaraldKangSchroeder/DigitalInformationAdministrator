@@ -296,7 +296,7 @@ exports.getUserEntriesWithPoints = async (week, year) => {
 
 
         let queryValues = [week, year];
-        let { rows } = await pool.query(queryText,queryValues);
+        let { rows } = await pool.query(queryText, queryValues);
         return rows;
     }
     catch (e) {
@@ -464,13 +464,13 @@ const createTaskAccomplishmentEntry = async (taskAccomplishment) => {
     }
 }
 
-exports.updateTaskAccomplishmentEntryWithUserId = async (id,userId) => {
+exports.updateTaskAccomplishmentEntryWithUserId = async (id, userId) => {
     try {
         let queryText = `
             UPDATE ${TABLE_TASK_ACCOMPLISHMENTS} SET user_id = $2 WHERE id = $1;
         `;
-        let queryValues = [id,userId];
-        await pool.query(queryText,queryValues);
+        let queryValues = [id, userId];
+        await pool.query(queryText, queryValues);
     }
     catch (e) {
         console.error(e);
@@ -482,8 +482,8 @@ exports.createGroceryEntry = async (name, type) => {
         let queryText = `
             INSERT INTO ${TABLE_GROCERIES} VALUES ($1,$2);
         `;
-        let queryValues = [name,type];
-        await pool.query(queryText,queryValues);
+        let queryValues = [name, type];
+        await pool.query(queryText, queryValues);
         console.log(`createGroceryEntry : with ${name} and ${type}`);
     }
     catch (e) {
@@ -492,16 +492,49 @@ exports.createGroceryEntry = async (name, type) => {
     }
 }
 
-exports.updateGroceryEntryWithName = async (oldName, newName) {
-
+exports.updateGroceryEntryWithName = async (oldName, newName) => {
+    try {
+        let queryText = `
+            UPDATE ${TABLE_GROCERIES} SET name = $2 WHERE name = $1;
+        `;
+        let queryValues = [oldName, newName];
+        await pool.query(queryText, queryValues);
+        console.log(`updateGroceryEntryWithName : with ${oldName} and ${newName}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`updateGroceryEntryWithName : Failed with ${oldName} and ${newName}`);
+    }
 }
 
-exports.updateGroceryEntryWithType = async (name, newType) {
-
+exports.updateGroceryEntryWithType = async (name, newType) => {
+    try {
+        let queryText = `
+            UPDATE ${TABLE_GROCERIES} SET type = $2 WHERE name = $1;
+        `;
+        let queryValues = [name, newType];
+        await pool.query(queryText, queryValues);
+        console.log(`updateGroceryEntryWithType : with ${name} and ${newType}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`updateGroceryEntryWithType : Failed with ${name} and ${newType}`);
+    }
 }
 
 exports.deleteGroceryEntry = async (name) => {
-
+    try {
+        let queryText = `
+            DELETE FROM ${TABLE_GROCERIES} WHERE name = $1;
+        `;
+        let queryValues = [name];
+        await pool.query(queryText,queryValues);
+        console.log(`deleteGroceryEntry : with ${name}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`deleteGroceryEntry : Failed with ${name}`);
+    }
 }
 
 exports.createGroceryTypeEntry = async (type, color) => {
@@ -509,8 +542,8 @@ exports.createGroceryTypeEntry = async (type, color) => {
         let queryText = `
             INSERT INTO ${TABLE_GROCERY_TYPES} VALUES ($1,$2);
         `;
-        let queryValues = [type,color];
-        await pool.query(queryText,queryValues);
+        let queryValues = [type, color];
+        await pool.query(queryText, queryValues);
         console.log(`createGroceryTypeEntry : with ${type} and ${color}`);
     }
     catch (e) {
@@ -519,16 +552,49 @@ exports.createGroceryTypeEntry = async (type, color) => {
     }
 }
 
-exports.updateGroceryTypeEntryWithType = async (oldType, newType) {
-
+exports.updateGroceryTypeEntryWithType = async (oldType, newType) => {
+    try {
+        let queryText = `
+            UPDATE ${TABLE_GROCERY_TYPES} SET type = $2 WHERE type = $1;
+        `;
+        let queryValues = [oldType,newType];
+        await pool.query(queryText,queryValues);
+        console.log(`updateGroceryTypeEntryWithType : with old type ${oldType} and new type ${newType}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`updateGroceryTypeEntryWithType : Failed with old type ${oldType} and new type ${newType}`);
+    }
 }
 
-exports.updateGroceryTypeEntryWithColor = async (type, newColor) {
-
+exports.updateGroceryTypeEntryWithColor = async (type, newColor) => {
+    try {
+        let queryText = `
+        UPDATE ${TABLE_GROCERY_TYPES} SET color = $2 WHERE type = $1;
+        `;
+        let queryValues = [type,newColor];
+        await pool.query(queryText,queryValues);
+        console.log(`updateGroceryTypeEntryWithColor : with type ${type} and color ${newColor}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`updateGroceryTypeEntryWithColor : Failed with type ${type} and color ${newColor}`);
+    }
 }
 
 exports.deleteGroceryTypeEntry = async (type) => {
-    
+    try {
+        let queryText = `
+            DELETE FROM ${TABLE_GROCERY_TYPES} WHERE type = $1;
+        `;
+        let queryValues = [type];
+        await pool.query(queryText,queryValues);
+        console.log(`deleteGroceryTypeEntry : with type ${type}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`deleteGroceryTypeEntry : Failed with type ${type}`);
+    }
 }
 
 

@@ -7,6 +7,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import GroceriesManager from "./Components/GroceriesManager/GroceriesManager";
 
 
 function App() {
@@ -20,6 +21,9 @@ function App() {
           </Route>
           <Route exact path="/users">
             <UsersManager />
+          </Route>
+          <Route exact path="/groceries">
+            <GroceriesManager />
           </Route>
         </Switch>
         </div>

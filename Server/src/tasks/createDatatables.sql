@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS users;
 DROP DOMAIN IF EXISTS week_num;
 DROP DOMAIN IF EXISTS day_num;
 
+
 CREATE TABLE tasks
 (
     id SERIAL PRIMARY KEY,
@@ -46,3 +47,26 @@ CREATE TABLE task_accomplishments
     FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+
+DROP TABLE IF EXISTS groceries;
+DROP TABLE IF EXISTS grocery_types;
+DROP DOMAIN IF EXISTS type_color;
+
+CREATE DOMAIN type_color AS VARCHAR CHECK (VALUE ~ '^#[0-9|a-f]{2}[0-9|a-f]{2}[0-9|a-f]{2}$');
+
+CREATE TABLE grocery_types 
+(
+    type VARCHAR PRIMARY KEY,
+    color type_color NOT NULL 
+);
+
+
+CREATE TABLE groceries
+(
+    name VARCHAR PRIMARY KEY,
+    type VARCHAR,
+    FOREIGN KEY (type) REFERENCES grocery_types(type)
+);
+
+

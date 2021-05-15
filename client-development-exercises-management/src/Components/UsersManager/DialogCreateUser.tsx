@@ -46,7 +46,7 @@ export function DialogCreateUser() {
         setName(e.target.value);
     }
 
-    let isNameSet = name.length === 0;
+    let isNameSet = name.length !== 0;
 
     const classes = useStyles();
     return (
@@ -80,7 +80,7 @@ export function DialogCreateUser() {
                     <Button onClick={handleDialogClose} color="primary">
                         Cancel
                     </Button>
-                    <Button disabled={isNameSet} onClick={handleCreateUserSubmit} color="primary">
+                    <Button disabled={!isNameSet} onClick={handleCreateUserSubmit} color="primary">
                         Create User
                     </Button>
                 </DialogActions>

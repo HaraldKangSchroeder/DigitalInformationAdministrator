@@ -4,10 +4,10 @@ export default class GroceryTypes {
 
     groceryTypeList : GroceryType[];
 
-    constructor(groceryTypesDataset : any){
+    constructor(groceryTypesDataset : any[]){
         this.groceryTypeList = [];
         if(groceryTypesDataset != null){
-
+            this.readDataset(groceryTypesDataset);
         }
     }
 
@@ -26,5 +26,11 @@ export default class GroceryTypes {
 
     getList() {
         return this.groceryTypeList;
+    }
+
+    readDataset(entries : any[]){
+        for(let entry of entries){
+            this.addGroceryType(new GroceryType(entry.type, entry.color));
+        }
     }
 }

@@ -477,6 +477,21 @@ exports.updateTaskAccomplishmentEntryWithUserId = async (id, userId) => {
     }
 }
 
+exports.getGroceryEntries = async () => {
+    try {
+        let queryText = `
+            SELECT * FROM ${TABLE_GROCERIES};
+        `;
+        const {rows} = await pool.query(queryText);
+        console.log("getGroceryEntries");
+        return rows;
+    }
+    catch (e) {
+        console.error(e);
+        console.error("getGroceryEntries : Error");
+    }
+}
+
 exports.createGroceryEntry = async (name, type) => {
     try {
         let queryText = `
@@ -534,6 +549,21 @@ exports.deleteGroceryEntry = async (name) => {
     catch (e) {
         console.error(e);
         console.error(`deleteGroceryEntry : Failed with ${name}`);
+    }
+}
+
+exports.getGroceryTypeEntries = async () => {
+    try {
+        let queryText = `
+            SELECT * FROM ${TABLE_GROCERY_TYPES};
+        `;
+        const {rows} = await pool.query(queryText);
+        console.log("getGroceryTypeEntries");
+        return rows;
+    }
+    catch (e) {
+        console.error(e);
+        console.error("getGroceryTypeEntries : Error");
     }
 }
 

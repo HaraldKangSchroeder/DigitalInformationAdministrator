@@ -4,10 +4,10 @@ export default class Groceries {
 
     groceryList : Grocery[];
 
-    constructor(groceryDataset : any){
+    constructor(groceryDataset : any[]){
         this.groceryList = [];
         if(groceryDataset != null){
-
+            this.readDataset(groceryDataset);
         }
     }
 
@@ -35,6 +35,12 @@ export default class Groceries {
             }
         }
         return null;
+    }
+
+    readDataset(entries : any[]){
+        for(let entry of entries){
+            this.addGrocery(new Grocery(entry.name, entry.type));
+        }
     }
 
 }

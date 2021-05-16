@@ -612,6 +612,24 @@ exports.updateGroceryTypeEntryWithColor = async (type, newColor) => {
     }
 }
 
+
+exports.updateGroceryEntriesTypeToNull = async (type) => {
+    try{
+        let queryText = `
+            UPDATE ${TABLE_GROCERIES} SET type = null WHERE type = $1;
+        `;
+        let queryValues = [type];
+        await pool.query(queryText,queryValues);
+        console.log(`updateGroceryEntriesTypeToNull : with type ${type}`)
+    }
+    catch (e){
+        console.error(e);
+        console.error(`updateGroceryEntriesTypeToNull : Error with type ${type}`)
+    }
+}
+
+
+
 exports.deleteGroceryTypeEntry = async (type) => {
     try {
         let queryText = `

@@ -9,40 +9,28 @@ import socket from "../../socket";
 import { DialogEntityDeletion } from "../DialogEntityDeletion";
 import { EntitiesSelection } from "../EntitiesSelection";
 import { DialogCreateTask } from "../TasksManager/DialogCreateTask";
+import { DialogChangeGroceryName } from "./DialogChangeGroceryName";
+import { DialogChangeGroceryTypeName } from "./DialogChangeGroceryTypeName";
 import DialogCreateGrocery from "./DialogCreateGrocery";
+import DialogCreateGroceryType from "./DialogCreateGroceryType";
 
 
 export default function GroceriesManager() {
-    const [state, setState] = useState({
-        selectedGrocery : null,
-        groceries : new Groceries(null),
-        selectedGroceryType : null,
-        groceryTypes : new GroceryTypes(null),
+    const [selections, setSelections] = useState({
+        selectedGrocery: null,
+        selectedGroceryType: null
+    });
+    const [groceryEntities, setGroceryEntities] = useState({
+        groceries: new Groceries(null),
+        groceryTypes: new GroceryTypes(null),
     })
 
     useEffect(() => {
-        socket.on("groceryData" , ({groceryEntries, groceryTypeEntries}) => {
+        socket.on("groceryData", ({ groceryEntries, groceryTypeEntries }) => {
             console.log("groceryData received");
-            console.log(groceryEntries);
-            console.log(groceryTypeEntries);
-            setState({
-                ...state,
-                groceries : new Groceries(groceryEntries),
-                groceryTypes : new GroceryTypes(groceryTypeEntries),
-            })
-        });
-
-        socket.on("groceryEntries", (groceryEntries) => {
-            setState({
-                ...state,
-                groceries : new Groceries(groceryEntries),
-            })
-        });
-
-        socket.on("groceryEntryTypes", (groceryEntryTypes) => {
-            setState({
-                ...state,
-                groceryTypes : new GroceryTypes(groceryEntryTypes),
+            setGroceryEntities({
+                groceries: new Groceries(groceryEntries),
+                groceryTypes: new GroceryTypes(groceryTypeEntries),
             })
         });
 
@@ -50,113 +38,114 @@ export default function GroceriesManager() {
 
         return () => {
             socket.off("groceryData");
-            socket.off("groceryEntries");
-            socket.off("groceryEntryTypes");
         }
-    },[])
+    }, [])
 
-    const changeSelectedGrocery = (grocery : Grocery) => {
-        let isGrocerySelected = state.selectedGrocery != null;
-        if(isGrocerySelected && state.selectedGrocery.getName() === grocery.getName()) {
-            setState({
-                ...state,
-                selectedGrocery : null,
+    const changeSelectedGrocery = (grocery: Grocery) => {
+        let isGrocerySelected = selections.selectedGrocery != null;
+        if (isGrocerySelected && selections.selectedGrocery.getName() === grocery.getName()) {
+            setSelections({
+                ...selections,
+                selectedGrocery: null,
             })
             return;
         }
-        setState({
-            ...state,
-            selectedGrocery : grocery,
+        let newSelectedGroceryType = groceryEntities.groceryTypes.getGroceryType(grocery.getType());
+        setSelections({
+            selectedGroceryType: newSelectedGroceryType,
+            selectedGrocery: grocery,
         })
     }
 
-    const changeSelectedGroceryType = (groceryType : GroceryType) => {
-        let isGroceryTypeSelected = state.selectedGroceryType != null;
-        if(isGroceryTypeSelected && state.selectedGroceryType.getType() === groceryType.getType()){
-            setState({
-                ...state,
-                selectedGroceryType : null,
-            })
-            return;
-        }
-        setState({
-            ...state,
-            selectedGroceryType : null,
+    const changeSelectedGroceryType = (groceryType: GroceryType) => {
+        let isGroceryTypeSelected = selections.selectedGroceryType != null;
+        let isGrocerySelected = selections.selectedGrocery != null;
+        let newSelectedGroceryType = isGroceryTypeSelected && selections.selectedGroceryType.getType() === groceryType.getType() ? null : groceryType;
+        setSelections({
+            ...selections,
+            selectedGroceryType: newSelectedGroceryType,
         })
+        if (isGrocerySelected) {
+            socket.emit("updateGroceryEntryWithType", { name: selections.selectedGrocery.getName(), type: newSelectedGroceryType != null ? newSelectedGroceryType.getType() : null });
+        }
     }
 
     const deleteSelectedGrocery = () => {
-        console.log(state.selectedGrocery.getName());
-        socket.emit("deleteGroceryEntry", {name : state.selectedGrocery.getName()})
+        socket.emit("deleteGroceryEntry", { name: selections.selectedGrocery.getName() })
     }
 
-    let isGrocerySelected = state.selectedGrocery != null;
+    const deleteSelectedGroceryType = () => {
+        socket.emit("deleteGroceryTypeEntry", { type: selections.selectedGroceryType.getType() });
+    };
+
+    let isGrocerySelected = selections.selectedGrocery != null;
     let selectedGroceries = new Groceries(null);
-    if(isGrocerySelected){
-        selectedGroceries.addGrocery(state.selectedGrocery);
+    if (isGrocerySelected) {
+        selectedGroceries.addGrocery(selections.selectedGrocery);
     }
 
-    let isGroceryTypeSelected = state.selectedGroceryType != null;
+    let isGroceryTypeSelected = selections.selectedGroceryType != null;
     let selectedGroceryTypes = new GroceryTypes(null);
-    if(isGroceryTypeSelected){
-        selectedGroceryTypes.addGroceryType(state.selectedGroceryType);
+    if (isGroceryTypeSelected) {
+        selectedGroceryTypes.addGroceryType(selections.selectedGroceryType);
     }
+
     return (
         <Grid container alignItems="flex-start">
-            <Grid container item xs={2} style={{marginTop: "1vh", paddingLeft: "2vw" }}>
+            <Grid container spacing={1} item xs={2} style={{ marginTop: "1vh", paddingLeft: "2vw" }}>
                 <Grid item xs={12}>
                     <EntitiesSelection
                         entityType="Groceries"
-                        entities={state.groceries}
+                        entities={groceryEntities.groceries}
                         selectedEntities={selectedGroceries}
                         changeSelectedEntities={changeSelectedGrocery}
                     />
                 </Grid>
                 <Grid item xs={4}>
-                    <DialogCreateGrocery/>
+                    <DialogCreateGrocery
+                        groceryTypes={groceryEntities.groceryTypes}
+                    />
                 </Grid>
                 <Grid item xs={4}>
                     <DialogEntityDeletion
                         disabled={!isGrocerySelected}
                         entityType="Grocery"
-                        entityLabel={isGrocerySelected ? state.selectedGrocery.getName() : ""}
+                        entityLabel={isGrocerySelected ? selections.selectedGrocery.getName() : ""}
                         deleteEntity={deleteSelectedGrocery}
                     />
                 </Grid>
-                {/* <Grid item xs={4}>
-                    <DialogChangeTaskWeeklyRythm
-                        disabled={!isTaskSelected}
-                        selectedTask={selectedTask}
+                <Grid item xs={4}>
+                    <DialogChangeGroceryName
+                        selectedGrocery={selections.selectedGrocery}
                     />
-                </Grid> */}
+                </Grid>
             </Grid>
             {/* <Grid item xs={1} /> */}
-            <Grid container item xs={3} style={{marginTop: "1vh", paddingLeft: "2vw" }}>
+            <Grid spacing={1} container item xs={2} style={{ marginTop: "1vh", paddingLeft: "2vw" }}>
                 <Grid item xs={12}>
                     <EntitiesSelection
                         entityType="Grocery Types"
-                        entities={state.groceryTypes}
+                        entities={groceryEntities.groceryTypes}
                         selectedEntities={selectedGroceryTypes}
                         changeSelectedEntities={changeSelectedGroceryType}
                     />
                 </Grid>
                 <Grid item xs={4}>
-                    {/* <DialogCreateTask /> */}
+                    <DialogCreateGroceryType />
                 </Grid>
                 <Grid item xs={4}>
-                    {/* <DialogEntityDeletion
-                        disabled={!isTaskSelected}
-                        entityType="Task"
-                        entityLabel={isTaskSelected ? selectedTask.getLabel() : ""}
-                        deleteEntity={deleteSelectedTask}
-                    /> */}
-                </Grid>
-                {/* <Grid item xs={4}>
-                    <DialogChangeTaskWeeklyRythm
-                        disabled={!isTaskSelected}
-                        selectedTask={selectedTask}
+                    <DialogEntityDeletion
+                        disabled={!isGroceryTypeSelected}
+                        entityType="Grocery Type"
+                        entityLabel={isGroceryTypeSelected ? selections.selectedGroceryType.getType() : ""}
+                        deleteEntity={deleteSelectedGroceryType}
                     />
-                </Grid> */}
+                </Grid>
+                <Grid item xs={4}>
+                    <DialogChangeGroceryTypeName
+                        selectedGroceryType={selections.selectedGroceryType}
+                    />
+                </Grid>
             </Grid>
         </Grid>
     );

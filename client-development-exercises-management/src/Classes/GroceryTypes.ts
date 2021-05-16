@@ -1,3 +1,4 @@
+import Grocery from "./Grocery";
 import GroceryType from "./GroceryType";
 
 export default class GroceryTypes {
@@ -26,6 +27,23 @@ export default class GroceryTypes {
 
     getList() {
         return this.groceryTypeList;
+    }
+
+    getGroceryType(type : string) : GroceryType {
+        for(let groceryType of this.groceryTypeList){
+            if(type === groceryType.getType()){
+                return groceryType;
+            }
+        }
+        return null;
+    }
+
+    getGroceryTypesAsList() {
+        let list = [];
+        for(let groceryType of this.groceryTypeList){
+            list.push(groceryType.getType());
+        }
+        return list;
     }
 
     readDataset(entries : any[]){

@@ -9,11 +9,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { SelectMenu} from '../SelectMenu';
 import socket from "../../socket";
-import GroceryTypes from "../../Classes/GroceryTypes";
 
-const DEFAULT_GROCERY_TYPE = "DEFAULT";
+
 
 const useStyles = makeStyles({
     root: {
@@ -28,17 +26,14 @@ const useStyles = makeStyles({
     }
 })
 
-interface Props {
-    groceryTypes : GroceryTypes
-}
 
-export default function DialogCreateGrocery(props : Props) {
+export default function DialogCreateGroceryType() {
     const classes = useStyles();
 
     const [open, setOpen] = useState(false);
     const [state, setState] = useState({
-        name: "",
         type: "",
+        color: "#ff0000",
     });
 
     const handleOpen = () => {
@@ -47,38 +42,37 @@ export default function DialogCreateGrocery(props : Props) {
 
     const handleClose = () => {
         setState({
-            name: "",
             type: "",
+            color: "#ff0000",
         })
         setOpen(false);
     };
 
-    const handleChangeName = (e : any) => {
-        setState({
-            ...state,
-            name: e.target.value
-        })
-    }
-
     const handleChangeType = (e : any) => {
         setState({
             ...state,
-            type : e.target.value,
+            type: e.target.value
+        })
+    }
+
+    const handleChangeColor = (e : any) => {
+        setState({
+            ...state,
+            color : e.target.value,
         })
     }
 
     const handleSubmit = () => {
-        let type = state.type === DEFAULT_GROCERY_TYPE ? null : state.type;
-        socket.emit("createGroceryEntry", {name:state.name, type:type});
+        socket.emit("createGroceryTypeEntry", {type:state.type, color:state.color});
         setState({
-            name: "",
             type: "",
+            color: "#ff0000",
         })
         setOpen(false);
     }
 
-    let isNameSet = state.name !== "";
     let isTypeSet = state.type !== "";
+    let isColorSet = state.color !== "";
 
     return (
         <div>
@@ -92,34 +86,34 @@ export default function DialogCreateGrocery(props : Props) {
             >
             </Button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" maxWidth={'sm'} fullWidth={true}>
-                <DialogTitle id="form-dialog-title">Add Grocery</DialogTitle>
+                <DialogTitle id="form-dialog-title">Add Grocery Type</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus
                         margin="dense"
                         id="groceryname"
-                        label="Name of the Grocery"
+                        label="Name of the Grocery Type"
                         type="name"
-                        onChange={handleChangeName}
+                        onChange={handleChangeType}
                     />
 
                     <DialogContentText className={classes.informationText}>
-                        Choose one of the existing types
+                        Choose a color which identifies the respective grocery type
                     </DialogContentText>
-                    <SelectMenu
+                    {/* <SelectMenu
                         value={state.type}
-                        label={"Grocery Type"}
-                        menuItems={[DEFAULT_GROCERY_TYPE, ...props.groceryTypes.getGroceryTypesAsList()]}
+                        label={"Score"}
+                        menuItems={[state.type]}
                         handleChange={handleChangeType}
-                    />
+                    /> */}
                 </DialogContent>
 
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button disabled={!isNameSet || !isTypeSet} onClick={handleSubmit} color="primary">
-                        Add Grocery
+                    <Button disabled={!isTypeSet || !isColorSet} onClick={handleSubmit} color="primary">
+                        Add Grocery Type
                     </Button>
                 </DialogActions>
             </Dialog>

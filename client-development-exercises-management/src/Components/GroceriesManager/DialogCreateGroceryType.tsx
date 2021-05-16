@@ -10,12 +10,16 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import socket from "../../socket";
+import { SketchPicker } from 'react-color';
 
 
 
 const useStyles = makeStyles({
     root: {
-        marginTop: "10px"
+        marginTop: "10px",
+    },
+    dialog: {
+        height: "30vh"
     },
     informationText: {
         marginTop: "40px",
@@ -48,22 +52,22 @@ export default function DialogCreateGroceryType() {
         setOpen(false);
     };
 
-    const handleChangeType = (e : any) => {
+    const handleChangeType = (e: any) => {
         setState({
             ...state,
             type: e.target.value
         })
     }
 
-    const handleChangeColor = (e : any) => {
+    const handleChangeColor = (e: any) => {
         setState({
             ...state,
-            color : e.target.value,
+            color: e.target.value,
         })
     }
 
     const handleSubmit = () => {
-        socket.emit("createGroceryTypeEntry", {type:state.type, color:state.color});
+        socket.emit("createGroceryTypeEntry", { type: state.type, color: state.color });
         setState({
             type: "",
             color: "#ff0000",
@@ -100,12 +104,10 @@ export default function DialogCreateGroceryType() {
                     <DialogContentText className={classes.informationText}>
                         Choose a color which identifies the respective grocery type
                     </DialogContentText>
-                    {/* <SelectMenu
-                        value={state.type}
-                        label={"Score"}
-                        menuItems={[state.type]}
-                        handleChange={handleChangeType}
-                    /> */}
+                    <SketchPicker
+                        color={state.color}
+                        onChange={(color : any) => {console.log(state.color); setState({...state, color:color.hex})}}
+                    />
                 </DialogContent>
 
                 <DialogActions>

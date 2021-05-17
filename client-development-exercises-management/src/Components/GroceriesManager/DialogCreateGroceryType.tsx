@@ -12,8 +12,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import socket from "../../socket";
 import { SketchPicker } from 'react-color';
 
-
-
 const useStyles = makeStyles({
     root: {
         marginTop: "10px",

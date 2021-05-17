@@ -312,7 +312,7 @@ exports.setUpSocketListeners = async (io, socket) => {
     })
 
     socket.on('deleteGroceryTypeEntry', async ({type}) => {
-        await databaseManager.updateGroceryEntriesTypeToNull(type);
+        await databaseManager.updateGroceryEntriesTypeToDefault(type);
         await databaseManager.deleteGroceryTypeEntry(type);
         let groceryEntries = await databaseManager.getGroceryEntries();
         let groceryTypeEntries = await databaseManager.getGroceryTypeEntries();

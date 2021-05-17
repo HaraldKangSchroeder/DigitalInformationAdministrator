@@ -13,8 +13,6 @@ import { SelectMenu} from '../SelectMenu';
 import socket from "../../socket";
 import GroceryTypes from "../../Classes/GroceryTypes";
 
-const DEFAULT_GROCERY_TYPE = "DEFAULT";
-
 const useStyles = makeStyles({
     root: {
         marginTop: "10px"
@@ -68,8 +66,7 @@ export default function DialogCreateGrocery(props : Props) {
     }
 
     const handleSubmit = () => {
-        let type = state.type === DEFAULT_GROCERY_TYPE ? null : state.type;
-        socket.emit("createGroceryEntry", {name:state.name, type:type});
+        socket.emit("createGroceryEntry", {name:state.name, type:state.type});
         setState({
             name: "",
             type: "",
@@ -109,7 +106,7 @@ export default function DialogCreateGrocery(props : Props) {
                     <SelectMenu
                         value={state.type}
                         label={"Grocery Type"}
-                        menuItems={[DEFAULT_GROCERY_TYPE, ...props.groceryTypes.getGroceryTypesAsList()]}
+                        menuItems={props.groceryTypes.getGroceryTypesAsList()}
                         handleChange={handleChangeType}
                     />
                 </DialogContent>

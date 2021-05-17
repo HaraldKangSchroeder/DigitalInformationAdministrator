@@ -61,12 +61,21 @@ CREATE TABLE grocery_types
     color type_color NOT NULL 
 );
 
+INSERT INTO grocery_types VALUES ('Default' , '#555555');
+
 
 CREATE TABLE groceries
 (
     name VARCHAR PRIMARY KEY,
-    type VARCHAR,
+    type VARCHAR NOT NULL,
     FOREIGN KEY (type) REFERENCES grocery_types(type)
 );
 
+
+CREATE TABLE grocery_cart
+(
+    name VARCHAR PRIMARY KEY,
+    type VARCHAR NOT NULL,
+    FOREIGN KEY (type) REFERENCES grocery_types(type)
+);
 

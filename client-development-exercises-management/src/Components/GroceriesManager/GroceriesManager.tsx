@@ -14,6 +14,7 @@ import { DialogChangeGroceryTypeName } from "./DialogChangeGroceryTypeName";
 import DialogCreateGrocery from "./DialogCreateGrocery";
 import DialogCreateGroceryType from "./DialogCreateGroceryType";
 
+const DEFAULT_GROCERY_TYPE = "Default";
 
 export default function GroceriesManager() {
     const [selections, setSelections] = useState({
@@ -41,6 +42,19 @@ export default function GroceriesManager() {
         }
     }, [])
 
+    // this is necessary to automatically select type of grocery after its previous type got deleted
+    useEffect(() => {
+        let isGrocerySelected = selections.selectedGroceryType != null;
+        if (isGrocerySelected) {
+            // this is necessary since the current stored selectedGrocery was extracted from the previous version of the groceries, thus its needs to be updated as well (in case type changed)
+            let updatedSelectedGrocery = groceryEntities.groceries.getGroceryByName(selections.selectedGrocery.getName());
+            setSelections({
+                selectedGrocery : updatedSelectedGrocery,
+                selectedGroceryType: groceryEntities.groceryTypes.getGroceryType(updatedSelectedGrocery.getType()),
+            })
+        }
+    }, [groceryEntities])
+
     const changeSelectedGrocery = (grocery: Grocery) => {
         let isGrocerySelected = selections.selectedGrocery != null;
         if (isGrocerySelected && selections.selectedGrocery.getName() === grocery.getName()) {
@@ -60,14 +74,22 @@ export default function GroceriesManager() {
     const changeSelectedGroceryType = (groceryType: GroceryType) => {
         let isGroceryTypeSelected = selections.selectedGroceryType != null;
         let isGrocerySelected = selections.selectedGrocery != null;
+        if (isGrocerySelected) {
+            let isNewGroceryTypeAlreadyAssigned = selections.selectedGroceryType.getType() === groceryType.getType();
+            if (!isNewGroceryTypeAlreadyAssigned) {
+                socket.emit("updateGroceryEntryWithType", { name: selections.selectedGrocery.getName(), type: groceryType.getType() });
+                setSelections({
+                    ...selections,
+                    selectedGroceryType: groceryType,
+                })
+            }
+            return;
+        }
         let newSelectedGroceryType = isGroceryTypeSelected && selections.selectedGroceryType.getType() === groceryType.getType() ? null : groceryType;
         setSelections({
             ...selections,
             selectedGroceryType: newSelectedGroceryType,
         })
-        if (isGrocerySelected) {
-            socket.emit("updateGroceryEntryWithType", { name: selections.selectedGrocery.getName(), type: newSelectedGroceryType != null ? newSelectedGroceryType.getType() : null });
-        }
     }
 
     const deleteSelectedGrocery = () => {
@@ -135,7 +157,7 @@ export default function GroceriesManager() {
                 </Grid>
                 <Grid item xs={4}>
                     <DialogEntityDeletion
-                        disabled={!isGroceryTypeSelected}
+                        disabled={!isGroceryTypeSelected || !(selections.selectedGroceryType.getType() != DEFAULT_GROCERY_TYPE)}
                         entityType="Grocery Type"
                         entityLabel={isGroceryTypeSelected ? selections.selectedGroceryType.getType() : ""}
                         deleteEntity={deleteSelectedGroceryType}

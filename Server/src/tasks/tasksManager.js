@@ -295,6 +295,14 @@ exports.setUpSocketListeners = async (io, socket) => {
         logDivider();
     });
 
+    socket.on('updateGroceryTypeEntryWithColor' , async ({type, color}) => {
+        await databaseManager.updateGroceryTypeEntryWithColor(type,color);
+        let groceryEntries = await databaseManager.getGroceryEntries();
+        let groceryTypeEntries = await databaseManager.getGroceryTypeEntries();
+        socket.emit("groceryData", {groceryEntries:groceryEntries, groceryTypeEntries : groceryTypeEntries});
+        logDivider();
+    });
+
     socket.on('deleteGroceryEntry', async ({name}) => {
         await databaseManager.deleteGroceryEntry(name);
         let groceryEntries = await databaseManager.getGroceryEntries();

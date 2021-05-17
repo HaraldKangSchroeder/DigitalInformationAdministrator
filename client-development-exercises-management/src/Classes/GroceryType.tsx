@@ -1,3 +1,5 @@
+import DialogChangeGroceryTypeColor from "../Components/GroceriesManager/DialogChangeGroceryTypeColor";
+
 export default class GroceryType {
     type : string;
     color : string;
@@ -15,7 +17,7 @@ export default class GroceryType {
         return this.color;
     }
 
-    getLabel() : string {
-        return this.type;
+    getLabel() {
+        return <div>{this.type} <DialogChangeGroceryTypeColor type={this.type} color={this.color}/></div>;
     }
 }

@@ -106,7 +106,7 @@ export default function DialogCreateGroceryType() {
                     </DialogContentText>
                     <SketchPicker
                         color={state.color}
-                        onChange={(color : any) => {console.log(state.color); setState({...state, color:color.hex})}}
+                        onChange={(color : any) => {setState({...state, color:color.hex})}}
                     />
                 </DialogContent>
 

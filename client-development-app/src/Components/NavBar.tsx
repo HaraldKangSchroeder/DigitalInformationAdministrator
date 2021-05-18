@@ -23,7 +23,7 @@ export default function NavBar() {
     return (
         <Tabs orientation={"vertical"} centered className={classes.root}>
             <Tab to='/' component={Link} label={<div style={{ backgroundImage: `url("tasks.png")` }} className={classes.image} />} />
-            <Tab to='/Groceries' component={Link} label={<div style={{ backgroundImage: `url("tasks.png")` }} className={classes.image} />} />
+            <Tab to='/Groceries' component={Link} label={<div style={{ backgroundImage: `url("GroceryCartNavBar.png")` }} className={classes.image} />} />
         </Tabs>
     );
 }

@@ -16,7 +16,7 @@ export default class Tasks {
             if(!this.containsTaskByTaskId(tasksDataset[i].taskId)){
                 j++;
             }
-            let task = new Task(tasksDataset[i].id, tasksDataset[i].taskId, tasksDataset[i].userId, tasksDataset[i].label, tasksDataset[i].score, hslList[j]);
+            let task = new Task(tasksDataset[i].id, tasksDataset[i].taskId, tasksDataset[i].userId, tasksDataset[i].label, tasksDataset[i].score, tasksDataset[i].dayOfWeek, hslList[j]);
             this.taskList.push(task);
         }
     }

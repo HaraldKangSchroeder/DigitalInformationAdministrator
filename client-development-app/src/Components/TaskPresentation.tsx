@@ -75,6 +75,7 @@ export default function TaskPresentation(props: Props) {
     }
 
     const classes = useStyles(props);
+    let text = `${props.task.getLabel()} ${props.task.getDayOfWeekText()}`;
     let hasUserDoneTask = props.task.getUserId() != null;
     const avatarClass = hasUserDoneTask ? `${classes.avatar} ${classes.userAvatar}` : `${classes.avatar} ${classes.taskPendingAvatar}`;
     return (
@@ -85,7 +86,7 @@ export default function TaskPresentation(props: Props) {
                         <Avatar className={avatarClass}>{hasUserDoneTask ? props.users.getUserById(props.task.getUserId()).getNameCode() : " "}</Avatar>
                     </ListItemAvatar>
                 </div>
-                <ListItemText primary={props.task.getLabel()} secondary={"Score: " + props.task.getScore()} />
+                <ListItemText primary={text} secondary={"Score: " + props.task.getScore()} />
             </ListItem>
         </div>
     )

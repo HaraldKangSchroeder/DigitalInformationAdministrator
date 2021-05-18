@@ -77,6 +77,7 @@ CREATE TABLE grocery_cart
 (
     name VARCHAR PRIMARY KEY,
     type VARCHAR NOT NULL,
+    amount VARCHAR,
     FOREIGN KEY (type) REFERENCES grocery_types(type)
 );
 

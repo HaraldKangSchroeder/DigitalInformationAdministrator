@@ -50,6 +50,7 @@ CREATE TABLE task_accomplishments
 
 
 DROP TABLE IF EXISTS groceries;
+DROP TABLE IF EXISTS grocery_cart;
 DROP TABLE IF EXISTS grocery_types;
 DROP DOMAIN IF EXISTS type_color;
 

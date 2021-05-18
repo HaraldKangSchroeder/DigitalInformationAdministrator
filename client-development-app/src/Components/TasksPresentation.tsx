@@ -9,7 +9,7 @@ import User from "../Classes/User";
 const useStyles = makeStyles({
     root : {
         paddingLeft : "1vw",
-        height: "99.9vh",
+        height: "100vh",
         overflowY: "auto",
     }
 })

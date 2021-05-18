@@ -14,7 +14,7 @@ interface Props {
 const useStyles = makeStyles({
     root : {
         background:"rgb(70,70,70)",
-        height:"99.9vh",
+        height:"100vh",
         width:"100%",
         overflowY: "auto",
     }

@@ -319,6 +319,29 @@ exports.setUpSocketListeners = async (io, socket) => {
         socket.emit("groceryData", {groceryEntries:groceryEntries, groceryTypeEntries : groceryTypeEntries});
         logDivider();
     }); 
+
+    socket.on('getAllGroceryData', async () => {
+        let groceryEntries = await databaseManager.getGroceryEntries();
+        let groceryTypeEntries = await databaseManager.getGroceryTypeEntries();
+        let groceryCartEntries = await databaseManager.getGroceryCartEntries();
+        socket.emit("allGroceryData", {groceryEntries:groceryEntries, groceryTypeEntries : groceryTypeEntries, groceryCartEntries : groceryCartEntries});
+    });
+
+    socket.on('createGroceryCartEntry' , async ({name,type}) => {
+        await databaseManager.createGroceryCartEntry(name,type);
+        let groceryEntries = await databaseManager.getGroceryEntries();
+        let groceryTypeEntries = await databaseManager.getGroceryTypeEntries();
+        let groceryCartEntries = await databaseManager.getGroceryCartEntries();
+        socket.emit("allGroceryData", {groceryEntries:groceryEntries, groceryTypeEntries : groceryTypeEntries, groceryCartEntries : groceryCartEntries});
+    })
+
+    socket.on('deleteGroceryCartEntry' , async ({name}) => {
+        await databaseManager.deleteGroceryCartEntry(name);
+        let groceryEntries = await databaseManager.getGroceryEntries();
+        let groceryTypeEntries = await databaseManager.getGroceryTypeEntries();
+        let groceryCartEntries = await databaseManager.getGroceryCartEntries();
+        socket.emit("allGroceryData", {groceryEntries:groceryEntries, groceryTypeEntries : groceryTypeEntries, groceryCartEntries : groceryCartEntries});
+    })
 }
 
 async function getTasksAndUsersOfCurrentWeek() {

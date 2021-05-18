@@ -10,6 +10,7 @@ const TABLE_USERS = "users";
 const TABLE_TASK_ACCOMPLISHMENTS = "task_accomplishments";
 const TABLE_GROCERIES = "groceries";
 const TABLE_GROCERY_TYPES = "grocery_types";
+const TABLE_GROCERY_CART = "grocery_cart";
 
 
 const pool = new pg.Pool({
@@ -477,18 +478,18 @@ exports.updateTaskAccomplishmentEntryWithUserId = async (id, userId) => {
     }
 }
 
-exports.getGroceryEntries = async () => {
+exports.getGroceryCartEntries = async () => {
     try {
         let queryText = `
-            SELECT * FROM ${TABLE_GROCERIES};
+            SELECT * FROM ${TABLE_GROCERY_CART};
         `;
         const {rows} = await pool.query(queryText);
-        console.log("getGroceryEntries");
+        console.log("getGroceryCartEntries");
         return rows;
     }
     catch (e) {
         console.error(e);
-        console.error("getGroceryEntries : Error");
+        console.error("getGroceryCartEntries : Error");
     }
 }
 
@@ -504,6 +505,51 @@ exports.createGroceryEntry = async (name, type) => {
     catch (e) {
         console.error(e);
         console.error(`createGroceryEntry : Failed with ${name} and ${type}`);
+    }
+}
+
+exports.getGroceryEntries = async () => {
+    try {
+        let queryText = `
+            SELECT * FROM ${TABLE_GROCERIES};
+        `;
+        const {rows} = await pool.query(queryText);
+        console.log("getGroceryEntries");
+        return rows;
+    }
+    catch (e) {
+        console.error(e);
+        console.error("getGroceryEntries : Error");
+    }
+}
+
+exports.createGroceryCartEntry = async (name, type) => {
+    try {
+        let queryText = `
+            INSERT INTO ${TABLE_GROCERY_CART} VALUES ($1,$2);
+        `;
+        let queryValues = [name, type];
+        await pool.query(queryText, queryValues);
+        console.log(`createGroceryCartEntry : with ${name} and ${type}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`createGroceryCartEntry : Failed with ${name} and ${type}`);
+    }
+}
+
+exports.deleteGroceryCartEntry = async (name) => {
+    try {
+        let queryText = `
+            DELETE FROM ${TABLE_GROCERY_CART} WHERE name = $1;
+        `;
+        let queryValues = [name];
+        await pool.query(queryText,queryValues);
+        console.log(`deleteGroceryCartEntry : with ${name}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`deleteGroceryCartEntry : Failed with ${name}`);
     }
 }
 

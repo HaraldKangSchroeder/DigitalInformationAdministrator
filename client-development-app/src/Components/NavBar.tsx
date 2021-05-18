@@ -1,28 +1,29 @@
 import { makeStyles } from "@material-ui/core";
-import React from "react";
-import NavElement from "./NavElement";
+import { BrowserRouter, Link } from 'react-router-dom';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 const useStyles = makeStyles({
-    root : {
-        textAlign: 'center',
-        background : "rgb(30,30,30)",
+    root: {
+        background: "rgb(30,30,30)",
         boxShadow: "1px 0 5px -2px #000",
-        height: "99.9vh",
-        width:"100%",
-        paddingTop: "0.1vh",
+        height: "100vh",
+    },
+    image: {
+        width: "70px",
+        height: "70px",
+        backgroundSize: "cover",
+        // background: "red",
+        marginTop: "5vh",
     }
 })
 
-export default function NavBar(){
+export default function NavBar() {
     const classes = useStyles();
     return (
-        <div className={classes.root}>
-            <NavElement
-                imagePath={"tasks.png"}
-            />
-            <NavElement
-                imagePath={"tasks.png"}
-            />
-        </div>
+        <Tabs orientation={"vertical"} centered className={classes.root}>
+            <Tab to='/' component={Link} label={<div style={{ backgroundImage: `url("tasks.png")` }} className={classes.image} />} />
+            <Tab to='/Groceries' component={Link} label={<div style={{ backgroundImage: `url("tasks.png")` }} className={classes.image} />} />
+        </Tabs>
     );
 }

@@ -33,7 +33,7 @@ async function updateTaskaccomplishments(io) {
     logDivider();
 }
 
-exports.resetTaskAccomplishmentsOfCurrentWeek = async (io) => {
+async function resetTaskAccomplishmentsOfCurrentWeek(io){
     let dateToday = new Date();
     let currentYear = dateToday.getFullYear();
     let currentWeek = getWeekNumberByDate(dateToday);
@@ -77,7 +77,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         socket.emit('activeTaskEntries', activeTaskEntries);
         logDivider();
 
-        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+        await resetTaskAccomplishmentsOfCurrentWeek(io);
     });
 
     socket.on('deleteTaskEntry', async (task) => {
@@ -86,7 +86,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         socket.emit('activeTaskEntries', activeTaskEntries);
         logDivider();
 
-        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+        await resetTaskAccomplishmentsOfCurrentWeek(io);
     });
 
     socket.on('createTaskOccurenceEntryWithWeekAndDay', async (data) => {
@@ -96,7 +96,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         socket.emit('taskOccurenceEntries', taskOccurenceEntries);
         logDivider();
 
-        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+        await resetTaskAccomplishmentsOfCurrentWeek(io);
     });
 
     socket.on('updateTaskOccurenceEntryByRemovingDayOfWeek', async (data) => {
@@ -105,7 +105,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         socket.emit('taskOccurenceEntries', taskOccurenceEntries);
         logDivider();
 
-        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+        await resetTaskAccomplishmentsOfCurrentWeek(io);
     });
 
     socket.on('createTaskOccurenceEntryWithWeek', async (data) => {
@@ -114,7 +114,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         socket.emit('taskOccurenceEntries', taskOccurenceEntries);
         logDivider();
 
-        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+        await resetTaskAccomplishmentsOfCurrentWeek(io);
     });
 
     socket.on('deleteTaskOccurenceEntryByWeek', async (data) => {
@@ -123,7 +123,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         socket.emit('taskOccurenceEntries', taskOccurenceEntries);
         logDivider();
 
-        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+        await resetTaskAccomplishmentsOfCurrentWeek(io);
     });
 
     socket.on('updateTaskEntryWithName', async (data) => {
@@ -165,7 +165,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         socket.emit('activeTaskEntries', activeTaskEntries);
         logDivider();
 
-        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+        await resetTaskAccomplishmentsOfCurrentWeek(io);
     });
 
     socket.on('updateTaskWeeklyRythm', async (data) => {
@@ -184,7 +184,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         socket.emit('taskOccurenceEntries', taskOccurenceEntries);
         logDivider();
 
-        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+        await resetTaskAccomplishmentsOfCurrentWeek(io);
     });
 
     socket.on('createUserEntry', async (data) => {
@@ -210,7 +210,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         socket.emit("userEntries", userEntries);
         logDivider();
 
-        await tasksManager.resetTaskAccomplishmentsOfCurrentWeek(io);
+        await resetTaskAccomplishmentsOfCurrentWeek(io);
     })
 
     socket.on('getYearsOfTaskAccomplishmentEntries', async () => {

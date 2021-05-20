@@ -26,6 +26,11 @@ function UsersManager() {
         }
     }, [])
 
+    useEffect(() => {
+        let updatedSelectedUsers = getUpdatedSelectedUsers(users,selectedUsers);
+        setSelectedUsers(updatedSelectedUsers);
+    }, [users])
+
     const changeSelectedUsers = (user: User) => {
         let selectedUsersCopy = selectedUsers.getCopy();
         if (selectedUsersCopy.contains(user)) {
@@ -38,7 +43,7 @@ function UsersManager() {
     }
 
     const deleteSelectedUser = () => {
-        if (!selectedUsers.containsExactlyOneUser()) return ;
+        if (!selectedUsers.containsExactlyOneUser()) return;
 
         let id = selectedUsers.getList()[0].getId();
         socket.emit("deleteUserEntry", { id: id });
@@ -89,5 +94,14 @@ function UsersManager() {
     );
 }
 
+function getUpdatedSelectedUsers(users: Users, selectedUsers: Users): Users {
+    let updatedSelectedUsers = new Users(null);
+    for (let user of selectedUsers.getList()) {
+        let updatedUser = users.getUserById(user.getId());
+        if (updatedUser == null) continue;
+        updatedSelectedUsers.addUser(updatedUser);
+    }
+    return updatedSelectedUsers;
+}
 
 export default UsersManager;

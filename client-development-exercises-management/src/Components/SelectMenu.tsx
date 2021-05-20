@@ -51,8 +51,10 @@ export function SelectMenu(props : Props) {
                 }
                 {
                     props.menuItems.map((menuItem : any) => {
+                        let value = menuItem.value != null ? menuItem.value : menuItem;
+                        let label = menuItem.label != null ? menuItem.label : menuItem;
                         return (
-                            <MenuItem value={menuItem.value || menuItem}>{menuItem.label || menuItem}</MenuItem>
+                            <MenuItem value={value}>{label}</MenuItem>
                         );
                     })
                 }

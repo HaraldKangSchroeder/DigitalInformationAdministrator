@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import socket from "../../socket";
 import Tasks from "../../Classes/Tasks";
 import Task from "../../Classes/Task";
-import { DialogChangeTaskName } from "./DialogChangeTaskName";
+import DialogChangeEntityName from "../DialogChangeEntityName";
 
 export function TasksManager() {
     const [selectedTask, setSelectedTask] = useState<Task>(null);
@@ -50,6 +50,11 @@ export function TasksManager() {
         setSelectedTask(null);
     }
 
+    const changeSelectedTaskName = (newName : string) => {
+        if (selectedTask == null) return;
+        socket.emit("updateTaskEntryWithName",{taskId:selectedTask.getId(), newName:newName});
+    }
+
     let selectedTasks = new Tasks(null);
     let isTaskSelected = selectedTask != null;
     if (isTaskSelected) {
@@ -84,9 +89,16 @@ export function TasksManager() {
                             selectedTask={selectedTask}
                         />
                          */}
-                        <DialogChangeTaskName
+                        {/* <DialogChangeTaskName
                             selectedTask={selectedTask}
                             disabled={!isTaskSelected}
+                        /> */}
+
+                        <DialogChangeEntityName 
+                            entityName = {isTaskSelected ? selectedTask.getLabel() : ""}
+                            entityType = "Task"
+                            changeEntityName = {changeSelectedTaskName}
+                            disabled = {!isTaskSelected}
                         />
                     </Grid>
                 </Grid>

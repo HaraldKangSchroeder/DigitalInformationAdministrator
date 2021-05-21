@@ -6,11 +6,10 @@ import Grocery from "../../Classes/Grocery";
 import GroceryType from "../../Classes/GroceryType";
 import GroceryTypes from "../../Classes/GroceryTypes";
 import socket from "../../socket";
+import DialogChangeEntityName from "../DialogChangeEntityName";
 import { DialogEntityDeletion } from "../DialogEntityDeletion";
 import { EntitiesSelection } from "../EntitiesSelection";
 import { DialogCreateTask } from "../TasksManager/DialogCreateTask";
-import { DialogChangeGroceryName } from "./DialogChangeGroceryName";
-import { DialogChangeGroceryTypeName } from "./DialogChangeGroceryTypeName";
 import DialogCreateGrocery from "./DialogCreateGrocery";
 import DialogCreateGroceryType from "./DialogCreateGroceryType";
 
@@ -44,13 +43,20 @@ export default function GroceriesManager() {
 
     // this is necessary to automatically select type of grocery after its previous type got deleted
     useEffect(() => {
-        let isGrocerySelected = selections.selectedGroceryType != null;
-        if (isGrocerySelected) {
-            // this is necessary since the current stored selectedGrocery was extracted from the previous version of the groceries, thus its needs to be updated as well (in case type changed)
+        let isGrocerySelected = selections.selectedGrocery != null;
+        if(isGrocerySelected) {
             let updatedSelectedGrocery = groceryEntities.groceries.getGroceryByName(selections.selectedGrocery.getName());
+            // happens after renaming grocery name
+            if(updatedSelectedGrocery == null){
+                setSelections({
+                    selectedGrocery : null,
+                    selectedGroceryType : null
+                });
+                return;
+            }
             setSelections({
+                selectedGroceryType : groceryEntities.groceryTypes.getGroceryType(updatedSelectedGrocery.getType()),
                 selectedGrocery : updatedSelectedGrocery,
-                selectedGroceryType: groceryEntities.groceryTypes.getGroceryType(updatedSelectedGrocery.getType()),
             })
         }
     }, [groceryEntities])
@@ -99,6 +105,15 @@ export default function GroceriesManager() {
     const deleteSelectedGroceryType = () => {
         socket.emit("deleteGroceryTypeEntry", { type: selections.selectedGroceryType.getType() });
     };
+    const changeSelectedGroceryTypeName = (newType : string) => {
+        if(selections.selectedGroceryType == null) return;
+        socket.emit("updateGroceryTypeEntryWithType",{type:selections.selectedGroceryType.getType(), newType: newType});
+    }
+
+    const changeSelectedGroceryName = (newName : string) => {
+        if(selections.selectedGrocery == null) return;
+        socket.emit("updateGroceryEntryWithName",{name:selections.selectedGrocery.getName(), newName: newName});
+    }
 
     let isGrocerySelected = selections.selectedGrocery != null;
     let selectedGroceries = new Groceries(null);
@@ -137,8 +152,11 @@ export default function GroceriesManager() {
                     />
                 </Grid>
                 <Grid item xs={4}>
-                    <DialogChangeGroceryName
-                        selectedGrocery={selections.selectedGrocery}
+                    <DialogChangeEntityName
+                        entityName={isGrocerySelected ? selections.selectedGrocery.getName() : ""}
+                        entityType="Grocery"
+                        disabled={!isGrocerySelected}
+                        changeEntityName={changeSelectedGroceryName}
                     />
                 </Grid>
             </Grid>
@@ -164,8 +182,11 @@ export default function GroceriesManager() {
                     />
                 </Grid>
                 <Grid item xs={4}>
-                    <DialogChangeGroceryTypeName
-                        selectedGroceryType={selections.selectedGroceryType}
+                    <DialogChangeEntityName 
+                        entityName={isGroceryTypeSelected ? selections.selectedGroceryType.getType() : ""}
+                        disabled = {!isGroceryTypeSelected}
+                        entityType = "Grocery Type"
+                        changeEntityName = {changeSelectedGroceryTypeName}
                     />
                 </Grid>
             </Grid>

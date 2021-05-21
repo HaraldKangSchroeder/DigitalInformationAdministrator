@@ -1,3 +1,4 @@
+
 import React ,{ useState } from "react";
 import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -8,21 +9,14 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import socket from "../../socket";
-import Task from "../../Classes/Task";
 
 const useStyles = makeStyles({
     root: {
-        // marginLeft:'20px',
-        // maxWidth: '30px', 
-        // maxHeight: '30px', 
-        // minWidth: '30px', 
-        // minHeight: '30px',
-        // color:"grey",
-        marginTop: "10px",
+        marginTop: "10px"
     },
     informationText: {
-        marginBottom: "20px"
+        marginTop: "30px",
+        marginBottom: "10px"
     },
     startIcon: {
         margin: 0
@@ -30,70 +24,71 @@ const useStyles = makeStyles({
 })
 
 interface Props {
-    selectedTask : Task,
+    entityName : string,
+    entityType : string,
     disabled : boolean,
+    changeEntityName : Function,
 }
 
-export function DialogChangeTaskName(props : Props) {
-    const [isDialogOpen,setIsDialogOpen] = useState<boolean>(false);
+export default function DialogChangeEntityName(props : Props) {
+    const [open,setOpen] = useState<boolean>(false);
     const [newName, setNewName] = useState<string>("");
 
-    const handleChangeNameClose = () => {
+    const handleClose = () => {
         setNewName("");
-        setIsDialogOpen(false); 
+        setOpen(false); 
     }
 
-    const handleChangeNameDialogOpen = () => {
-        setIsDialogOpen(true);
+    const handleOpen = () => {
+        setOpen(true);
     }
 
-    const handleChangeNameSubmit = () => {
-        socket.emit("updateTaskEntryWithName",{taskId:props.selectedTask.getId(), newName:newName});
+    const handleSubmit = () => {
+        props.changeEntityName(newName);
         setNewName("");
-        setIsDialogOpen(false);
+        setOpen(false);
     }
 
     const handleChangeNameText = (e : any) => {
         setNewName(e.target.value);
     }
 
-    let isNewNameSet = newName.length === 0;
-
+    let isNewNameSet = newName.length !== 0;
     const classes = useStyles();
     return (
         <React.Fragment>
             <Button
+                disabled = {props.disabled}
                 classes={{ startIcon: classes.startIcon }}
                 className={classes.root}
                 startIcon={<EditIcon />}
-                onClick={handleChangeNameDialogOpen}
+                onClick={handleOpen}
                 variant="contained"
                 color="secondary"
-                disabled={props.disabled}
             >
             </Button>
-            <Dialog open={isDialogOpen} onClose={handleChangeNameClose} aria-labelledby="form-dialog-title" maxWidth={'sm'} fullWidth={true}>
-                <DialogTitle id="form-dialog-title">Add Task</DialogTitle>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" maxWidth={'sm'} fullWidth={true}>
+                <DialogTitle id="form-dialog-title">{`Change ${props.entityType} Name`}</DialogTitle>
                 <DialogContent>
                     <DialogContentText className={classes.informationText}>
-                        Set a new name for the Task "{props.selectedTask != null ? props.selectedTask.getLabel() : ""}"
+                        {`Set a new name for the ${props.entityType} ${props.entityName}`}
                     </DialogContentText>
                     <TextField
                         autoFocus
                         margin="dense"
-                        id="newTaskname"
-                        label={"New task name"}
+                        id="newGroceryname"
+                        label={"New Grocery name"}
                         type="name"
                         onChange={handleChangeNameText}
                     />
                 </DialogContent>
 
                 <DialogActions>
-                    <Button onClick={handleChangeNameClose} color="primary">
+                    <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button disabled={isNewNameSet} onClick={handleChangeNameSubmit} color="primary">
-                        Change Taskname
+                    <Button disabled={!isNewNameSet} onClick={handleSubmit} color="primary">
+                        {`Change ${props.entityType} Name`}
                     </Button>
                 </DialogActions>
             </Dialog>

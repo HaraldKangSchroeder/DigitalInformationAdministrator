@@ -69,7 +69,7 @@ CREATE TABLE groceries
 (
     name VARCHAR PRIMARY KEY,
     type VARCHAR NOT NULL,
-    FOREIGN KEY (type) REFERENCES grocery_types(type)
+    FOREIGN KEY (type) REFERENCES grocery_types(type) ON UPDATE CASCADE
 );
 
 

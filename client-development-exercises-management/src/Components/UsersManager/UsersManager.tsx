@@ -3,11 +3,11 @@ import { EntitiesSelection } from "../EntitiesSelection";
 import { DialogEntityDeletion } from "../DialogEntityDeletion";
 import { DialogCreateUser } from "./DialogCreateUser";
 import { UserCharts } from "./UserCharts";
-import { DialogChangeUserName } from "./DialogChangeUserName";
 import Grid from '@material-ui/core/Grid';
 import socket from "../../socket";
 import Users from "../../Classes/Users";
 import User from "../../Classes/User";
+import DialogChangeEntityName from "../DialogChangeEntityName";
 
 
 function UsersManager() {
@@ -52,6 +52,11 @@ function UsersManager() {
         setSelectedUsers(selectedUsersCopy);
     }
 
+    const changeSelectedUserName = (newName : string) => {
+        if(!selectedUsers.containsExactlyOneUser()) return;
+        socket.emit("updateUserEntryWithName",{userId:selectedUsers.getList()[0].getId(), newName:newName});
+    }
+
     return (
         <React.Fragment>
             <Grid container spacing={0} alignItems="flex-start">
@@ -77,9 +82,11 @@ function UsersManager() {
                         />
                     </Grid>
                     <Grid item xs={4}>
-                        <DialogChangeUserName
+                        <DialogChangeEntityName 
                             disabled={!selectedUsers.containsExactlyOneUser()}
-                            selectedUser={selectedUsers.containsExactlyOneUser() ? selectedUsers.getList()[0] : null}
+                            entityName={selectedUsers.containsExactlyOneUser() ? selectedUsers.getList()[0].getName() : ""}
+                            entityType="User"
+                            changeEntityName={changeSelectedUserName}
                         />
                     </Grid>
                 </Grid>

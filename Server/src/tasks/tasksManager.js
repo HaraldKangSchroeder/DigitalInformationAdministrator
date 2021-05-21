@@ -250,48 +250,56 @@ exports.setUpSocketListeners = async (io, socket) => {
 
     socket.on('getGroceryData', async () => {
         await getGroceryData(socket);
+        await getAllGroceryData(io);
         logDivider();
     })
 
     socket.on('createGroceryEntry', async ({ name, type }) => {
         await databaseManager.createGroceryEntry(name, type);
         await getGroceryData(socket);
+        await getAllGroceryData(io);
         logDivider();
     });
 
     socket.on('updateGroceryEntryWithName', async ({ name, newName }) => {
         await databaseManager.updateGroceryEntryWithName(name, newName);
         await getGroceryData(socket);
+        await getAllGroceryData(io);
         logDivider();
     });
 
     socket.on('updateGroceryEntryWithType', async ({ name, type }) => {
         await databaseManager.updateGroceryEntryWithType(name, type);
         await getGroceryData(socket);
+        await getAllGroceryData(io);
         logDivider();
     });
 
     socket.on('createGroceryTypeEntry', async ({ type, color }) => {
         await databaseManager.createGroceryTypeEntry(type, color);
         await getGroceryData(socket);
+        await getAllGroceryData(io);
         logDivider();
     });
 
     socket.on('updateGroceryTypeEntryWithType', async ({ type, newType }) => {
         await databaseManager.updateGroceryTypeEntryWithType(type, newType);
         await getGroceryData(socket);
+        await getAllGroceryData(io);
         logDivider();
     });
 
     socket.on('updateGroceryTypeEntryWithColor', async ({ type, color }) => {
         await databaseManager.updateGroceryTypeEntryWithColor(type, color);
         await getGroceryData(socket);
+        await getAllGroceryData(io);
         logDivider();
     });
 
     socket.on('deleteGroceryEntry', async ({ name }) => {
         await databaseManager.deleteGroceryEntry(name);
         await getGroceryData(socket);
+        await getAllGroceryData(io);
         logDivider();
     })
 
@@ -299,6 +307,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         await databaseManager.updateGroceryEntriesTypeToDefault(type);
         await databaseManager.deleteGroceryTypeEntry(type);
         await getGroceryData(socket);
+        await getAllGroceryData(io);
         logDivider();
     });
 

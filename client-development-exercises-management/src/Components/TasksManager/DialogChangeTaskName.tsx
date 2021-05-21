@@ -13,12 +13,13 @@ import Task from "../../Classes/Task";
 
 const useStyles = makeStyles({
     root: {
-        marginLeft:'20px',
-        maxWidth: '30px', 
-        maxHeight: '30px', 
-        minWidth: '30px', 
-        minHeight: '30px',
-        color:"grey",
+        // marginLeft:'20px',
+        // maxWidth: '30px', 
+        // maxHeight: '30px', 
+        // minWidth: '30px', 
+        // minHeight: '30px',
+        // color:"grey",
+        marginTop: "10px",
     },
     informationText: {
         marginBottom: "20px"
@@ -29,7 +30,8 @@ const useStyles = makeStyles({
 })
 
 interface Props {
-    selectedTask : Task;
+    selectedTask : Task,
+    disabled : boolean,
 }
 
 export function DialogChangeTaskName(props : Props) {
@@ -65,13 +67,16 @@ export function DialogChangeTaskName(props : Props) {
                 className={classes.root}
                 startIcon={<EditIcon />}
                 onClick={handleChangeNameDialogOpen}
+                variant="contained"
+                color="secondary"
+                disabled={props.disabled}
             >
             </Button>
             <Dialog open={isDialogOpen} onClose={handleChangeNameClose} aria-labelledby="form-dialog-title" maxWidth={'sm'} fullWidth={true}>
                 <DialogTitle id="form-dialog-title">Add Task</DialogTitle>
                 <DialogContent>
                     <DialogContentText className={classes.informationText}>
-                        Set a new name for the Task "{props.selectedTask.getLabel()}"
+                        Set a new name for the Task "{props.selectedTask != null ? props.selectedTask.getLabel() : ""}"
                     </DialogContentText>
                     <TextField
                         autoFocus

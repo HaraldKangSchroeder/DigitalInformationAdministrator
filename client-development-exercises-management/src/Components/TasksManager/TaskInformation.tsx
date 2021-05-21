@@ -55,15 +55,7 @@ export function TaskInformation(props : Props) {
     }
     return (
         <React.Fragment>
-            <Grid item xs={3}>
-                <div className={classes.text}>
-                    Task : {props.selectedTask.getLabel()}
-                    <DialogChangeTaskName
-                        selectedTask={props.selectedTask}
-                    />
-                </div>
-            </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={4}>
                 <div className={classes.text}>
                     Weekly Occurences : {props.selectedTask.getWeeklyOccurences()}
                     <DialogChangeTaskValue
@@ -74,7 +66,7 @@ export function TaskInformation(props : Props) {
                     />
                 </div>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={4}>
                 <div className={classes.text}>
                     Score : {props.selectedTask.getScore()}
                     <DialogChangeTaskValue
@@ -85,7 +77,7 @@ export function TaskInformation(props : Props) {
                     />
                 </div>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={4}>
                 <div className={classes.text}>
                     Importance : {props.selectedTask.getImportance()}
                     <DialogChangeTaskValue

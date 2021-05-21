@@ -1,4 +1,4 @@
-import React , { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { EntitiesSelection } from "../EntitiesSelection";
 import { DialogEntityDeletion } from "../DialogEntityDeletion";
 import { DialogCreateTask } from "./DialogCreateTask";
@@ -8,9 +8,10 @@ import Grid from '@material-ui/core/Grid';
 import socket from "../../socket";
 import Tasks from "../../Classes/Tasks";
 import Task from "../../Classes/Task";
+import { DialogChangeTaskName } from "./DialogChangeTaskName";
 
 export function TasksManager() {
-    const [selectedTask,setSelectedTask] = useState<Task>(null);
+    const [selectedTask, setSelectedTask] = useState<Task>(null);
     const [tasks, setTasks] = useState(new Tasks(null));
 
     useEffect(() => {
@@ -28,15 +29,15 @@ export function TasksManager() {
     }, [])
 
     useEffect(() => {
-        if(selectedTask != null){
+        if (selectedTask != null) {
             // get new version of the currently selected Task that came in with the latest server response
             setSelectedTask(tasks.getTaskById(selectedTask.getId()));
         }
     }, [tasks])
 
-    const changeSelectedTask = (task : Task) => {
+    const changeSelectedTask = (task: Task) => {
         let isTaskSelected = selectedTask != null;
-        if(isTaskSelected && selectedTask.getId() === task.getId()){
+        if (isTaskSelected && selectedTask.getId() === task.getId()) {
             setSelectedTask(null);
             return;
         }
@@ -44,14 +45,14 @@ export function TasksManager() {
     }
 
     const deleteSelectedTask = () => {
-        if(selectedTask == null) return;
-        socket.emit("deleteTaskEntry", {id:selectedTask.getId()});
+        if (selectedTask == null) return;
+        socket.emit("deleteTaskEntry", { id: selectedTask.getId() });
         setSelectedTask(null);
     }
 
     let selectedTasks = new Tasks(null);
     let isTaskSelected = selectedTask != null;
-    if(isTaskSelected){
+    if (isTaskSelected) {
         selectedTasks.addTask(selectedTask);
     }
     return (
@@ -78,9 +79,14 @@ export function TasksManager() {
                         />
                     </Grid>
                     <Grid item xs={4}>
-                        <DialogChangeTaskWeeklyRythm
+                        {/* <DialogChangeTaskWeeklyRythm
                             disabled={!isTaskSelected}
                             selectedTask={selectedTask}
+                        />
+                         */}
+                        <DialogChangeTaskName
+                            selectedTask={selectedTask}
+                            disabled={!isTaskSelected}
                         />
                     </Grid>
                 </Grid>

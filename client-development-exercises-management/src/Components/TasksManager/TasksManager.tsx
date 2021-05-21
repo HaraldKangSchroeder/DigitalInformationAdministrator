@@ -9,7 +9,7 @@ import socket from "../../socket";
 import Tasks from "../../Classes/Tasks";
 import Task from "../../Classes/Task";
 
-export function TaskManager() {
+export function TasksManager() {
     const [selectedTask,setSelectedTask] = useState<Task>(null);
     const [tasks, setTasks] = useState(new Tasks(null));
 
@@ -98,4 +98,4 @@ export function TaskManager() {
 
 
 
-export default TaskManager;
+export default TasksManager;

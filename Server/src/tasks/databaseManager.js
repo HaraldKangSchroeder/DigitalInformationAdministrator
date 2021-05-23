@@ -539,6 +539,21 @@ exports.createGroceryCartEntry = async (name, type) => {
     }
 }
 
+exports.updateGroceryCartEntryWithType = async (name, type) => {
+    try{
+        let queryText = `
+            UPDATE ${TABLE_GROCERY_CART} SET type = $2 WHERE name = $1;
+        `;
+        let queryValues = [name,type];
+        await pool.query(queryText,queryValues);
+        console.log(`updateGroceryCartEntryWithType : with ${name} and ${type}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`updateGroceryCartEntryWithType : Error with ${name} and ${type}`);
+    }
+}
+
 exports.deleteGroceryCartEntry = async (name) => {
     try {
         let queryText = `

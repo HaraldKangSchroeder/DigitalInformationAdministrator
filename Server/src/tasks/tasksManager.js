@@ -270,6 +270,7 @@ exports.setUpSocketListeners = async (io, socket) => {
 
     socket.on('updateGroceryEntryWithType', async ({ name, type }) => {
         await databaseManager.updateGroceryEntryWithType(name, type);
+        await databaseManager.updateGroceryCartEntryWithType(name,type);
         await getGroceryData(socket);
         await getAllGroceryData(io);
         logDivider();
@@ -318,13 +319,13 @@ exports.setUpSocketListeners = async (io, socket) => {
 
     socket.on('createGroceryCartEntry', async ({ name, type }) => {
         await databaseManager.createGroceryCartEntry(name, type);
-        await getAllGroceryData(socket);
+        await getAllGroceryData(io);
         logDivider();
     })
 
     socket.on('deleteGroceryCartEntry', async ({ name }) => {
         await databaseManager.deleteGroceryCartEntry(name);
-        await getAllGroceryData(socket);
+        await getAllGroceryData(io);
         logDivider();
     })
 }

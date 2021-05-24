@@ -263,6 +263,7 @@ exports.setUpSocketListeners = async (io, socket) => {
 
     socket.on('updateGroceryEntryWithName', async ({ name, newName }) => {
         await databaseManager.updateGroceryEntryWithName(name, newName);
+        await databaseManager.updateGroceryCartEntryWithName(name, newName);
         await getGroceryData(socket);
         await getAllGroceryData(io);
         logDivider();
@@ -284,6 +285,7 @@ exports.setUpSocketListeners = async (io, socket) => {
     });
 
     socket.on('updateGroceryTypeEntryWithType', async ({ type, newType }) => {
+        // changes also grocery cart table due to update on cascade on foreign key
         await databaseManager.updateGroceryTypeEntryWithType(type, newType);
         await getGroceryData(socket);
         await getAllGroceryData(io);

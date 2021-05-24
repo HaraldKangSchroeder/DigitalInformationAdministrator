@@ -78,6 +78,6 @@ CREATE TABLE grocery_cart
     name VARCHAR PRIMARY KEY,
     type VARCHAR NOT NULL,
     amount VARCHAR,
-    FOREIGN KEY (type) REFERENCES grocery_types(type)
+    FOREIGN KEY (type) REFERENCES grocery_types(type) ON UPDATE CASCADE
 );
 

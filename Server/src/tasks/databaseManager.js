@@ -554,6 +554,21 @@ exports.updateGroceryCartEntryWithType = async (name, type) => {
     }
 }
 
+exports.updateGroceryCartEntryWithName = async (name, newName) => {
+    try{
+        let queryText = `
+            UPDATE ${TABLE_GROCERY_CART} SET name = $2 WHERE name = $1;
+        `;
+        let queryValues = [name,newName];
+        await pool.query(queryText,queryValues);
+        console.log(`updateGroceryCartEntryWithName : with old name ${name} and new name ${newName}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`updateGroceryCartEntryWithName : Error with old name ${name} and new name ${newName}`);
+    }
+}
+
 exports.deleteGroceryCartEntry = async (name) => {
     try {
         let queryText = `

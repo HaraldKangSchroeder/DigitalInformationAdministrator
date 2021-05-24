@@ -319,8 +319,8 @@ exports.setUpSocketListeners = async (io, socket) => {
         logDivider();
     });
 
-    socket.on('createGroceryCartEntry', async ({ name, type }) => {
-        await databaseManager.createGroceryCartEntry(name, type);
+    socket.on('createGroceryCartEntry', async ({ name, type , amount}) => {
+        await databaseManager.createGroceryCartEntry(name, type, amount);
         await getAllGroceryData(io);
         logDivider();
     })
@@ -330,6 +330,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         await getAllGroceryData(io);
         logDivider();
     })
+
 }
 
 async function getTasksAndUsersOfCurrentWeek() {

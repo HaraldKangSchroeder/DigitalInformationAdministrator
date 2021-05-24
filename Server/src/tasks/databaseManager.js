@@ -524,18 +524,18 @@ exports.getGroceryEntries = async () => {
     }
 }
 
-exports.createGroceryCartEntry = async (name, type) => {
+exports.createGroceryCartEntry = async (name, type, amount) => {
     try {
         let queryText = `
-            INSERT INTO ${TABLE_GROCERY_CART} VALUES ($1,$2);
+            INSERT INTO ${TABLE_GROCERY_CART} VALUES ($1,$2,$3);
         `;
-        let queryValues = [name, type];
+        let queryValues = [name, type, amount];
         await pool.query(queryText, queryValues);
-        console.log(`createGroceryCartEntry : with ${name} and ${type}`);
+        console.log(`createGroceryCartEntry : with ${name} and ${type} and ${amount}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`createGroceryCartEntry : Failed with ${name} and ${type}`);
+        console.error(`createGroceryCartEntry : Failed with ${name} and ${type} and ${amount}`);
     }
 }
 

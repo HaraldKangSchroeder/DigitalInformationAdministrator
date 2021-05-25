@@ -37,7 +37,7 @@ export default function GroceryPresentation(props: Props) {
             socket.emit("deleteGroceryCartEntry", {name : props.grocery.getName()});
             return;
         }
-        socket.emit("createGroceryCartEntry", {name : props.grocery.getName(), type : props.grocery.getType(), amount : null});
+        socket.emit("createGroceryCartEntry", {name : props.grocery.getName(), type : props.grocery.getType(), amount : ""});
     }
 
     const classes = useStyles(props);

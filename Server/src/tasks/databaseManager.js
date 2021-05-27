@@ -482,7 +482,7 @@ exports.updateTaskAccomplishmentEntryWithUserId = async (id, userId) => {
 exports.getGroceryCartEntries = async () => {
     try {
         let queryText = `
-            SELECT * FROM ${TABLE_GROCERY_CART};
+            SELECT * FROM ${TABLE_GROCERY_CART} ORDER BY type,name;
         `;
         const {rows} = await pool.query(queryText);
         console.log("getGroceryCartEntries");
@@ -512,7 +512,7 @@ exports.createGroceryEntry = async (name, type) => {
 exports.getGroceryEntries = async () => {
     try {
         let queryText = `
-            SELECT * FROM ${TABLE_GROCERIES};
+            SELECT * FROM ${TABLE_GROCERIES} ORDER BY type,name;
         `;
         const {rows} = await pool.query(queryText);
         console.log("getGroceryEntries");
@@ -632,7 +632,7 @@ exports.deleteGroceryEntry = async (name) => {
 exports.getGroceryTypeEntries = async () => {
     try {
         let queryText = `
-            SELECT * FROM ${TABLE_GROCERY_TYPES};
+            SELECT * FROM ${TABLE_GROCERY_TYPES} ORDER BY type;
         `;
         const {rows} = await pool.query(queryText);
         console.log("getGroceryTypeEntries");

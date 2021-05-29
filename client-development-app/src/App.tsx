@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import GroceryCartPresenter from "./GroceryCartPresenter";
 import TasksPresenter from './TasksPresenter';
+import WeatherPresenter from "./WeatherPresenter";
 
 function App() {
     return (
@@ -13,6 +14,9 @@ function App() {
             <Switch>
                 <Route exact path="/Groceries">
                     <GroceryCartPresenter />
+                </Route>
+                <Route exact path="/Weather">
+                    <WeatherPresenter />
                 </Route>
                 <Route exact path="/">
                     <TasksPresenter />

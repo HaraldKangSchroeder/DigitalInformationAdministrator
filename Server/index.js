@@ -4,7 +4,8 @@ const { configs } = require("./configs");
 const Server = require("socket.io");
 const cors = require("cors");
 const tasksManager = require("./src/tasksManager");
-const groceriesManager = require("./src/tasksManager");
+const groceriesManager = require("./src/groceriesManager");
+const weatherManager = require("./src/weatherManager");
 const {logDivider} = require("./src/utils");
 
 const app = express();
@@ -42,5 +43,6 @@ io.on("connection", (socket) => {
     });
 
     tasksManager.setUpSocketListeners(io,socket);
-    groceriesManager.setUpSocketListeners(io,socket);
+    groceriesManager.setupSocketListeners(io,socket);
+    weatherManager.setupSocketListeners(socket);
 });

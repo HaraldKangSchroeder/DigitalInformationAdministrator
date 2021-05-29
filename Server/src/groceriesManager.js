@@ -1,7 +1,7 @@
 const { logDivider } = require("./utils");
 const databaseManager = require("./databaseManager");
 
-exports.setUpSocketListeners = (io,socket) => {
+exports.setupSocketListeners = (io,socket) => {
     socket.on('createGroceryEntry', async ({ name, type }) => {
         await databaseManager.createGroceryEntry(name, type);
         await getAllGroceryData(io);

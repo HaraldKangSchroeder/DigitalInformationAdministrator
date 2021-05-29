@@ -1,5 +1,5 @@
 const pg = require("pg");
-const { configs } = require("../../configs");
+const { configs } = require("../configs");
 const dotenv = require("dotenv");
 const { query } = require("express");
 dotenv.config();

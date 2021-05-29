@@ -30,8 +30,6 @@ export default function GroceryCartPresenter() {
         }
     }, []);
 
-    console.log(state);
-
     return (
         <div className="App">
             <Grid container alignItems="flex-start">

@@ -27,6 +27,7 @@ app.get("/", (req, res) => {
 })
 
 tasksManager.startUpdateTaskAccomplishments(io);
+weatherManager.startUpdateWeatherData(io);
 
 
 server.listen(port, () => {

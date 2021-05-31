@@ -1,19 +1,19 @@
 const axios = require('axios');
 
-const UPADTE_INTERVAL = 300000;
+const UPADTE_INTERVAL = 300000; // = 5min
 let interval = null;
 
 exports.startUpdateWeatherData = async (io) => {
     await updateWeatherData(io);
     interval = setInterval(async () => {
-        await updateWeatherData();
+        await updateWeatherData(io);
     }, UPADTE_INTERVAL);
 }
 
 async function updateWeatherData(io) {
     try {
         let data = await getWeatherData();
-        io.emit("", data);
+        io.emit("weatherData", data);
     }
     catch (e) {
         console.error(e);

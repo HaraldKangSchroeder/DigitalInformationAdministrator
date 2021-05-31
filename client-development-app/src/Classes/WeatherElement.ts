@@ -48,6 +48,7 @@ export default class WeatherElement {
 
     getLabelPresentation() : string {
         return `${this.getHour()} ${this.getDayShortName()}`;
+        // return [this.getHour(), this.getDayShortName()]
     }
 
     getPrecipitationProbability(): number {

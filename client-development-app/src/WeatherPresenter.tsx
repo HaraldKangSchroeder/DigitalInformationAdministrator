@@ -108,7 +108,7 @@ function getWeatherDatasets(weather: Weather) {
     return [
         ...getWeatherPrecipitationProbabilityDatasets(weather),
         ...getWeatherTemperatureDatasets(weather, { value: 100 }),
-        ...getWeatherTemperatureDatasetsDummy(weather, { value: -100 }),
+        //...getWeatherTemperatureDatasetsDummy(weather, { value: -100 }),
     ];
 }
 

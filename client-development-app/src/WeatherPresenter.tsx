@@ -6,8 +6,8 @@ import socket from "./socket";
 import { Line } from 'react-chartjs-2';
 import { getDayName } from "./utils";
 
-const CHART_BACKGROUND_COLOR1 = "rgba(130,130,130,0.5)";
-const CHART_BACKGROUND_COLOR2 = "rgba(100,100,100,0.5)";
+const CHART_BACKGROUND_COLOR1 = "rgba(130,130,130,0.35)";
+const CHART_BACKGROUND_COLOR2 = "rgba(100,100,100,0.35)";
 const CHART_BACKGROUND_COLORS = [CHART_BACKGROUND_COLOR1,CHART_BACKGROUND_COLOR2,CHART_BACKGROUND_COLOR1,CHART_BACKGROUND_COLOR2,CHART_BACKGROUND_COLOR1,CHART_BACKGROUND_COLOR2];
 
 export default function WeatherPresenter() {
@@ -59,10 +59,11 @@ export default function WeatherPresenter() {
                                     title: {
                                         color: 'rgb(0,255,0)',
                                         display: true,
-                                        text: 'Temperature'
+                                        text: 'Temperature Celsius'
                                     },
                                     ticks: {
                                         color: 'rgb(200,200,200)',
+                                        stepSize : 3,
                                     },
                                     position: "left",
                                     id: "Temperature",

@@ -11,7 +11,8 @@ const {logDivider} = require("./src/utils");
 const app = express();
 app.use(cors());
 
-app.use(express.static(__dirname + '/public/build'));
+app.use(express.static(__dirname + '/public/app'));
+app.use(express.static(__dirname + '/public/management'));
 
 const server = http.createServer(app);
 const io = Server(server, {
@@ -23,7 +24,13 @@ const io = Server(server, {
 var port = process.env.SERVER_PORT || configs.port;
 
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + '/public/build/index.html');
+    console.log("Get app");
+    res.sendFile(__dirname + '/public/app/index.html');
+})
+
+app.get("/management", (req, res) => {
+    console.log("Get Management");
+    res.sendFile(__dirname + '/public/management/index.html');
 })
 
 tasksManager.startUpdateTaskAccomplishments(io);

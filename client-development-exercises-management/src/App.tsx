@@ -12,7 +12,7 @@ import GroceriesManager from "./Components/GroceriesManager/GroceriesManager";
 
 function App() {
   return (
-      <Router>
+      <Router basename="/management">
         <div className="App">
         <NavBar />
         <Switch>

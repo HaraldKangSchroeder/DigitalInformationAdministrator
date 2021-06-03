@@ -32,10 +32,10 @@ export default function NavBar() {
                 <div style={{ backgroundImage: `url("tasks.png")` }} className={classes.image}/>                
                 </Link>
                 <Link to='/Groceries' >
-                <div style={{ backgroundImage: `url("GroceryCartNavBar.png")` }} className={classes.image}/>
+                <div style={{ backgroundImage: `url("groceryCartNavbar.png")` }} className={classes.image}/>
                 </Link>
                 <Link to='/Weather' >
-                <div style={{ backgroundImage: `url("Weather.png")` }} className={classes.image}/>
+                <div style={{ backgroundImage: `url("weather.png")` }} className={classes.image}/>
                 </Link>
             </div>
         </div>

@@ -12,14 +12,8 @@ const TABLE_GROCERIES = "groceries";
 const TABLE_GROCERY_TYPES = "grocery_types";
 const TABLE_GROCERY_CART = "grocery_cart";
 
-
-const pool = new pg.Pool({
-    user: process.env.DATABASE_USERNAME,
-    host: configs.databaseHost,
-    database: configs.databaseName,
-    password: process.env.DATABASE_PASSWORD,
-    port: configs.databasePort,
-});
+// uses env variables : see https://node-postgres.com/features/connecting
+const pool = new pg.Pool();
 
 exports.createTaskEntry = async (taskLabel, score, importance, weeklyOccurences) => {
     try {

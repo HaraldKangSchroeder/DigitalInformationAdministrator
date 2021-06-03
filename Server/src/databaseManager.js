@@ -3,15 +3,34 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const TABLE_TASKS = "tasks";
-const TABLE_TASKS_OCCURENCES = "tasks_occurences";
+const TABLE_TASKS_OCCURENCES = "task_occurences";
 const TABLE_USERS = "users";
 const TABLE_TASK_ACCOMPLISHMENTS = "task_accomplishments";
 const TABLE_GROCERIES = "groceries";
 const TABLE_GROCERY_TYPES = "grocery_types";
 const TABLE_GROCERY_CART = "grocery_cart";
 
+let connectionRetries = 10;
+
 // uses env variables : see https://node-postgres.com/features/connecting
-const pool = new pg.Pool();
+let pool = new pg.Pool();
+
+exports.createConnection = async () => {
+    while(connectionRetries >= 0){
+        try {
+            console.log("Try to connect to DB");
+            await pool.connect();
+            console.log("Connection to DB established");
+            return;
+        }
+        catch (e) {
+            connectionRetries--;
+            console.log(`Failed to connect to DB. Remaining retries : ${connectionRetries}`);
+            await new Promise(res => setTimeout(res,5000));
+        }
+    }
+    console.log("Failed to connect to DB. No retries left");
+}
 
 exports.createTaskEntry = async (taskLabel, score, importance, weeklyOccurences) => {
     try {
@@ -476,7 +495,7 @@ exports.getGroceryCartEntries = async () => {
         let queryText = `
             SELECT * FROM ${TABLE_GROCERY_CART} ORDER BY type,name;
         `;
-        const {rows} = await pool.query(queryText);
+        const { rows } = await pool.query(queryText);
         console.log("getGroceryCartEntries");
         return rows;
     }
@@ -506,7 +525,7 @@ exports.getGroceryEntries = async () => {
         let queryText = `
             SELECT * FROM ${TABLE_GROCERIES} ORDER BY type,name;
         `;
-        const {rows} = await pool.query(queryText);
+        const { rows } = await pool.query(queryText);
         console.log("getGroceryEntries");
         return rows;
     }
@@ -532,12 +551,12 @@ exports.createGroceryCartEntry = async (name, type, amount) => {
 }
 
 exports.updateGroceryCartEntryWithType = async (name, type) => {
-    try{
+    try {
         let queryText = `
             UPDATE ${TABLE_GROCERY_CART} SET type = $2 WHERE name = $1;
         `;
-        let queryValues = [name,type];
-        await pool.query(queryText,queryValues);
+        let queryValues = [name, type];
+        await pool.query(queryText, queryValues);
         console.log(`updateGroceryCartEntryWithType : with ${name} and ${type}`);
     }
     catch (e) {
@@ -547,12 +566,12 @@ exports.updateGroceryCartEntryWithType = async (name, type) => {
 }
 
 exports.updateGroceryCartEntryWithName = async (name, newName) => {
-    try{
+    try {
         let queryText = `
             UPDATE ${TABLE_GROCERY_CART} SET name = $2 WHERE name = $1;
         `;
-        let queryValues = [name,newName];
-        await pool.query(queryText,queryValues);
+        let queryValues = [name, newName];
+        await pool.query(queryText, queryValues);
         console.log(`updateGroceryCartEntryWithName : with old name ${name} and new name ${newName}`);
     }
     catch (e) {
@@ -567,7 +586,7 @@ exports.deleteGroceryCartEntry = async (name) => {
             DELETE FROM ${TABLE_GROCERY_CART} WHERE name = $1;
         `;
         let queryValues = [name];
-        await pool.query(queryText,queryValues);
+        await pool.query(queryText, queryValues);
         console.log(`deleteGroceryCartEntry : with ${name}`);
     }
     catch (e) {
@@ -612,7 +631,7 @@ exports.deleteGroceryEntry = async (name) => {
             DELETE FROM ${TABLE_GROCERIES} WHERE name = $1;
         `;
         let queryValues = [name];
-        await pool.query(queryText,queryValues);
+        await pool.query(queryText, queryValues);
         console.log(`deleteGroceryEntry : with ${name}`);
     }
     catch (e) {
@@ -626,7 +645,7 @@ exports.getGroceryTypeEntries = async () => {
         let queryText = `
             SELECT * FROM ${TABLE_GROCERY_TYPES} ORDER BY type;
         `;
-        const {rows} = await pool.query(queryText);
+        const { rows } = await pool.query(queryText);
         console.log("getGroceryTypeEntries");
         return rows;
     }
@@ -656,8 +675,8 @@ exports.updateGroceryTypeEntryWithType = async (oldType, newType) => {
         let queryText = `
             UPDATE ${TABLE_GROCERY_TYPES} SET type = $2 WHERE type = $1;
         `;
-        let queryValues = [oldType,newType];
-        await pool.query(queryText,queryValues);
+        let queryValues = [oldType, newType];
+        await pool.query(queryText, queryValues);
         console.log(`updateGroceryTypeEntryWithType : with old type ${oldType} and new type ${newType}`);
     }
     catch (e) {
@@ -671,8 +690,8 @@ exports.updateGroceryTypeEntryWithColor = async (type, newColor) => {
         let queryText = `
         UPDATE ${TABLE_GROCERY_TYPES} SET color = $2 WHERE type = $1;
         `;
-        let queryValues = [type,newColor];
-        await pool.query(queryText,queryValues);
+        let queryValues = [type, newColor];
+        await pool.query(queryText, queryValues);
         console.log(`updateGroceryTypeEntryWithColor : with type ${type} and color ${newColor}`);
     }
     catch (e) {
@@ -683,15 +702,15 @@ exports.updateGroceryTypeEntryWithColor = async (type, newColor) => {
 
 
 exports.updateGroceryEntriesTypeToDefault = async (type) => {
-    try{
+    try {
         let queryText = `
             UPDATE ${TABLE_GROCERIES} SET type = 'Default' WHERE type = $1;
         `;
         let queryValues = [type];
-        await pool.query(queryText,queryValues);
+        await pool.query(queryText, queryValues);
         console.log(`updateGroceryEntriesTypeToDefault : with type ${type}`)
     }
-    catch (e){
+    catch (e) {
         console.error(e);
         console.error(`updateGroceryEntriesTypeToDefault : Error with type ${type}`)
     }
@@ -705,12 +724,127 @@ exports.deleteGroceryTypeEntry = async (type) => {
             DELETE FROM ${TABLE_GROCERY_TYPES} WHERE type = $1;
         `;
         let queryValues = [type];
-        await pool.query(queryText,queryValues);
+        await pool.query(queryText, queryValues);
         console.log(`deleteGroceryTypeEntry : with type ${type}`);
     }
     catch (e) {
         console.error(e);
         console.error(`deleteGroceryTypeEntry : Failed with type ${type}`);
+    }
+}
+
+exports.setupDatabase = async () => {
+    // seperate try catch block for create domain because it seems that you cant do smth like CREATE DOMAIN IF NOT EXISTS...
+    try {
+        let queryText = `
+            CREATE DOMAIN day_num AS integer CHECK (VALUE >= 0 AND VALUE <= 6);
+        `;
+        await pool.query(queryText);
+
+        queryText = `
+            CREATE DOMAIN week_num AS integer CHECK (VALUE >= 0 AND VALUE <= 53);
+        `;
+        await pool.query(queryText);
+
+        queryText = `
+            CREATE DOMAIN type_color AS VARCHAR CHECK (VALUE ~ '^#[0-9|a-f]{2}[0-9|a-f]{2}[0-9|a-f]{2}$');    
+        `;
+        await pool.query(queryText);
+    }
+    catch (e) {
+        console.log("Domains day_num,week_num,type_color already exists");
+    }
+    try {
+        queryText = `
+            CREATE TABLE IF NOT EXISTS ${TABLE_TASKS}
+            (
+                id SERIAL PRIMARY KEY,
+                label VARCHAR NOT NULL,
+                score INT NOT NULL CHECK (score > 0),
+                importance INT NOT NULL CHECK (importance > 0),
+                weekly_occurences INT NOT NULL CHECK (weekly_occurences > 0),
+                active BOOLEAN NOT NULL
+            );
+        `;
+        await pool.query(queryText);
+
+        queryText = `
+            CREATE TABLE IF NOT EXISTS ${TABLE_TASKS_OCCURENCES}
+            (
+                id INT NOT NULL,
+                calendar_week week_num NOT NULL,
+                day_of_week day_num,
+                UNIQUE(id,calendar_week),
+                FOREIGN KEY (id) REFERENCES ${TABLE_TASKS}(id) ON DELETE CASCADE
+            );
+        `;
+        await pool.query(queryText);
+
+        queryText = `
+            CREATE TABLE IF NOT EXISTS ${TABLE_USERS}
+            (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR NOT NULL
+            );
+        `;
+        await pool.query(queryText);
+
+        queryText = `
+            CREATE TABLE IF NOT EXISTS ${TABLE_TASK_ACCOMPLISHMENTS}
+            (
+                id SERIAL PRIMARY KEY,
+                task_id INT NOT NULL,
+                user_id INT,
+                calendar_week week_num NOT NULL,
+                year INT NOT NULL,
+                FOREIGN KEY (task_id) REFERENCES ${TABLE_TASKS}(id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES ${TABLE_USERS}(id) ON DELETE CASCADE
+            );
+        `;
+        await pool.query(queryText);
+
+        queryText = `
+            CREATE TABLE IF NOT EXISTS ${TABLE_GROCERY_TYPES} 
+            (
+                type VARCHAR PRIMARY KEY,
+                color type_color NOT NULL 
+            );
+        `;
+        await pool.query(queryText);
+
+        queryText = `
+            CREATE TABLE IF NOT EXISTS groceries
+            (
+                name VARCHAR PRIMARY KEY,
+                type VARCHAR NOT NULL,
+                FOREIGN KEY (type) REFERENCES ${TABLE_GROCERY_TYPES}(type) ON UPDATE CASCADE
+            );
+        `;
+        await pool.query(queryText);
+
+        queryText = `
+            CREATE TABLE IF NOT EXISTS grocery_cart
+            (
+                name VARCHAR PRIMARY KEY,
+                type VARCHAR NOT NULL,
+                amount VARCHAR,
+                FOREIGN KEY (type) REFERENCES ${TABLE_GROCERY_TYPES}(type) ON UPDATE CASCADE
+            );
+        `;
+        await pool.query(queryText);
+    }
+    catch (e) {
+        console.error(e);
+        console.log("Failed to setup database");
+    }
+    try{
+        queryText = `
+            INSERT INTO ${TABLE_GROCERY_TYPES} VALUES ('Default' , '#555555');
+        `;
+        await pool.query(queryText);
+    }
+    catch (e){
+        console.error(`${TABLE_GROCERY_TYPES} already contains (Default,#555555)`);
     }
 }
 

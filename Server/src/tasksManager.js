@@ -1,8 +1,8 @@
-const { logDivider, getWeekNumberByDate } = require("./utils");
+const { logDivider, getWeekNumberByDate,getMillisecondsByMinute } = require("./utils");
 
 const databaseManager = require("./databaseManager");
 
-const UPDATE_TIME_STEP = 300000;
+const UPDATE_TIME_STEP_MIN = 5;
 
 let interval = null;
 
@@ -10,7 +10,7 @@ exports.startUpdateTaskAccomplishments = async (io) => {
     await updateTaskaccomplishments(io);
     interval = setInterval(async () => {
         await updateTaskaccomplishments(io);
-    }, UPDATE_TIME_STEP);
+    }, getMillisecondsByMinute(UPDATE_TIME_STEP_MIN));
 }
 
 async function updateTaskaccomplishments(io) {

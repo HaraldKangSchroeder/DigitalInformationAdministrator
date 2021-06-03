@@ -5,6 +5,10 @@ exports.getWeekNumberByDate = (d) => {
     return Math.ceil((((d - onejan) / millisecsInDay) + onejan.getDay() + 1) / 7);
 };
 
+exports.getMillisecondsByMinute = (min) => {
+    return min * 60000;
+}
+
 exports.logDivider = () => {
     console.log("------------------------");
 }

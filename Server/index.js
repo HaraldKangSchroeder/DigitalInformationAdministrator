@@ -6,7 +6,8 @@ const cors = require("cors");
 const tasksManager = require("./src/tasksManager");
 const groceriesManager = require("./src/groceriesManager");
 const weatherManager = require("./src/weatherManager");
-const {logDivider} = require("./src/utils");
+const { logDivider } = require("./src/utils");
+const databaseManager = require("./src/databaseManager");
 
 const app = express();
 app.use(cors());
@@ -31,26 +32,32 @@ app.get("/", (req, res) => {
 app.get("/management", (req, res) => {
     console.log("Get Management");
     res.sendFile(__dirname + '/public/management/index.html');
-})
-
-tasksManager.startUpdateTaskAccomplishments(io);
-weatherManager.startUpdateWeatherData(io);
-
+});
 
 server.listen(port, () => {
     console.log(`Server starts running on ${port}`);
 });
 
-io.on("connection", (socket) => {
-    console.log("new socket connection");
-    logDivider();
+setup();
 
-    socket.on('disconnect', function () {
-        console.log('socket disconnect!');
+
+async function setup() {
+    await databaseManager.createConnection();
+    await databaseManager.setupDatabase();
+    tasksManager.startUpdateTaskAccomplishments(io);
+    weatherManager.startUpdateWeatherData(io);
+
+    io.on("connection", (socket) => {
+        console.log("new socket connection");
         logDivider();
+    
+        socket.on('disconnect', function () {
+            console.log('socket disconnect!');
+            logDivider();
+        });
+    
+        tasksManager.setUpSocketListeners(io, socket);
+        groceriesManager.setupSocketListeners(io, socket);
+        weatherManager.setupSocketListeners(socket);
     });
-
-    tasksManager.setUpSocketListeners(io,socket);
-    groceriesManager.setupSocketListeners(io,socket);
-    weatherManager.setupSocketListeners(socket);
-});
+}

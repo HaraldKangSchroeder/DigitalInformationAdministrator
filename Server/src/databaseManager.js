@@ -1,7 +1,5 @@
 const pg = require("pg");
-const { configs } = require("../configs");
 const dotenv = require("dotenv");
-const { query } = require("express");
 dotenv.config();
 
 const TABLE_TASKS = "tasks";

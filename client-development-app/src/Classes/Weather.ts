@@ -37,7 +37,7 @@ export default class Weather {
                 weather.addWeatherElement(weatherElement);
             }
         }
-        let weatherElementAtMidnight = this.getWeatherElementOnDayAndHour(day + 1, 0);
+        let weatherElementAtMidnight = this.getWeatherElementOnDayAndHour((day + 1) % 7, 0);
         if(weatherElementAtMidnight != null) weather.addWeatherElement(weatherElementAtMidnight);
         return weather;
     }

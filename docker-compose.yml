@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+    db:
+        image: postgres
+        environment:
+            POSTGRES_PASSWORD: postgres
+        volumes:
+            - ./postgresql/pgdata:/var/lib/postgresql/data
+        ports:
+            - '5432:5432'
+    app:
+        build: .
+        depends_on:
+            - db
+        environment:
+            PGHOST: db
+            PGPASSWORD: postgres
+            PGUSER: postgres 
+            PGDATABASE: postgres 
+            PGPORT: 5432
+            WEATHER_API_KEY: bc1771adbb5bcf996e3eacf1b087716a
+            WEATHER_LOCATION_LAT: 48.521637
+            WEATHER_LOCATION_LON: 9.057645
+    # Proxies requests to internal services
+    reverse-proxy:
+        build: ./nginx/
+        environment:
+            COUNTRY_NAME_2LETTER_CODE: SA
+            STATE_NAME: Germany
+            CITY_NAME: Tuebingen
+            SERVER_NAME: localhost
+            EMAIL: hans@ka
+            ORGANIZATION_NAME: Private
+            ORGANIZATION_UNIT_NAME: Private
+            AUTH_PASSWORD: test
+            AUTH_USERNAME: harri
+        container_name: reverse_proxy_demo
+        depends_on:
+            - db
+            - app
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+        ports:
+            - 80:80
+            - 443:443

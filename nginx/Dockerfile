@@ -7,6 +7,8 @@ RUN apt-get update && apt-get install -y \
 
 COPY ./setup.sh /
 
+RUN ["chmod", "+x", "./setup.sh"]
+
 ENTRYPOINT ["./setup.sh"]
 
 CMD ["nginx","-g","daemon off;"]

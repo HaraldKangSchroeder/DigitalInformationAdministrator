@@ -1,0 +1,21 @@
+# This is a basic workflow that is manually triggered
+
+name: Build And Run Digital Information Administrator on local self hosted action listener
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  push:
+    branches: [master]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "greet"
+  build_and_run:
+    name: Build
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: Send greeting
+      run: echo "Hello You"

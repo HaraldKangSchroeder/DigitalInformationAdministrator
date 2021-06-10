@@ -20,5 +20,8 @@ jobs:
     - name: Checkout Repo
       uses: actions/checkout@v2
     
+    - name: Build Dockerfiles
+      run: docker-compose build
+    
     - name: Send greeting
       run: echo "Hello You"

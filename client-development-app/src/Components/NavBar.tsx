@@ -16,7 +16,7 @@ const useStyles = makeStyles({
         width: "70px",
         height: "70px",
         backgroundSize: "contain",
-        backgroundRepeat : "no-repeat",
+        backgroundRepeat: "no-repeat",
         marginTop: "5vh",
     }
 })
@@ -27,13 +27,13 @@ export default function NavBar() {
         <div className={classes.root}>
             <div style={{ width: "70px", paddingTop: "10px" }}>
                 <Link to='/' >
-                <div style={{ backgroundImage: `url("tasks.png")` }} className={classes.image}/>                
+                    <div style={{ backgroundImage: `url("tasks.png")` }} className={classes.image} />
                 </Link>
                 <Link to='/Groceries' >
-                <div style={{ backgroundImage: `url("groceryCartNavbar.png")` }} className={classes.image}/>
+                    <div style={{ backgroundImage: `url("groceryCartNavbar.png")` }} className={classes.image} />
                 </Link>
                 <Link to='/Weather' >
-                <div style={{ backgroundImage: `url("weather.png")` }} className={classes.image}/>
+                    <div style={{ backgroundImage: `url("weather.png")` }} className={classes.image} />
                 </Link>
             </div>
         </div>

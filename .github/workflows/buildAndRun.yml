@@ -6,7 +6,9 @@ name: Build And Run Digital Information Administrator on local self hosted actio
 # or API.
 on:
   push:
-    branches: [master]
+    branches: [main] 
+  workflow_dispatch:
+    
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -17,5 +19,17 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+    
+    - name: Build Dockerfiles
+      run: sudo docker-compose build
+      
+    - name: Run Docker Images
+      run: sudo docker-compose up
+    
     - name: Send greeting
       run: echo "Hello You"
+      
+    - name: end
+      run: echo "end"

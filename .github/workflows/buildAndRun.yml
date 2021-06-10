@@ -6,7 +6,7 @@ name: Build And Run Digital Information Administrator on local self hosted actio
 # or API.
 on:
   push:
-    branches: [master]
+    branches: [main]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

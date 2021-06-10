@@ -13,7 +13,7 @@ jobs:
   # This workflow contains a single job called "greet"
   build_and_run:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:

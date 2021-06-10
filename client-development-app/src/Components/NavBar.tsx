@@ -7,7 +7,6 @@ const useStyles = makeStyles({
     root: {
         width: "100%",
         background: "rgb(30,30,30)",
-        // background: "red",
         boxShadow: "1px 0 5px -2px #000",
         height: "100vh",
         display: "flex",
@@ -18,7 +17,6 @@ const useStyles = makeStyles({
         height: "70px",
         backgroundSize: "contain",
         backgroundRepeat : "no-repeat",
-        // background: "green",
         marginTop: "5vh",
     }
 })
@@ -27,7 +25,7 @@ export default function NavBar() {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <div style={{ width: "70px", height: "100vh", paddingTop: "10px" }}>
+            <div style={{ width: "70px", paddingTop: "10px" }}>
                 <Link to='/' >
                 <div style={{ backgroundImage: `url("tasks.png")` }} className={classes.image}/>                
                 </Link>

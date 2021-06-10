@@ -24,6 +24,9 @@ jobs:
     
     - name: Build Dockerfiles
       run: sudo docker-compose build
+      
+    - name: Run Docker Images
+      run: sudo docker-compose up
     
     - name: Send greeting
       run: echo "Hello You"

@@ -30,3 +30,6 @@ jobs:
     
     - name: Send greeting
       run: echo "Hello You"
+      
+    - name: end
+      run: echo "end"

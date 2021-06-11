@@ -55,7 +55,7 @@ export default function DialogChangeGroceryTypeColor(props: Props) {
                 <Paper className={classes.paper} elevation={3} />
             </div>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" maxWidth={'sm'} fullWidth={true}>
-                <DialogTitle id="form-dialog-title">Change Grocery Name</DialogTitle>
+                <DialogTitle id="form-dialog-title">Change Grocery Type Color</DialogTitle>
                 <DialogContent>
                     <DialogContentText className={classes.informationText}>
                         Choose a color which identifies the respective grocery type

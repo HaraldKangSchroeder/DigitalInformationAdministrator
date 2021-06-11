@@ -2,6 +2,7 @@ version: "3.7"
 services:
     db:
         image: postgres
+        container_name: db
         environment:
             POSTGRES_PASSWORD: postgres
         volumes:
@@ -10,6 +11,7 @@ services:
             - '5432:5432'
     app:
         build: .
+        container_name: app
         depends_on:
             - db
         environment:
@@ -24,6 +26,7 @@ services:
     # Proxies requests to internal services
     reverse-proxy:
         build: ./nginx/
+        container_name: reverse-proxy
         environment:
             COUNTRY_NAME_2LETTER_CODE: SA
             STATE_NAME: Germany
@@ -34,7 +37,6 @@ services:
             ORGANIZATION_UNIT_NAME: Private
             AUTH_PASSWORD: test
             AUTH_USERNAME: harri
-        container_name: reverse_proxy_demo
         depends_on:
             - db
             - app

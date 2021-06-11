@@ -9,6 +9,8 @@ RUN npm install
 
 COPY Server/ .
 
+RUN mkdir public
+
 COPY client-development-app/ ./client-development-app
 
 RUN cd client-development-app && \

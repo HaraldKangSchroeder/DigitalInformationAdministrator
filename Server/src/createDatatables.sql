@@ -10,7 +10,7 @@ CREATE TABLE tasks
 (
     id SERIAL PRIMARY KEY,
     label VARCHAR NOT NULL,
-    score INT NOT NULL CHECK (score > 0),
+    score INT NOT NULL CHECK (score >= 0),
     importance INT NOT NULL CHECK (importance > 0),
     weekly_occurences INT NOT NULL CHECK (weekly_occurences > 0),
     active BOOLEAN NOT NULL

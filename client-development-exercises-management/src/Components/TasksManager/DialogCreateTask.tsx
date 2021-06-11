@@ -9,8 +9,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { SelectMenu} from '../SelectMenu';
-import { MENU_ITEMS_SCORES, MENU_ITEMS_IMPORTANCES, MENU_ITEMS_WEEKLY_RYTHMS, MENU_ITEMS_DAYS, MENU_ITEMS_WEEKLY_OCCURENCES} from '../../constants';
+import { SelectMenu } from '../SelectMenu';
+import { MENU_ITEMS_SCORES, MENU_ITEMS_IMPORTANCES, MENU_ITEMS_WEEKLY_RYTHMS, MENU_ITEMS_DAYS, MENU_ITEMS_WEEKLY_OCCURENCES } from '../../constants';
 import socket from "../../socket";
 
 
@@ -58,42 +58,42 @@ export function DialogCreateTask() {
         setOpenAddTask(false);
     };
 
-    const handleChangeScore = (e : any) => {
+    const handleChangeScore = (e: any) => {
         setState({
             ...state,
             score: e.target.value
         });
     }
 
-    const handleChangeImportance = (e : any) => {
+    const handleChangeImportance = (e: any) => {
         setState({
             ...state,
             importance: e.target.value
         })
     }
 
-    const handleChangeWeeklyRythm = (e : any) => {
+    const handleChangeWeeklyRythm = (e: any) => {
         setState({
             ...state,
             weeklyRythm: e.target.value
         })
     }
 
-    const handleChangeDay = (e : any) => {
+    const handleChangeDay = (e: any) => {
         setState({
             ...state,
             dayOfWeek: e.target.value
         })
     }
 
-    const handleChangeText = (e : any) => {
+    const handleChangeText = (e: any) => {
         setState({
             ...state,
             name: e.target.value
         })
     }
 
-    const handleChangeWeeklyOccurences = (e : any) => {
+    const handleChangeWeeklyOccurences = (e: any) => {
         setState({
             ...state,
             weeklyOccurences: e.target.value
@@ -142,7 +142,7 @@ export function DialogCreateTask() {
                     />
 
                     <DialogContentText className={classes.informationText}>
-                        Choose an importance value. A high value ensure that this Task rather occurs at the top in the presentation view
+                        Choose a Score value which is obtained after solving this Task
                     </DialogContentText>
                     <SelectMenu
                         value={state.score}
@@ -152,7 +152,7 @@ export function DialogCreateTask() {
                     />
 
                     <DialogContentText className={classes.informationText}>
-                        Choose a Score value which is obtained after solving this Task
+                        Choose an importance value. A high value ensure that this Task rather occurs at the top in the presentation view
                     </DialogContentText>
                     <SelectMenu
                         value={state.importance}

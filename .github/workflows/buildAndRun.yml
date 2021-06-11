@@ -21,12 +21,14 @@ jobs:
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v2
+      with:
+        clean: false
     
     - name: Build Dockerfiles
       run: sudo docker-compose build
       
     - name: Run Docker Images
-      run: sudo docker-compose up
+      run: sudo docker-compose up -d
     
     - name: Send greeting
       run: echo "Hello You"

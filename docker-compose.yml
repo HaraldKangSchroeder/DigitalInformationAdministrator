@@ -4,7 +4,7 @@ services:
         image: postgres
         container_name: db
         environment:
-            POSTGRES_PASSWORD: postgres
+            POSTGRES_PASSWORD: ${PGPASSWORD}
         volumes:
             - ./postgresql/pgdata:/var/lib/postgresql/data
         ports:
@@ -16,27 +16,27 @@ services:
             - db
         environment:
             PGHOST: db
-            PGPASSWORD: postgres
-            PGUSER: postgres 
-            PGDATABASE: postgres 
-            PGPORT: 5432
-            WEATHER_API_KEY: bc1771adbb5bcf996e3eacf1b087716a
-            WEATHER_LOCATION_LAT: 48.521637
-            WEATHER_LOCATION_LON: 9.057645
+            PGPASSWORD: ${PGPASSWORD}
+            PGUSER: ${PGUSER}
+            PGDATABASE: ${PGDATABASE}
+            PGPORT: ${PGPORT}
+            WEATHER_API_KEY: ${WEATHER_API_KEY}
+            WEATHER_LOCATION_LAT: ${WEATHER_LOCATION_LAT}
+            WEATHER_LOCATION_LON: ${WEATHER_LOCATION_LON}
     # Proxies requests to internal services
     reverse-proxy:
         build: ./nginx/
         container_name: reverse-proxy
         environment:
-            COUNTRY_NAME_2LETTER_CODE: SA
-            STATE_NAME: Germany
-            CITY_NAME: Tuebingen
-            SERVER_NAME: localhost
-            EMAIL: hans@ka
-            ORGANIZATION_NAME: Private
-            ORGANIZATION_UNIT_NAME: Private
-            AUTH_PASSWORD: test
-            AUTH_USERNAME: harri
+            COUNTRY_NAME_2LETTER_CODE: ${COUNTRY_NAME_2LETTER_CODE}
+            STATE_NAME: ${STATE_NAME}
+            CITY_NAME: ${CITY_NAME}
+            SERVER_NAME: ${SERVER_NAME}
+            EMAIL: ${EMAIL}
+            ORGANIZATION_NAME: ${ORGANIZATION_NAME}
+            ORGANIZATION_UNIT_NAME: ${ORGANIZATION_UNIT_NAME}
+            AUTH_PASSWORD: ${AUTH_PASSWORD}
+            AUTH_USERNAME: ${AUTH_USERNAME}
         depends_on:
             - db
             - app

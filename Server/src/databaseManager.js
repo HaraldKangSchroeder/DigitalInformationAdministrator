@@ -2,6 +2,8 @@ const pg = require("pg");
 const dotenv = require("dotenv");
 dotenv.config();
 
+const CONNECTION_RETRIES_COUNT = 15;
+
 const TABLE_TASKS = "tasks";
 const TABLE_TASKS_OCCURENCES = "task_occurences";
 const TABLE_USERS = "users";
@@ -10,8 +12,8 @@ const TABLE_GROCERIES = "groceries";
 const TABLE_GROCERY_TYPES = "grocery_types";
 const TABLE_GROCERY_CART = "grocery_cart";
 
-let connectionRetries = 10;
 
+let connectionRetries = CONNECTION_RETRIES_COUNT;
 // uses env variables : see https://node-postgres.com/features/connecting
 let pool = new pg.Pool();
 

@@ -2,7 +2,7 @@ const { logDivider, getWeekNumberByDate,getMillisecondsByMinute } = require("./u
 
 const databaseManager = require("./databaseManager");
 
-const UPDATE_TIME_STEP_MIN = 5;
+const UPDATE_TIME_STEP_MIN = 10;
 
 let interval = null;
 

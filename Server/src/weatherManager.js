@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { getMillisecondsByMinute } = require("./utils");
 
-const UPDATE_TIME_STEP_MIN = 5;
+const UPDATE_TIME_STEP_MIN = 60;
 let interval = null;
 
 exports.startUpdateWeatherData = async (io) => {

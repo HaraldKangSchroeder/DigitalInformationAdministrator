@@ -1,10 +1,10 @@
 import TaskPresentation from "./TaskPresentation";
 import { makeStyles } from "@material-ui/core"
 import React from "react";
-import Tasks from "../Classes/Tasks";
+import Tasks from "../../Classes/Tasks";
 import { classicNameResolver } from "typescript";
-import Users from "../Classes/Users";
-import User from "../Classes/User";
+import Users from "../../Classes/Users";
+import User from "../../Classes/User";
 
 const useStyles = makeStyles({
     root : {

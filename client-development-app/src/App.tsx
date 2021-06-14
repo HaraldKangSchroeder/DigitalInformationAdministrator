@@ -4,9 +4,10 @@ import {
     Route,
     Link
 } from "react-router-dom";
-import GroceryCartPresenter from "./GroceryCartPresenter";
-import TasksPresenter from './TasksPresenter';
-import WeatherPresenter from "./WeatherPresenter";
+import GroceryCartPresenter from "./Components/Groceries/GroceryCartPresenter";
+import TasksPresenter from './Components/Tasks/TasksPresenter';
+import WeatherPresenter from "./Components/Weather/WeatherPresenter";
+import './App.css';
 
 function App() {
     return (

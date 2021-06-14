@@ -1,6 +1,6 @@
 import { Avatar, ListItem, ListItemAvatar, ListItemText, makeStyles } from "@material-ui/core";
-import Grocery from "../Classes/Grocery";
-import socket from "../socket";
+import Grocery from "../../Classes/Grocery";
+import socket from "../../socket";
 
 const useStyles = makeStyles({
     root: (props: Props) => ({

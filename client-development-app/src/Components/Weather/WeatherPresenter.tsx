@@ -1,10 +1,10 @@
 import { Grid } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import Weather from "./Classes/Weather";
-import NavBar from "./Components/Navbar/NavBar";
-import socket from "./socket";
+import Weather from "../../Classes/Weather";
+import NavBar from "../Navbar/NavBar";
+import socket from "../../socket";
 import { Line } from 'react-chartjs-2';
-import { getDayName } from "./utils";
+import { getDayName } from "../../utils";
 
 const CHART_BACKGROUND_COLOR1 = "rgba(130,130,130,0.35)";
 const CHART_BACKGROUND_COLOR2 = "rgba(100,100,100,0.35)";

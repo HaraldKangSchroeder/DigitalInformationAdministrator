@@ -2,14 +2,14 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import socket from "./socket";
-import TasksPresentation from "./Components/TasksPresentation";
-import UsersPresentation from "./Components/UsersPresentation";
-import NavBar from './Components/Navbar/NavBar';
-import Tasks from "./Classes/Tasks";
-import Users from "./Classes/Users";
-import User from './Classes/User';
-import './App.css';
+import socket from "../../socket";
+import TasksPresentation from "./TasksPresentation";
+import UsersPresentation from "./UsersPresentation";
+import NavBar from '../Navbar/NavBar';
+import Tasks from "../../Classes/Tasks";
+import Users from "../../Classes/Users";
+import User from '../../Classes/User';
+// import './App.css';
 
 export default function TasksPresenter() {
     const [selectedUser, setSelectedUser] = useState(null);

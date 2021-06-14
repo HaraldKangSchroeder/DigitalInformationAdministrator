@@ -1,10 +1,10 @@
 import { Grid } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import Groceries from './Classes/Groceries';
-import GroceryTypes from './Classes/GroceryTypes';
-import GroceriesPresentation from './Components/GroceriesPresentation';
-import NavBar from './Components/Navbar/NavBar';
-import socket from './socket';
+import Groceries from '../../Classes/Groceries';
+import GroceryTypes from '../../Classes/GroceryTypes';
+import GroceriesPresentation from './GroceriesPresentation';
+import NavBar from '../Navbar/NavBar';
+import socket from '../../socket';
 
 
 export default function GroceryCartPresenter() {

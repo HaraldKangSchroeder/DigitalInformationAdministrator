@@ -17,7 +17,7 @@ export default function Clock(){
     );
 }
 
-function getTimeRepresentation(time : Date) : string{
+export function getTimeRepresentation(time : Date) : string{
     let hours = time.getHours() + "";
     let isHoursSingleValue = hours.length === 1;
     if(isHoursSingleValue) hours = prependZero(hours);
@@ -28,7 +28,7 @@ function getTimeRepresentation(time : Date) : string{
     return `${hours}:${minutes}`;
 }
 
-function prependZero(value : string) : string{
+export function prependZero(value : string) : string{
     value = "" + value;
     if(value.length === 1) return "0" + value;
     return value;

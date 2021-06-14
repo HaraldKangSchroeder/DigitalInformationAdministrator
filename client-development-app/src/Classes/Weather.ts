@@ -7,7 +7,6 @@ export default class Weather {
         this.weatherData = [];
         if(dataEntries != null){
             this.readDataset(dataEntries);
-            console.log(this.weatherData);
         }
     }
     

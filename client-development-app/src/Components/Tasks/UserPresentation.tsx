@@ -33,7 +33,6 @@ interface Props {
 }
 
 export default function UserPresentation(props : Props) {
-    console.log(props.isUserSelected);
     const classes = useStyles(props);
     return (
         <div className={classes.root}>

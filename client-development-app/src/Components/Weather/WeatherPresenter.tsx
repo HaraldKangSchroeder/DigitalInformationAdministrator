@@ -104,12 +104,9 @@ function getWeatherLabels(weather: Weather) {
 
 function getWeatherDatasets(weather: Weather) {
     if (weather == null) return [];
-    console.log(getWeatherTemperatureDatasets(weather, { value: 100 }));
-    console.log(getWeatherPrecipitationProbabilityDatasets(weather));
     return [
         ...getWeatherPrecipitationProbabilityDatasets(weather),
         ...getWeatherTemperatureDatasets(weather, { value: 100 }),
-        //...getWeatherTemperatureDatasetsDummy(weather, { value: -100 }),
     ];
 }
 
@@ -120,18 +117,6 @@ function getWeatherTemperatureDatasets(weather: Weather, fill: any): any[][] {
         let weatherOnDay = weather.getWeatherOnDay(days[i]);
         let temperatureData = weatherOnDay.getTemperatureData();
         let dataset = getDataset(" " + getDayName(days[i]) + " Temperature", "Temperature", temperatureData, "temperature", "rgb(0,255,0)", CHART_BACKGROUND_COLORS[i], fill,8);
-        datasets.push(dataset);
-    }
-    return datasets;
-}
-
-function getWeatherTemperatureDatasetsDummy(weather: Weather, fill: any): any[][] {
-    let datasets: any[][] = [];
-    let days = weather.getDays();
-    for (let i = 0; i < days.length; i++) {
-        let weatherOnDay = weather.getWeatherOnDay(days[i]);
-        let temperatureData = weatherOnDay.getTemperatureData();
-        let dataset = getDatasetDummy("Temperature", temperatureData, "temperature", CHART_BACKGROUND_COLORS[i]);
         datasets.push(dataset);
     }
     return datasets;
@@ -165,21 +150,5 @@ function getDataset(label: string, yAxisID: string, data: any[], yAxisKey: strin
         pointBackgroundColor: color,
         fill: fill,
         backgroundColor: backgroundColor != null ? backgroundColor : "",
-    })
-}
-
-function getDatasetDummy(yAxisID: string, data: any[], yAxisKey: string, backgroundColor: string): any {
-    return ({
-        label: "",
-        yAxisID: yAxisID,
-        data: data,
-        parsing: {
-            yAxisKey: yAxisKey
-        },
-        lineTension: 0.5,
-        borderWidth: 0.1,
-        fill: true,
-        backgroundColor: backgroundColor,
-        pointRadius: 0,
     })
 }

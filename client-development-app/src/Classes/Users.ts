@@ -12,8 +12,13 @@ export default class Users {
         let meanSaturation = 85;
         let hslList = getHslList(users.length, lightness, meanSaturation);
         for(let i = 0; i < users.length; i++){
-            this.userList.push(new User(users[i].id,users[i].name,users[i].scoreOfWeek,users[i].scoreOfYear,hslList[i]));
+            this.addUser(users[i].id,users[i].name,users[i].scoreOfWeek,users[i].scoreOfYear,hslList[i]);
         }
+    }
+
+    addUser(id : number, name : string, scoreOfWeek : number, scoreOfYear : number, avatarColor : string){
+        let user = new User(id, name, scoreOfWeek, scoreOfYear, avatarColor);
+        this.userList.push(user);
     }
 
     getUserList() : User[]{

@@ -4,7 +4,7 @@ export default class Tasks {
 
     taskList : Task[];
 
-    constructor(dataset : any) {
+    constructor(dataset? : any) {
         this.taskList = [];
         if(dataset != null){
             this.readDataset(dataset);

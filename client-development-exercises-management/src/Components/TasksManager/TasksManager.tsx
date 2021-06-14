@@ -12,7 +12,7 @@ import DialogChangeEntityName from "../DialogChangeEntityName";
 
 export function TasksManager() {
     const [selectedTask, setSelectedTask] = useState<Task>(null);
-    const [tasks, setTasks] = useState(new Tasks(null));
+    const [tasks, setTasks] = useState(new Tasks());
 
     useEffect(() => {
         socket.connect();

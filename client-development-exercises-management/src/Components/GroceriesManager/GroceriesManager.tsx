@@ -21,8 +21,8 @@ export default function GroceriesManager() {
         selectedGroceryType: null
     });
     const [groceryEntities, setGroceryEntities] = useState({
-        groceries: new Groceries(null),
-        groceryTypes: new GroceryTypes(null),
+        groceries: new Groceries(),
+        groceryTypes: new GroceryTypes(),
     })
 
     useEffect(() => {

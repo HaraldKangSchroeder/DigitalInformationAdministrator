@@ -4,7 +4,7 @@ export default class Users {
 
     userList: User[];
 
-    constructor(dataset: any) {
+    constructor(dataset?: any) {
         this.userList = [];
         if (dataset != null) {
             this.readDataset(dataset);

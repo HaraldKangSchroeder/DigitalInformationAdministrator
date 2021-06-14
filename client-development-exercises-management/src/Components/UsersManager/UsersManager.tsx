@@ -11,8 +11,8 @@ import DialogChangeEntityName from "../DialogChangeEntityName";
 
 
 function UsersManager() {
-    const [users, setUsers] = useState(new Users(null));
-    const [selectedUsers, setSelectedUsers] = useState(new Users(null));
+    const [users, setUsers] = useState(new Users());
+    const [selectedUsers, setSelectedUsers] = useState(new Users());
 
     useEffect(() => {
         socket.connect();

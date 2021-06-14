@@ -4,7 +4,7 @@ export default class TaskAccomplishments {
 
     taskAccomplishmentList: TaskAccomplishment[];
 
-    constructor(dataset: any) {
+    constructor(dataset?: any) {
         this.taskAccomplishmentList = [];
         if (dataset != null) {
             this.readDataset(dataset);

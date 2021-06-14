@@ -29,7 +29,7 @@ interface Props {
 
 
 export function TaskInformation(props : Props) {
-    const [taskOccurences, setTaskOccurences] = useState(new TaskOccurences(null));
+    const [taskOccurences, setTaskOccurences] = useState(new TaskOccurences());
 
     useEffect(() => {
         socket.on("taskOccurenceEntries", (taskOccurenceEntries) => {

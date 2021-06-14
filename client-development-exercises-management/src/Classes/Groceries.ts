@@ -4,7 +4,7 @@ export default class Groceries {
 
     groceryList : Grocery[];
 
-    constructor(groceryDataset : any[]){
+    constructor(groceryDataset? : any[]){
         this.groceryList = [];
         if(groceryDataset != null){
             this.readDataset(groceryDataset);

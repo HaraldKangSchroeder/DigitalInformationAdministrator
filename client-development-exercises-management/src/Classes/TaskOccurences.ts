@@ -4,7 +4,7 @@ export default class TaskOccurences {
 
     taskOccurenceList : TaskOccurence[];
 
-    constructor(dataset : any){
+    constructor(dataset? : any){
         this.taskOccurenceList = [];
         if(dataset != null){
             this.readDataset(dataset);

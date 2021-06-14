@@ -1,7 +1,7 @@
 import { Grid } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import Weather from "./Classes/Weather";
-import NavBar from "./Components/NavBar";
+import NavBar from "./Components/Navbar/NavBar";
 import socket from "./socket";
 import { Line } from 'react-chartjs-2';
 import { getDayName } from "./utils";

@@ -10,6 +10,14 @@ export default function Clock(){
         }, 1000);
     },[]);
 
+    return (
+        <div>
+            {getTimeRepresentation(time)}
+        </div>
+    );
+}
+
+function getTimeRepresentation(time : Date) : string{
     let hours = time.getHours() + "";
     let isHoursSingleValue = hours.length === 1;
     if(isHoursSingleValue) hours = prependZero(hours);
@@ -17,12 +25,7 @@ export default function Clock(){
     let minutes = time.getMinutes() + "";
     let isMinutesSingleValue = minutes.length === 1;
     if(isMinutesSingleValue) minutes = prependZero(minutes);
-
-    return (
-        <div>
-            {hours}:{minutes}
-        </div>
-    );
+    return `${hours}:${minutes}`;
 }
 
 function prependZero(value : string) : string{

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import socket from "./socket";
 import TasksPresentation from "./Components/TasksPresentation";
 import UsersPresentation from "./Components/UsersPresentation";
-import NavBar from './Components/NavBar';
+import NavBar from './Components/Navbar/NavBar';
 import Tasks from "./Classes/Tasks";
 import Users from "./Classes/Users";
 import User from './Classes/User';

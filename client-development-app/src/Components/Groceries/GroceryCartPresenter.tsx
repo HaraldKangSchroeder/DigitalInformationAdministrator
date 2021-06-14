@@ -9,9 +9,9 @@ import socket from '../../socket';
 
 export default function GroceryCartPresenter() {
     const [state, setState] = useState({
-        groceries: new Groceries(null),
-        groceryTypes: new GroceryTypes(null),
-        groceryCart: new Groceries(null)
+        groceries: new Groceries(),
+        groceryTypes: new GroceryTypes(),
+        groceryCart: new Groceries()
     })
 
     useEffect(() => {

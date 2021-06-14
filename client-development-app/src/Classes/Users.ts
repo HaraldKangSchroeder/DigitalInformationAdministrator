@@ -5,7 +5,7 @@ export default class Users {
 
     userList : User[];
 
-    constructor(users : any){
+    constructor(users? : any){
         this.userList = [];
         if(users == null) return;
         let lightness = 50;

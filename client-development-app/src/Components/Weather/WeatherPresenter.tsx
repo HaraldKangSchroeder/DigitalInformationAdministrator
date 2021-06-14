@@ -11,7 +11,7 @@ const CHART_BACKGROUND_COLOR2 = "rgba(100,100,100,0.35)";
 const CHART_BACKGROUND_COLORS = [CHART_BACKGROUND_COLOR1,CHART_BACKGROUND_COLOR2,CHART_BACKGROUND_COLOR1,CHART_BACKGROUND_COLOR2,CHART_BACKGROUND_COLOR1,CHART_BACKGROUND_COLOR2];
 
 export default function WeatherPresenter() {
-    const [weather, setWeather] = useState(new Weather(null));
+    const [weather, setWeather] = useState(new Weather());
 
     useEffect(() => {
         socket.on("weatherData", data => {

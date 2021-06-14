@@ -14,8 +14,8 @@ import User from '../../Classes/User';
 export default function TasksPresenter() {
     const [selectedUser, setSelectedUser] = useState(null);
     const [state, setState] = useState({
-        tasks: new Tasks(null),
-        users: new Users(null)
+        tasks: new Tasks(),
+        users: new Users()
     })
 
     useEffect(() => {

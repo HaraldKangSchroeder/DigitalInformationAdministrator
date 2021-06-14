@@ -5,7 +5,7 @@ export default class Tasks {
 
     taskList: Task[];
 
-    constructor(tasksDataset: any) {
+    constructor(tasksDataset?: any) {
         this.taskList = [];
         if (tasksDataset == null) return;
         let lightness = 80;

@@ -3,7 +3,7 @@ import WeatherElement from "./WeatherElement";
 export default class Weather {
     weatherData : WeatherElement[];
 
-    constructor(dataEntries : any){
+    constructor(dataEntries? : any){
         this.weatherData = [];
         if(dataEntries != null){
             this.readDataset(dataEntries);

@@ -7,7 +7,7 @@ import Tasks from "../../Classes/Tasks";
 
 const useStyles = makeStyles({
     root: {
-        fontSize: "1.4em",
+        fontSize: "1.25vw",
         color: "rgb(100,100,100)",
         display: "flex",
         justifyContent: "center",

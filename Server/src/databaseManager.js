@@ -18,7 +18,7 @@ let connectionRetries = CONNECTION_RETRIES_COUNT;
 let pool = new pg.Pool();
 
 exports.createConnection = async () => {
-    while(connectionRetries >= 0){
+    while (connectionRetries >= 0) {
         try {
             console.log("Try to connect to DB");
             await pool.connect();
@@ -28,7 +28,7 @@ exports.createConnection = async () => {
         catch (e) {
             connectionRetries--;
             console.log(`Failed to connect to DB. Remaining retries : ${connectionRetries}`);
-            await new Promise(res => setTimeout(res,5000));
+            await new Promise(res => setTimeout(res, 5000));
         }
     }
     console.log("Failed to connect to DB. No retries left");
@@ -430,7 +430,7 @@ exports.getPendingTaskEntriesOfWeekInYear = async (week, year) => {
                 (SELECT "t".day_of_week FROM ${TABLE_TASKS_OCCURENCES} AS "t" WHERE "t".id = "ta".task_id AND "ta".calendar_week = "t".calendar_week) AS "dayOfWeek"
             FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS "ta" 
             WHERE "ta".calendar_week = $1 AND "ta".year = $2
-            ORDER BY importance DESC,"ta".task_id, "ta".id;
+            ORDER BY importance DESC,dayOfWeek,"ta".task_id, "ta".id;
         `;
         let queryValues = [week, year];
         let { rows } = await pool.query(queryText, queryValues);
@@ -839,13 +839,13 @@ exports.setupDatabase = async () => {
         console.error(e);
         console.log("Failed to setup database");
     }
-    try{
+    try {
         queryText = `
             INSERT INTO ${TABLE_GROCERY_TYPES} VALUES ('Default' , '#555555');
         `;
         await pool.query(queryText);
     }
-    catch (e){
+    catch (e) {
         console.error(`${TABLE_GROCERY_TYPES} already contains (Default,#555555)`);
     }
 }

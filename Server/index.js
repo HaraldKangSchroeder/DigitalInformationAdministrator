@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require("http");
 const { configs } = require("./configs");
-const Server = require("socket.io");
+const socketio = require("socket.io");
 const cors = require("cors");
 const tasksManager = require("./src/tasksManager");
 const groceriesManager = require("./src/groceriesManager");
@@ -16,7 +16,7 @@ app.use(express.static(__dirname + '/public/app'));
 app.use(express.static(__dirname + '/public/management'));
 
 const server = http.createServer(app);
-const io = Server(server, {
+const io = socketio(server, {
     cors: {
         origin: '*',
     }

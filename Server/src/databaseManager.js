@@ -434,12 +434,12 @@ exports.getPendingTaskEntriesOfWeekInYear = async (week, year) => {
         `;
         let queryValues = [week, year];
         let { rows } = await pool.query(queryText, queryValues);
-        console.log(`getTaskAccomplishmentEntriesOfWeekInYear : get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
+        console.log(`getPendingTaskEntriesOfWeekInYear : get pending Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
         return rows;
     }
     catch (e) {
         console.error(e);
-        console.error(`getTaskAccomplishmentEntriesOfWeekInYear : failed to get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
+        console.error(`getPendingTaskEntriesOfWeekInYear : failed to get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
     }
 }
 

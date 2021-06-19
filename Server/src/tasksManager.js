@@ -2,7 +2,7 @@ const { logDivider, getWeekNumberByDate,getMillisecondsByMinute } = require("./u
 
 const databaseManager = require("./databaseManager");
 
-const UPDATE_TIME_STEP_MIN = 10;
+const UPDATE_TIME_STEP_MIN = 30;
 
 let interval = null;
 
@@ -20,14 +20,13 @@ async function updateTaskaccomplishments(io) {
 
     let tasksAccomplishmentEntriesOfWeekInYear = await databaseManager.getTaskAccomplishmentEntriesOfWeekInYear(currentWeek, currentYear);
     let tasksAccomplishmentsExistent = tasksAccomplishmentEntriesOfWeekInYear.length > 0;
+    if (!tasksAccomplishmentsExistent) {
+        let taskOccurencesEntriesOfCurrentWeek = await databaseManager.getTaskOccurenceEntriesOfWeek(currentWeek);
+        let taskEntries = await databaseManager.getActiveTaskEntries();
+        let taskAccomplishmentEntries = createTasksAccomplishmentEntries(taskOccurencesEntriesOfCurrentWeek, taskEntries, currentYear);
+        await databaseManager.createTaskAccomplishmentEntries(taskAccomplishmentEntries);
+    }
 
-    if (tasksAccomplishmentsExistent) return;
-
-    let taskOccurencesEntriesOfCurrentWeek = await databaseManager.getTaskOccurenceEntriesOfWeek(currentWeek);
-    let taskEntries = await databaseManager.getActiveTaskEntries();
-    let taskAccomplishmentEntries = createTasksAccomplishmentEntries(taskOccurencesEntriesOfCurrentWeek, taskEntries, currentYear);
-
-    await databaseManager.createTaskAccomplishmentEntries(taskAccomplishmentEntries);
     let res = await getTasksAndUsersOfCurrentWeek();
     io.emit("usersAndTasksOfCurrentWeek", res);
     logDivider();

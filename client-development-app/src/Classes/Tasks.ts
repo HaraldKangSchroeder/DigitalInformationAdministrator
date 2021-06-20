@@ -16,12 +16,12 @@ export default class Tasks {
             if (!this.containsTaskByTaskId(tasksDataset[i].taskId)) {
                 j++;
             }
-            this.addTask(tasksDataset[i].id, tasksDataset[i].taskId, tasksDataset[i].userId, tasksDataset[i].label, tasksDataset[i].score, tasksDataset[i].dayOfWeek, hslList[j]);
+            this.addTask(tasksDataset[i].id, tasksDataset[i].taskId, tasksDataset[i].userId, tasksDataset[i].label, tasksDataset[i].score, tasksDataset[i].dayOfWeek, hslList[j],tasksDataset[i].importance);
         }
     }
 
-    addTask(id: number, taskId: number, userId: number, label: string, score: number, dayOfWeek: number, color: string) {
-        let task = new Task(id, taskId, userId, label, score, dayOfWeek, color);
+    addTask(id: number, taskId: number, userId: number, label: string, score: number, dayOfWeek: number, color: string, importance : number) {
+        let task = new Task(id, taskId, userId, label, score, dayOfWeek, color, importance);
         this.taskList.push(task);
     }
 
@@ -36,6 +36,35 @@ export default class Tasks {
 
     getTaskList(): Task[] {
         return this.taskList;
+    }
+
+    getTasksOrganizedByImportance() : Task[][] {
+        let importances = this.getTaskImportances().sort().reverse();
+        let tasksOrganized : Task[][] = [];
+        for(let i = 0; i < importances.length; i++){
+            tasksOrganized[i] = this.getTasksByImportance(importances[i]);
+        }
+        return tasksOrganized;
+    }
+
+    getTaskImportances() : number[] {
+        let importances : number[] = [];
+        for(let task of this.taskList){
+            if(!importances.includes(task.getImportance())){
+                importances.push(task.getImportance());
+            }
+        }
+        return importances;
+    }
+
+    getTasksByImportance(importance : number) : Task[] {
+        let tasks : Task[] = [];
+        for(let task of this.taskList){
+            if(task.getImportance() === importance){
+                tasks.push(task);
+            }
+        }
+        return tasks;
     }
 }
 

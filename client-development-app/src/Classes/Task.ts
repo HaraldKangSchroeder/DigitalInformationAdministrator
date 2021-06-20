@@ -7,8 +7,9 @@ export default class Task {
     score: number;
     color: string;
     dayOfWeek: number;
+    importance : number;
 
-    constructor(id: number, taskId: number, userId: number, label: string, score: number, dayOfWeek: number, color: string) {
+    constructor(id: number, taskId: number, userId: number, label: string, score: number, dayOfWeek: number, color: string, importance : number) {
         this.id = id;
         this.taskId = taskId;
         this.userId = userId;
@@ -16,6 +17,7 @@ export default class Task {
         this.score = score;
         this.color = color;
         this.dayOfWeek = dayOfWeek;
+        this.importance = importance;
     }
 
     getId(): number {
@@ -44,6 +46,10 @@ export default class Task {
 
     getDayOfWeek(): number {
         return this.dayOfWeek;
+    }
+
+    getImportance() : number {
+        return this.importance;
     }
 
     getDayOfWeekText(): string {

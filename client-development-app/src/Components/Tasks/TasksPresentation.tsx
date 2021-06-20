@@ -25,9 +25,13 @@ export default function TasksPresentation(props : Props){
     return (
         <div className={classes.root}>
             {
-                props.tasks.getTaskList().map((task) => {
-                    return <TaskPresentation selectedUser={props.selectedUser} users={props.users} task={task}/>
-                })
+                props.tasks.getTasksOrganizedByImportance().map((tasksOrganized) => 
+                    <div style={{marginBottom:"3vh"}}>
+                        {tasksOrganized.map((task) => {
+                            return <TaskPresentation selectedUser={props.selectedUser} users={props.users} task={task}/>
+                        })}
+                    </div>
+                )
             }
         </div>
     )

@@ -1,5 +1,4 @@
 const express = require("express");
-const http = require("http");
 const { configs } = require("./configs");
 const socketio = require("socket.io");
 const cors = require("cors");
@@ -15,13 +14,6 @@ app.use(cors());
 app.use(express.static(__dirname + '/public/app'));
 app.use(express.static(__dirname + '/public/management'));
 
-const server = http.createServer(app);
-const io = socketio(server, {
-    cors: {
-        origin: '*',
-    }
-});
-
 var port = process.env.SERVER_PORT || configs.port;
 
 app.get("/", (req, res) => {
@@ -34,8 +26,14 @@ app.get("/management", (req, res) => {
     res.sendFile(__dirname + '/public/management/index.html');
 });
 
-server.listen(port, () => {
-    console.log(`Server starts running on ${port}`);
+let server = app.listen(port, () => {
+    console.log(`Server starts running on port ${port}`);
+});
+
+const io = socketio(server, {
+    cors: {
+        origin: '*',
+    }
 });
 
 setup();

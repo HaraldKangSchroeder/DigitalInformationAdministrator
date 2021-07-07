@@ -1,5 +1,12 @@
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
+import { DefaultEventsMap } from "socket.io-client/build/typed-events";
 
-const socket = io();
+let socket : Socket<DefaultEventsMap, DefaultEventsMap>;
+if(process.env.REACT_APP_SOCKET_PATH){
+    socket = io({path : process.env.REACT_APP_SOCKET_PATH});
+}
+else{
+    socket = io();
+}
 
 export default socket;

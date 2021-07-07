@@ -32,19 +32,25 @@ const useStyles = makeStyles({
     }
 })
 
+/*
+in case of deploying the app from a subdir, you have to prepend the public url to the image path.
+per default, it is the root path / and thus it is not necessary to prepent the public url.
+src how-to: https://www.codegrepper.com/code-examples/javascript/create+react+app+cant+get+image+in+public
+*/
+
 export default function NavBar() {
     const classes = useStyles();
     return (
         <div className={classes.root}>
             <div style={{ width: "70px", paddingTop: "10px" , height:"80vh"}}>
                 <Link to='/' >
-                    <div style={{ backgroundImage: `url("tasks.png")` }} className={classes.image} />
+                    <div style={{ backgroundImage: `url("${process.env.PUBLIC_URL}/tasks.png")` }} className={classes.image} />
                 </Link>
                 <Link to='/Groceries' >
-                    <div style={{ backgroundImage: `url("groceryCartNavbar.png")` }} className={classes.image} />
+                    <div style={{ backgroundImage: `url("${process.env.PUBLIC_URL}/groceryCartNavbar.png")` }} className={classes.image} />
                 </Link>
                 <Link to='/Weather' >
-                    <div style={{ backgroundImage: `url("weather.png")` }} className={classes.image} />
+                    <div style={{ backgroundImage: `url("${process.env.PUBLIC_URL}/weather.png")` }} className={classes.image} />
                 </Link>
                 <div className={classes.clockContainer}>
                     <Clock />

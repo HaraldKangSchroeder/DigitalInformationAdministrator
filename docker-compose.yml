@@ -4,13 +4,19 @@ services:
         image: postgres
         container_name: db
         environment:
+            POSTGRES_USER: ${PGUSER}
             POSTGRES_PASSWORD: ${PGPASSWORD}
         volumes:
             - ./postgresql/pgdata:/var/lib/postgresql/data
-        ports:
-            - '5432:5432'
     app:
-        build: .
+        build:
+            # use env variables during docker-compose build 
+            # https://stackoverflow.com/questions/52429984/docker-compose-build-environment-variable
+            context: .
+            args:
+                - REACT_APP_BASEPATH_APP=${REACT_APP_BASEPATH_APP}
+                - REACT_APP_BASEPATH_MANAGEMENT=${REACT_APP_BASEPATH_MANAGEMENT}
+                - SOCKET_PATH=${SOCKET_PATH}
         container_name: app
         depends_on:
             - db
@@ -18,29 +24,11 @@ services:
             PGHOST: db
             PGPASSWORD: ${PGPASSWORD}
             PGUSER: ${PGUSER}
-            PGDATABASE: ${PGDATABASE}
-            PGPORT: ${PGPORT}
             WEATHER_API_KEY: ${WEATHER_API_KEY}
             WEATHER_LOCATION_LAT: ${WEATHER_LOCATION_LAT}
             WEATHER_LOCATION_LON: ${WEATHER_LOCATION_LON}
-    # Proxies requests to internal services
-    reverse-proxy:
-        build: ./nginx/
-        container_name: reverse-proxy
-        environment:
-            COUNTRY_NAME_2LETTER_CODE: ${COUNTRY_NAME_2LETTER_CODE}
-            STATE_NAME: ${STATE_NAME}
-            CITY_NAME: ${CITY_NAME}
-            SERVER_NAME: ${SERVER_NAME}
-            EMAIL: ${EMAIL}
-            ORGANIZATION_NAME: ${ORGANIZATION_NAME}
-            ORGANIZATION_UNIT_NAME: ${ORGANIZATION_UNIT_NAME}
-            AUTH_PASSWORD: ${AUTH_PASSWORD}
-            AUTH_USERNAME: ${AUTH_USERNAME}
-        depends_on:
-            - db
-            - app
-        volumes:
-            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+            REACT_APP_BASEPATH_APP: ${REACT_APP_BASEPATH_APP}
+            REACT_APP_BASEPATH_MANAGEMENT: ${REACT_APP_BASEPATH_MANAGEMENT}
+            SOCKET_PATH: ${SOCKET_PATH}
         ports:
-            - 443:443
+            - '8910:8910'

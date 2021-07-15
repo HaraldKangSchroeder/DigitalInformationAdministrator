@@ -9,6 +9,7 @@ import TasksPresenter from './Components/Tasks/TasksPresenter';
 import WeatherPresenter from "./Components/Weather/WeatherPresenter";
 import './App.css';
 import dotenv from "dotenv";
+import { UserCharts } from "./Components/UsersOverview/UserCharts";
 dotenv.config();
 
 /*
@@ -26,6 +27,9 @@ function App() {
                 </Route>
                 <Route exact path="/Weather">
                     <WeatherPresenter />
+                </Route>
+                <Route exact path="/UsersOverview">
+                    <UserCharts />
                 </Route>
                 <Route exact path="/">
                     <TasksPresenter />

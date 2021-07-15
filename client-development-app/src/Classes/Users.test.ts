@@ -2,11 +2,12 @@ import User from "./User";
 import Users from "./Users";
 
 let users = new Users();
-users.addUser(0, "max", 5, 10, "red");
+let user = new User(0, "max", 5, 10, "red");
+users.addUser(user);
 
 test("Add User", () => {
     let list = [new User(0, "max", 5, 10, "red")];
-    expect(users.getUserList()).toEqual(list);
+    expect(users.getList()).toEqual(list);
 })
 
 test("Get User by Id", () => {

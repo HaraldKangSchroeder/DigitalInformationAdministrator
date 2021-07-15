@@ -25,7 +25,7 @@ export default function UsersPresentation(props: Props) {
     return (
         <div className={classes.root}>
             {
-                props.users.getUserList().map((user: User) =>
+                props.users.getList().map((user: User) =>
                     <Grid item xs={12}>
                         <UserPresentation 
                             isUserSelected={props.selectedUser != null && props.selectedUser.getId() === user.getId()} 

@@ -1,28 +1,43 @@
+import { makeStyles } from "@material-ui/core";
 import React from "react";
 import Groceries from "../../Classes/Groceries";
 import Grocery from "../../Classes/Grocery";
 import GroceryTypes from "../../Classes/GroceryTypes";
 import GroceryPresentation from "./GroceryPresentation";
 
+
+const useStyles = makeStyles({
+    root : {
+        paddingLeft : "1vw",
+        height: "100vh",
+        overflowY: "auto",
+    }
+})
+
 interface Props {
     groceries: Groceries,
-    groceryTypes : GroceryTypes,
-    groceryCart : Groceries,
+    groceryTypes: GroceryTypes,
+    groceryCart: Groceries,
 }
 
 export default function GroceriesPresentation(props: Props) {
 
+    const classes = useStyles();
     return (
-        <React.Fragment>
+        <div className={classes.root}>
             {
-                props.groceries.getList().map((grocery: Grocery) => (
-                    <GroceryPresentation 
-                        backgroundColor={props.groceryTypes.getColorByType(grocery.getType())}
-                        isInGroceryCart={props.groceryCart.contains(grocery)}
-                        grocery={grocery}
-                    />
-                ))
+                props.groceries.getGroceriesOrganizedByType().map((groceriesOrganized) =>
+                    <div style={{ marginBottom: "3vh" }}>
+                        {groceriesOrganized.map((grocery: Grocery) =>
+                            <GroceryPresentation
+                                backgroundColor={props.groceryTypes.getColorByType(grocery.getType())}
+                                isInGroceryCart={props.groceryCart.contains(grocery)}
+                                grocery={grocery}
+                            />
+                        )}
+                    </div>
+                )
             }
-        </React.Fragment>
+        </div>
     );
 }

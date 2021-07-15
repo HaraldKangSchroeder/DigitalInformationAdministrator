@@ -10,7 +10,8 @@ const useStyles = makeStyles({
         background: props.backgroundColor,
         borderRadius: "10px",
         justifyContent: "center",
-        fontFamily: "Calibri"
+        fontFamily: "Calibri",
+        cursor: "pointer",
     }),
     avatar: (props: Props) => ({
         float: "left",
@@ -42,10 +43,10 @@ export default function GroceryPresentation(props: Props) {
 
     const classes = useStyles(props);
     return (
-        <div className={classes.root}>
+        <div className={classes.root} onClick={handleSubmit}>
             <div>
                 <ListItem>
-                    <div onClick={handleSubmit}>
+                    <div>
                         <ListItemAvatar>
                             <Avatar variant="rounded" className={classes.avatar}> </Avatar>
                         </ListItemAvatar>

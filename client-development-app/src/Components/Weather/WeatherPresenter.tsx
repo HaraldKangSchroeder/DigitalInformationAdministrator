@@ -32,12 +32,12 @@ export default function WeatherPresenter() {
                     <NavBar />
                 </Grid>
                 {/* <Grid item xs={1} /> */}
-                <Grid item xs={11} style={{ padding: "20px" }}>
+                <Grid item xs={11} style={{ padding: "30px" , height:"100vh"}}>
                     <Line
                         data={{ labels: getWeatherLabels(weather), datasets: getWeatherDatasets(weather) }}
                         type="line"
                         options={{
-                            // maintainAspectRatio: false,
+                            maintainAspectRatio: false,
                             plugins: { //https://github.com/reactchartjs/react-chartjs-2/issues/86
                                 legend: {
                                     display: false,

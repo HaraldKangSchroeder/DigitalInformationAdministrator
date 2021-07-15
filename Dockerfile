@@ -13,11 +13,11 @@ ENV REACT_APP_SOCKET_PATH $SOCKET_PATH
 # Create app directory
 WORKDIR /usr/src/app
 
-COPY Server/package*.json ./
+COPY server/package*.json ./
 
 RUN npm install
 
-COPY Server/ .
+COPY server/ .
 
 RUN mkdir -p public${REACT_APP_BASEPATH_APP}
 

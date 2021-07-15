@@ -52,6 +52,9 @@ export default function NavBar() {
                 <Link to='/Weather' >
                     <div style={{ backgroundImage: `url("${process.env.PUBLIC_URL}/weather.png")` }} className={classes.image} />
                 </Link>
+                <Link to='/UsersOverview' >
+                    <div style={{ backgroundImage: `url("${process.env.PUBLIC_URL}/magnifyingGlasses.png")` }} className={classes.image} />
+                </Link>
                 <div className={classes.clockContainer}>
                     <Clock />
                 </div>

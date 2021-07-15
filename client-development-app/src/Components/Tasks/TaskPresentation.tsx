@@ -17,6 +17,7 @@ const useStyles = makeStyles({
         fontFamily: "Calibri",
         background: props.task.getColor(),
         boxShadow: "0 1px 5px 0 rgba(0, 0, 0, 0.4),0 -1px 5px 0 rgba(0, 0, 0, 0.4)",
+        cursor: "pointer",
     }),
     avatar: {
         float: "left",
@@ -24,7 +25,6 @@ const useStyles = makeStyles({
         height: "40px",
         width: "40px",
         fontSize: "1.2em",
-        cursor:"pointer",
     },
     taskPendingAvatar: {
         backgroundColor: "rgba(200,200,200,0)",
@@ -79,9 +79,9 @@ export default function TaskPresentation(props: Props) {
     let hasUserDoneTask = props.task.getUserId() != null;
     const avatarClass = hasUserDoneTask ? `${classes.avatar} ${classes.userAvatar}` : `${classes.avatar} ${classes.taskPendingAvatar}`;
     return (
-        <div className={classes.root}>
+        <div className={classes.root} onClick={(e) => { handleClick(); }}>
             <ListItem>
-                <div onClick={(e) => { handleClick(); }}>
+                <div>
                     <ListItemAvatar>
                         <Avatar className={avatarClass}>{hasUserDoneTask ? props.users.getUserById(props.task.getUserId()).getNameCode() : " "}</Avatar>
                     </ListItemAvatar>

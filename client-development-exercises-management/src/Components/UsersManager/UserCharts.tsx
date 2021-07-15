@@ -101,7 +101,7 @@ export function UserCharts(props: Props) {
         let isCalendarWeekEndWithingNewRange = calendarWeekRange.end <= latestCalendarWeek;
         let newCalendarWeekEnd = isCalendarWeekEndSet && isCalendarWeekEndWithingNewRange ? calendarWeekRange.end : latestCalendarWeek;
         setCalendarWeekRange({
-            ...calendarWeekRange,
+            start: taskAccomplishments.getEarliestCalendarWeek(),
             end: newCalendarWeekEnd ,
         });
     }, [taskAccomplishments]);

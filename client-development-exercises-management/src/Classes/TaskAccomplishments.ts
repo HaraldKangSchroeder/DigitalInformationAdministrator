@@ -40,4 +40,9 @@ export default class TaskAccomplishments {
         if (this.taskAccomplishmentList.length === 0) return 0;
         return this.taskAccomplishmentList[this.taskAccomplishmentList.length - 1].getCalendarWeek(); // this is right, because it is ordered by calendar_week on serverside
     }
+
+    getEarliestCalendarWeek()  : number{
+        if (this.taskAccomplishmentList.length === 0) return 0;
+        return this.taskAccomplishmentList[0].getCalendarWeek(); // this is right, because it is ordered by calendar_week on serverside
+    }
 }

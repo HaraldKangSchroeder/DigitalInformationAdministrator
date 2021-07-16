@@ -144,7 +144,7 @@ function getDataset(label: string, yAxisID: string, data: any[], yAxisKey: strin
         },
         lineTension: 0.5,
         borderColor: color,
-        borderWidth: 8,
+        borderWidth: 2,
         pointRadius: pointRadius,
         pointHoverRadius: pointRadius * 2,
         pointBackgroundColor: color,

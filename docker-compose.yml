@@ -1,6 +1,7 @@
 version: "3.7"
 services:
     db:
+        restart: always
         image: postgres
         container_name: db
         environment:
@@ -9,6 +10,7 @@ services:
         volumes:
             - ./postgresql/pgdata:/var/lib/postgresql/data
     app:
+        restart: always
         build:
             # use env variables during docker-compose build 
             # https://stackoverflow.com/questions/52429984/docker-compose-build-environment-variable

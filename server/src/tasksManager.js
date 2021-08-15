@@ -9,7 +9,12 @@ let interval = null;
 exports.startUpdateTaskAccomplishments = async (io) => {
     await updateTaskaccomplishments(io);
     interval = setInterval(async () => {
-        await updateTaskaccomplishments(io);
+        try {
+            await updateTaskaccomplishments(io);
+        }   
+        catch (e) {
+            console.log("Failed to update TaskAccomplishments");
+        }
     }, getMillisecondsByMinute(UPDATE_TIME_STEP_MIN));
 }
 

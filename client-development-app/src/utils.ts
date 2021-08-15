@@ -51,3 +51,7 @@ export function getDayName(dayNum : number){
             return "Saturday"
     }
 }
+
+export function round2Digits(num : number) : number {
+    return Math.round(num * 100) / 100;
+}

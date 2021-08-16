@@ -14,6 +14,7 @@ exports.startUpdateWeatherData = async (io) => {
 async function updateWeatherData(io) {
     try {
         let data = await getWeatherData();
+        if(!data) return;
         io.emit("weatherData", data);
     }
     catch (e) {
@@ -31,6 +32,7 @@ async function getWeatherData() {
     catch (e) {
         console.error(e);
         console.error("getWeatherData failed");
+        return null;
     }
 }
 

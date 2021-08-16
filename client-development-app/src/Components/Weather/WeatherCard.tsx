@@ -41,7 +41,7 @@ export default function WeatherCard({ dayName, averageTemperature, averagePrecip
         <div className={classes.root} onClick={() => { setSelectedDay() }}>
             <div className={`${classes.text} ${classes.title}`}>{dayName}</div>
             <div className={classes.text}>Temp : {averageTemperature} °C</div>
-            <div className={classes.text}>Prec : {averagePrecipitationProbability * 100} %</div>
+            <div className={classes.text}>Prec : {Math.round(averagePrecipitationProbability * 100)} %</div>
         </div>
     );
 }

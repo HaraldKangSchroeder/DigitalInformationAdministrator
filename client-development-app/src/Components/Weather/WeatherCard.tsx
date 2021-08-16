@@ -22,7 +22,9 @@ const useStyles = makeStyles({
         width: "100%"
     },
     title: {
-        fontSize: "1.25em"
+        fontSize: "1.1em",
+        fontWeight: "bold",
+        color : "rgb(200,200,200)",
     }
 })
 

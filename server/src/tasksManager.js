@@ -1,4 +1,4 @@
-const { logDivider, getWeekNumberByDate,getMillisecondsByMinute } = require("./utils");
+const { logDivider, getWeekNumberByDate, getMillisecondsByMinute } = require("./utils");
 
 const databaseManager = require("./databaseManager");
 
@@ -10,14 +10,15 @@ let currentYear = 0;
 let currentWeek = 0;
 
 exports.startUpdateTaskAccomplishments = async (io) => {
-    updateCurrentDates();
+    let isNewWeek = updateCurrentDates();
+    if (isNewWeek) await updateScoresOverYears();
     await updateTaskaccomplishments(io);
     interval = setInterval(async () => {
         try {
             let isNewWeek = updateCurrentDates();
-            if(isNewWeek) await updateScoresOverYears();
+            if (isNewWeek) await updateScoresOverYears();
             await updateTaskaccomplishments(io);
-        }   
+        }
         catch (e) {
             console.log("Failed to update TaskAccomplishments");
         }
@@ -29,12 +30,12 @@ function updateCurrentDates() {
     let previousWeek = currentWeek;
     currentYear = dateToday.getFullYear();
     currentWeek = getWeekNumberByDate(dateToday);
-    return previousWeek != currentWeek;
-}   
+    return previousWeek !== currentWeek;
+}
 
 async function updateScoresOverYears() {
     let firstWeekOfYear = 1;
-    if(currentWeek === firstWeekOfYear){
+    if (currentWeek === firstWeekOfYear) {
         let previousYear = currentYear - 1;
         await databaseManager.updateScoresOfYear(previousYear);
         await databaseManager.createScoresEntriesForYear(currentYear);
@@ -276,7 +277,7 @@ async function getTasksAndUsersOfCurrentWeek() {
     let tasks = await databaseManager.getPendingTaskEntriesOfWeekInYear(currentWeek, currentYear);
     let users = await databaseManager.getUserEntriesWithPoints(currentWeek, currentYear);
     // iterate overall user and add weeklyScore on year score, because year score does not include current week
-    for(let user of users) {
+    for (let user of users) {
         user.scoreOfYear = parseInt(user.scoreOfYear) + parseInt(user.scoreOfWeek);
     }
     let res = { tasks: tasks, users: users }

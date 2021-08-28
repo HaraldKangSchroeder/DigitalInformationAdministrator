@@ -6,10 +6,16 @@ const UPDATE_TIME_STEP_MIN = 30;
 
 let interval = null;
 
+let currentYear = 0;
+let currentWeek = 0;
+
 exports.startUpdateTaskAccomplishments = async (io) => {
+    updateCurrentDates();
     await updateTaskaccomplishments(io);
     interval = setInterval(async () => {
         try {
+            let isNewWeek = updateCurrentDates();
+            if(isNewWeek) await updateScoresOverYears();
             await updateTaskaccomplishments(io);
         }   
         catch (e) {
@@ -18,11 +24,27 @@ exports.startUpdateTaskAccomplishments = async (io) => {
     }, getMillisecondsByMinute(UPDATE_TIME_STEP_MIN));
 }
 
-async function updateTaskaccomplishments(io) {
+function updateCurrentDates() {
     let dateToday = new Date();
-    let currentYear = dateToday.getFullYear();
-    let currentWeek = getWeekNumberByDate(dateToday);
+    let previousWeek = currentWeek;
+    currentYear = dateToday.getFullYear();
+    currentWeek = getWeekNumberByDate(dateToday);
+    return previousWeek != currentWeek;
+}   
 
+async function updateScoresOverYears() {
+    let firstWeekOfYear = 1;
+    if(currentWeek === firstWeekOfYear){
+        let previousYear = currentYear - 1;
+        await databaseManager.updateScoresOfYear(previousYear);
+        await databaseManager.createScoresEntriesForYear(currentYear);
+    }
+    else {
+        await databaseManager.updateScoresOfYear(currentYear);
+    }
+}
+
+async function updateTaskaccomplishments(io) {
     let tasksAccomplishmentEntriesOfWeekInYear = await databaseManager.getTaskAccomplishmentEntriesOfWeekInYear(currentWeek, currentYear);
     let tasksAccomplishmentsExistent = tasksAccomplishmentEntriesOfWeekInYear.length > 0;
     if (!tasksAccomplishmentsExistent) {
@@ -31,16 +53,12 @@ async function updateTaskaccomplishments(io) {
         let taskAccomplishmentEntries = createTasksAccomplishmentEntries(taskOccurencesEntriesOfCurrentWeek, taskEntries, currentYear);
         await databaseManager.createTaskAccomplishmentEntries(taskAccomplishmentEntries);
     }
-
     let res = await getTasksAndUsersOfCurrentWeek();
     io.emit("usersAndTasksOfCurrentWeek", res);
     logDivider();
 }
 
 async function resetTaskAccomplishmentsOfCurrentWeek(io) {
-    let dateToday = new Date();
-    let currentYear = dateToday.getFullYear();
-    let currentWeek = getWeekNumberByDate(dateToday);
     await databaseManager.deleteTaskAccomplishmentEntriesByWeekAndYear(currentWeek, currentYear);
     await updateTaskaccomplishments(io);
 }
@@ -192,7 +210,8 @@ exports.setUpSocketListeners = async (io, socket) => {
     });
 
     socket.on('createUserEntry', async (data) => {
-        await databaseManager.createUserEntry(data.name);
+        let userId = await databaseManager.createUserEntry(data.name);
+        await databaseManager.createScoresOverYearsEntry(userId, currentYear);
         let userEntries = await databaseManager.getUserEntries();
         socket.emit("userEntries", userEntries);
         logDivider();
@@ -254,11 +273,12 @@ exports.setUpSocketListeners = async (io, socket) => {
 }
 
 async function getTasksAndUsersOfCurrentWeek() {
-    let dateToday = new Date();
-    let currentYear = dateToday.getFullYear();
-    let currentWeek = getWeekNumberByDate(dateToday);
     let tasks = await databaseManager.getPendingTaskEntriesOfWeekInYear(currentWeek, currentYear);
     let users = await databaseManager.getUserEntriesWithPoints(currentWeek, currentYear);
+    // iterate overall user and add weeklyScore on year score, because year score does not include current week
+    for(let user of users) {
+        user.scoreOfYear = parseInt(user.scoreOfYear) + parseInt(user.scoreOfWeek);
+    }
     let res = { tasks: tasks, users: users }
     return res;
 }

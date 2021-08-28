@@ -8,6 +8,7 @@ const TABLE_TASKS = "tasks";
 const TABLE_TASKS_OCCURENCES = "task_occurences";
 const TABLE_USERS = "users";
 const TABLE_TASK_ACCOMPLISHMENTS = "task_accomplishments";
+const TABLE_SCORES_OVER_YEARS = "scores_over_years";
 const TABLE_GROCERIES = "groceries";
 const TABLE_GROCERY_TYPES = "grocery_types";
 const TABLE_GROCERY_CART = "grocery_cart";
@@ -260,10 +261,30 @@ exports.createUserEntry = async (userName) => {
         let queryValues = [userName];
         await pool.query(queryText, queryValues);
         console.log(`createUserEntry : Added row(${userName}) to table ${TABLE_USERS}`);
+
+        queryText = `SELECT id FROM ${TABLE_USERS} WHERE name = $1;`;
+        queryValues = [userName];
+        let { rows } = await pool.query(queryText, queryValues);
+        return rows[0].id;
     }
     catch (e) {
         console.error(e);
         console.error(`createUserEntry : Error when tried to add row(${userName}) to table ${TABLE_USERS}`);
+    }
+}
+
+exports.createScoresOverYearsEntry = async (userId, year) => {
+    try {
+        let queryText = `
+            INSERT INTO ${TABLE_SCORES_OVER_YEARS} VALUES ($1, $2, 0);
+        `;
+        let queryValues = [userId, year];
+        await pool.query(queryText, queryValues);
+        console.log(`createScoresOverYearsEntry : added row to table ${TABLE_SCORES_OVER_YEARS}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`createScoresOverYearsEntry : Error when tried to add row to table ${TABLE_SCORES_OVER_YEARS}`);
     }
 }
 
@@ -296,12 +317,8 @@ exports.getUserEntriesWithPoints = async (week, year) => {
                 ) AS "scoreOfWeek",
                 (
                     SELECT 
-                    COALESCE(sum((
-                            SELECT "t".score 
-                            FROM ${TABLE_TASKS} AS t 
-                            WHERE "t".id = "ta".task_id
-                            )),0)
-                    FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS ta WHERE "u".id = "ta".user_id AND "ta".year = $2
+                        "soy".score
+                    FROM ${TABLE_SCORES_OVER_YEARS} AS soy WHERE "u".id = "soy".user_id AND "soy".year = $2
                 ) AS "scoreOfYear"
             FROM 
                 ${TABLE_USERS} AS u
@@ -489,6 +506,52 @@ exports.updateTaskAccomplishmentEntryWithUserId = async (id, userId) => {
     }
     catch (e) {
         console.error(e);
+    }
+}
+
+exports.createScoresEntriesForYear = async (year) => {
+    try {
+        let users = await this.getUserEntries();
+        for(let user of users) {
+            let queryText = `
+                INSERT INTO ${TABLE_SCORES_OVER_YEARS} VALUES ($1,$2,0)
+            `;
+            let queryValues = [user.id, year];
+            await pool.query(queryText, queryValues);
+        }
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`createScoresEntriesForYear ${year} failed`);
+    }
+}
+
+exports.updateScoresOfYear = async (year) => {
+    try {
+        let users = await this.getUserEntries();
+        for (let user of users) {
+            let queryText = `
+                UPDATE ${TABLE_SCORES_OVER_YEARS} 
+                SET score = 
+                    (
+                        SELECT 
+                            COALESCE(sum((
+                                SELECT "t".score 
+                                    FROM ${TABLE_TASKS} AS t 
+                                    WHERE "t".id = "ta".task_id
+                            )), 0)
+                        FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS ta 
+                        WHERE "ta".user_id = $1 AND "ta".year = $2
+                    )
+                WHERE user_id = $1 AND year = $2
+            `;
+            let queryValues = [user.id, year];
+            await pool.query(queryText, queryValues);
+        }
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`updateScoresOfYear for year ${year} failed`);
     }
 }
 
@@ -786,7 +849,7 @@ exports.setupDatabase = async () => {
             CREATE TABLE IF NOT EXISTS ${TABLE_USERS}
             (
                 id SERIAL PRIMARY KEY,
-                name VARCHAR NOT NULL
+                name VARCHAR NOT NULL UNIQUE
             );
         `;
         await pool.query(queryText);
@@ -831,6 +894,18 @@ exports.setupDatabase = async () => {
                 type VARCHAR NOT NULL,
                 amount VARCHAR,
                 FOREIGN KEY (type) REFERENCES ${TABLE_GROCERY_TYPES}(type) ON UPDATE CASCADE
+            );
+        `;
+        await pool.query(queryText);
+
+        queryText = `
+            CREATE TABLE IF NOT EXISTS ${TABLE_SCORES_OVER_YEARS}
+            (
+                user_id INT NOT NULL,
+                year INT NOT NULL,
+                score INT NOT NULL CHECK (score >= 0),
+                UNIQUE(user_id,year),
+                FOREIGN KEY (user_id) REFERENCES ${TABLE_USERS}(id) ON DELETE CASCADE
             );
         `;
         await pool.query(queryText);

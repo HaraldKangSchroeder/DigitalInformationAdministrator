@@ -5,8 +5,8 @@ services:
         image: postgres
         container_name: db
         environment:
-            POSTGRES_USER: ${PGUSER}
-            POSTGRES_PASSWORD: ${PGPASSWORD}
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
         volumes:
             - ./postgresql/pgdata:/var/lib/postgresql/data
     app:
@@ -24,8 +24,8 @@ services:
             - db
         environment:
             PGHOST: db
-            PGPASSWORD: ${PGPASSWORD}
-            PGUSER: ${PGUSER}
+            PGPASSWORD: postgres
+            PGUSER: postgres
             WEATHER_API_KEY: ${WEATHER_API_KEY}
             WEATHER_LOCATION_LAT: ${WEATHER_LOCATION_LAT}
             WEATHER_LOCATION_LON: ${WEATHER_LOCATION_LON}

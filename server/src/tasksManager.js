@@ -268,7 +268,7 @@ exports.setUpSocketListeners = async (io, socket) => {
     socket.on('updateTaskAccomplishment', async ({ id, userId }) => {
         await databaseManager.updateTaskAccomplishmentEntryWithUserId(id, userId);
         let res = await getTasksAndUsersOfCurrentWeek();
-        socket.emit("usersAndTasksOfCurrentWeek", res);
+        io.emit("usersAndTasksOfCurrentWeek", res);
         logDivider();
     });
 }

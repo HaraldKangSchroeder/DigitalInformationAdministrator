@@ -526,7 +526,7 @@ exports.createScoresEntriesForYear = async (year) => {
     }
 }
 
-exports.updateScoresOfYear = async (year) => {
+exports.updateScoresOfYear = async (year,calendarWeekUntilScoreIsComputed) => {
     try {
         let users = await this.getUserEntries();
         for (let user of users) {
@@ -541,11 +541,11 @@ exports.updateScoresOfYear = async (year) => {
                                     WHERE "t".id = "ta".task_id
                             )), 0)
                         FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS ta 
-                        WHERE "ta".user_id = $1 AND "ta".year = $2
+                        WHERE "ta".user_id = $1 AND "ta".year = $2 AND "ta".calendar_week <= $3
                     )
                 WHERE user_id = $1 AND year = $2
             `;
-            let queryValues = [user.id, year];
+            let queryValues = [user.id, year, calendarWeekUntilScoreIsComputed];
             await pool.query(queryText, queryValues);
         }
     }

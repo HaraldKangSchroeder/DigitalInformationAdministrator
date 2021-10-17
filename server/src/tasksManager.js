@@ -37,11 +37,12 @@ async function updateScoresOverYears() {
     let firstWeekOfYear = 1;
     if (currentWeek === firstWeekOfYear) {
         let previousYear = currentYear - 1;
-        await databaseManager.updateScoresOfYear(previousYear);
+        await databaseManager.updateScoresOfYear(previousYear, 100); //100 is just a value above the max. number of weeks within a year (just to include all weeks)
         await databaseManager.createScoresEntriesForYear(currentYear);
     }
     else {
-        await databaseManager.updateScoresOfYear(currentYear);
+        let previousWeek = currentWeek - 1;
+        await databaseManager.updateScoresOfYear(currentYear, previousWeek);
     }
 }
 

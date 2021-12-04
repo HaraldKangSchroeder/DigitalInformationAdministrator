@@ -59,6 +59,9 @@ public class OptionsView extends AppCompatActivity {
 
                 GroceryCartNetworkManager.handleChangeRemoteHost(remoteHost);
                 setTextViewRemoteHost();
+
+                EditText et = (EditText) findViewById(R.id.editTextRemoteHost);
+                et.setText("");
             }
         });
     }
@@ -77,6 +80,9 @@ public class OptionsView extends AppCompatActivity {
                 editor.commit();
                 GroceryCartNetworkManager.handleChangeSocketPath(socketPath);
                 setTextViewSocketPath();
+
+                EditText et = (EditText) findViewById(R.id.editTextSocketPath);
+                et.setText("");
             }
         });
     }
@@ -94,6 +100,9 @@ public class OptionsView extends AppCompatActivity {
 
                 GroceryCartNetworkManager.handleChangeUsername(username);
                 setTextViewUsername();
+
+                EditText et = (EditText) findViewById(R.id.editTextUsername);
+                et.setText("");
             }
         });
     }
@@ -111,6 +120,9 @@ public class OptionsView extends AppCompatActivity {
 
                 GroceryCartNetworkManager.handleChangePassword(password);
                 setTextViewPassword();
+
+                EditText et = (EditText) findViewById(R.id.editTextPassword);
+                et.setText("");
             }
         });
     }

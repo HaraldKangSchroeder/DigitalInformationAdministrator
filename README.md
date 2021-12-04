@@ -57,4 +57,7 @@ Create an account and create an API KEY for the 5 Day / 3 Hour Forecast. (There 
 My application is constantly running (in detached mode) on a raspberry pi 4 which is attached to a touchdisplay (https://www.sunfounder.com/products/10inch-touchscreen-for-raspberrypi). To attach both components on a surface (in my case the fridge door), i created a case using a 3d printer.
 
 Since the mobile app needs to access the data of the shopping list from outside the local network, i also applied portforwarding.
-This indicates security leaks, which is why I've also set up an nginx server that acts as a reverse proxy with further security measures.
+This indicates security leaks, which is why I've also set up an nginx server that acts as a reverse proxy with further security measures ([https://github.com/HaraldKangSchroeder/ReverseProxy](https://github.com/HaraldKangSchroeder/ReverseProxy)).
+
+## Missing parts
+* Mobile app and its associated source files (coming soon)

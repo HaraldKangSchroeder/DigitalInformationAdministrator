@@ -27,7 +27,7 @@ https://user-images.githubusercontent.com/81776044/137017714-00dbb4a9-9ac1-4895-
 
 1. The application comes along with Docker, specifically with docker-compose.\
 You need to install those first -
-see https://docs.docker.com/compose/install/
+see https://docs.docker.com/compose/install/. You also need an account on Docker Hub ([https://hub.docker.com/](https://hub.docker.com/)).
 
 2. For the weather forecast, the https://openweathermap.org/guide API is used.
 Create an account and create an API KEY for the 5 Day / 3 Hour Forecast. (There is a free contract which is sufficient)

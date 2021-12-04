@@ -41,6 +41,7 @@ async function updateScoresOverYears() {
         await databaseManager.createScoresEntriesForYear(currentYear);
     }
     else {
+        // Note : using the previous week is necessary when restarting the app (else, it will include points of the current week which should be only added after the weekend) 
         let previousWeek = currentWeek - 1;
         await databaseManager.updateScoresOfYear(currentYear, previousWeek);
     }

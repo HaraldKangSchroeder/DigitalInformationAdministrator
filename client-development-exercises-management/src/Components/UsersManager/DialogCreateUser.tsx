@@ -37,12 +37,12 @@ export function DialogCreateUser() {
     }
 
     const handleCreateUserSubmit = () => {
-        socket.emit("createUserEntry", { name: name });
+        socket.emit("createUser", { name: name });
         setName("");
         setDialogOpen(false);
     }
 
-    const handleChangeNameText = (e : any) => {
+    const handleChangeNameText = (e: any) => {
         setName(e.target.value);
     }
 

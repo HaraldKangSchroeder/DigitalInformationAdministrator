@@ -18,7 +18,7 @@ export function TasksManager() {
         socket.on("activeTaskEntries", (activeTaskEntries) => {
             setTasks(new Tasks(activeTaskEntries));
         });
-        socket.emit("getActiveTaskEntries");
+        socket.emit("getActiveTasks");
 
         // remove listening on this specific event when leaving this page. else, it will just add one more listener when mounting again which
         // would result in multiple setTasks invocations
@@ -45,7 +45,7 @@ export function TasksManager() {
 
     const deleteSelectedTask = () => {
         if (selectedTask == null) return;
-        socket.emit("deleteTaskEntry", { id: selectedTask.getId() });
+        socket.emit("deleteTask", { id: selectedTask.getId() });
         setSelectedTask(null);
     }
 

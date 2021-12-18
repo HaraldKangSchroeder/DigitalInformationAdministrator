@@ -19,7 +19,7 @@ function UsersManager() {
         socket.on("userEntries", (userEntries) => {
             setUsers(new Users(userEntries));
         });
-        socket.emit("getUserEntries");
+        socket.emit("getUsers");
 
         return () => {
             socket.off("userEntries");
@@ -46,7 +46,7 @@ function UsersManager() {
         if (!selectedUsers.containsExactlyOneUser()) return;
 
         let id = selectedUsers.getList()[0].getId();
-        socket.emit("deleteUserEntry", { id: id });
+        socket.emit("deleteUser", { id: id });
         let selectedUsersCopy = selectedUsers.getCopy();
         selectedUsersCopy.removeUserById(id);
         setSelectedUsers(selectedUsersCopy);

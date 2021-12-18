@@ -76,7 +76,7 @@ export function UserCharts() {
             setTasks(newTasks);
         });
 
-        socket.emit("getUserEntries");
+        socket.emit("getUsers");
 
         return () => {
             socket.off("yearsOfTaskAccomplishmentEntries");
@@ -87,8 +87,8 @@ export function UserCharts() {
     }, [])
 
     useEffect(() => {
-        socket.emit("getTaskEntries");
-        socket.emit("getYearsOfTaskAccomplishmentEntries");
+        socket.emit("getTasks");
+        socket.emit("getTaskAccomplishmentYears");
     }, [users])
 
     useEffect(() => {
@@ -101,7 +101,7 @@ export function UserCharts() {
     useEffect(() => {
         let isYearSet = year !== 0;
         if (!isYearSet) return;
-        socket.emit("getTaskAccomplishmentEntriesInYear", { year: year, userIds: users.getUserIds() });
+        socket.emit("getTaskAccomplishments", { year: year, userIds: users.getUserIds() });
     }, [year])
 
     useEffect(() => {
@@ -187,7 +187,7 @@ export function UserCharts() {
                                 plugins: {
                                     legend: {
                                         labels: {
-                                            color: "rgb(200,200,200)",                                            
+                                            color: "rgb(200,200,200)",
                                         }
                                     }
                                 },

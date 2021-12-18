@@ -43,7 +43,7 @@ export function TaskInformation(props: Props) {
 
     useEffect(() => {
         if (props.selectedTask != null) {
-            socket.emit("getTaskOccurenceEntries", { taskId: props.selectedTask.getId() });
+            socket.emit("getTaskOccurences", { taskId: props.selectedTask.getId() });
         }
     }, [props.selectedTask]);
 

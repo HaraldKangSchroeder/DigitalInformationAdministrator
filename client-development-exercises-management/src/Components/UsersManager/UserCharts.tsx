@@ -40,7 +40,7 @@ const useStyles = makeStyles({
 })
 
 interface Props {
-    selectedUsers : Users;
+    selectedUsers: Users;
 }
 
 export function UserCharts(props: Props) {
@@ -72,8 +72,8 @@ export function UserCharts(props: Props) {
             setTasks(newTasks);
         });
 
-        socket.emit("getTaskEntries");
-        socket.emit("getYearsOfTaskAccomplishmentEntries");
+        socket.emit("getTasks");
+        socket.emit("getTaskAccomplishmentYears");
 
         return () => {
             socket.off("yearsOfTaskAccomplishmentEntries");
@@ -92,7 +92,7 @@ export function UserCharts(props: Props) {
     useEffect(() => {
         let isYearSet = year !== 0;
         if (!isYearSet) return;
-        socket.emit("getTaskAccomplishmentEntriesInYear", { year: year, userIds: props.selectedUsers.getUserIds() });
+        socket.emit("getTaskAccomplishments", { year: year, userIds: props.selectedUsers.getUserIds() });
     }, [year])
 
     useEffect(() => {
@@ -102,7 +102,7 @@ export function UserCharts(props: Props) {
         let newCalendarWeekEnd = isCalendarWeekEndSet && isCalendarWeekEndWithingNewRange ? calendarWeekRange.end : latestCalendarWeek;
         setCalendarWeekRange({
             start: taskAccomplishments.getEarliestCalendarWeek(),
-            end: newCalendarWeekEnd ,
+            end: newCalendarWeekEnd,
         });
     }, [taskAccomplishments]);
 
@@ -190,9 +190,9 @@ export function UserCharts(props: Props) {
     )
 }
 
-function getValuesUntilUpperLimitStartingOne(upperLimit : number){
-    let values : number[] = [];
-    for(let i = 1; i <= upperLimit; i++){
+function getValuesUntilUpperLimitStartingOne(upperLimit: number) {
+    let values: number[] = [];
+    for (let i = 1; i <= upperLimit; i++) {
         values.push(i);
     }
     return values;

@@ -24,7 +24,7 @@ export default function TasksPresenter() {
             console.log(new Users(users));
             setState({ tasks: new Tasks(tasks), users: new Users(users) });
         });
-        socket.emit("getUsersAndTasksOfCurrentWeek");
+        socket.emit("getCurrentWeekData");
 
         return () => {
             socket.off("usersAndTasksOfCurrentWeek");

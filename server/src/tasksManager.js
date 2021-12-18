@@ -68,25 +68,25 @@ async function resetTaskAccomplishmentsOfCurrentWeek(io) {
 
 
 exports.setUpSocketListeners = async (io, socket) => {
-    socket.on('getActiveTaskEntries', async () => {
+    socket.on('getActiveTasks', async () => {
         let activeTaskEntries = await databaseManager.getActiveTaskEntries();
         socket.emit('activeTaskEntries', activeTaskEntries);
         logDivider();
     });
 
-    socket.on('getTaskEntries', async () => {
+    socket.on('getTasks', async () => {
         let taskEntries = await databaseManager.getTaskEntries();
         socket.emit('taskEntries', taskEntries);
         logDivider();
     });
 
-    socket.on('getTaskOccurenceEntries', async (data) => {
+    socket.on('getTaskOccurences', async (data) => {
         let taskOccurenceEntries = await databaseManager.getTaskOccurenceEntries(data.taskId);
         socket.emit('taskOccurenceEntries', taskOccurenceEntries);
         logDivider();
     });
 
-    socket.on('createTaskEntry', async (task) => {
+    socket.on('createTask', async (task) => {
         let taskId = await databaseManager.createTaskEntry(task.name, task.score, task.importance, task.weeklyOccurences);
         let isWeeklyRythmSet = task.week !== "";
         if (isWeeklyRythmSet) {
@@ -105,7 +105,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         await resetTaskAccomplishmentsOfCurrentWeek(io);
     });
 
-    socket.on('deleteTaskEntry', async (task) => {
+    socket.on('deleteTask', async (task) => {
         await databaseManager.deleteTaskEntry(task.id);
         let activeTaskEntries = await databaseManager.getActiveTaskEntries();
         socket.emit('activeTaskEntries', activeTaskEntries);
@@ -235,7 +235,7 @@ exports.setUpSocketListeners = async (io, socket) => {
     // });
 
 
-    socket.on('createUserEntry', async (data) => {
+    socket.on('createUser', async (data) => {
         let userId = await databaseManager.createUserEntry(data.name);
         await databaseManager.createScoresOverYearsEntry(userId, currentYear);
         let userEntries = await databaseManager.getUserEntries();
@@ -247,13 +247,13 @@ exports.setUpSocketListeners = async (io, socket) => {
         logDivider();
     });
 
-    socket.on('getUserEntries', async () => {
+    socket.on('getUsers', async () => {
         let userEntries = await databaseManager.getUserEntries();
         socket.emit("userEntries", userEntries);
         logDivider();
     });
 
-    socket.on('deleteUserEntry', async (data) => {
+    socket.on('deleteUser', async (data) => {
         await databaseManager.deleteUserEntry(data.id);
         let userEntries = await databaseManager.getUserEntries();
         socket.emit("userEntries", userEntries);
@@ -262,13 +262,13 @@ exports.setUpSocketListeners = async (io, socket) => {
         await resetTaskAccomplishmentsOfCurrentWeek(io);
     })
 
-    socket.on('getYearsOfTaskAccomplishmentEntries', async () => {
+    socket.on('getTaskAccomplishmentYears', async () => {
         let years = await databaseManager.getYearsOfTaskAccomplishmentEntries();
         socket.emit("yearsOfTaskAccomplishmentEntries", years);
         logDivider();
     });
 
-    socket.on('getTaskAccomplishmentEntriesInYear', async ({ year }) => {
+    socket.on('getTaskAccomplishments', async ({ year }) => {
         let taskAccomplishmentEntries = await databaseManager.getTaskAccomplishmentEntriesByYear(year);
         socket.emit("taskAccomplishmentEntries", taskAccomplishmentEntries);
         logDivider();
@@ -297,7 +297,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         logDivider();
     })
 
-    socket.on('getUsersAndTasksOfCurrentWeek', async () => {
+    socket.on('getCurrentWeekData', async () => {
         let res = await getTasksAndUsersOfCurrentWeek();
         socket.emit("usersAndTasksOfCurrentWeek", res);
         logDivider();

@@ -160,7 +160,7 @@ exports.setUpSocketListeners = async (io, socket) => {
     //     await resetTaskAccomplishmentsOfCurrentWeek(io);
     // });
 
-    socket.on('deleteTaskOccurenceEntryByWeek', async (data) => {
+    socket.on('deleteTaskOccurence', async (data) => {
         await databaseManager.deleteTaskOccurenceEntryByWeek(data.taskId, data.calendarWeek);
         let taskOccurenceEntries = await databaseManager.getTaskOccurenceEntries(data.taskId);
         socket.emit('taskOccurenceEntries', taskOccurenceEntries);

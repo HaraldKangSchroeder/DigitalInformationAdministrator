@@ -48,7 +48,7 @@ export function TaskCalendarWeekEntry(props: Props) {
 
     const handleOnClick = () => {
         if (isTaskWeek) {
-            socket.emit("deleteTaskOccurenceEntryByWeek", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek });
+            socket.emit("deleteTaskOccurence", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek });
             return;
         }
         socket.emit("createTaskOccurence", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek });

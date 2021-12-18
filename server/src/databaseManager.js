@@ -91,6 +91,13 @@ exports.createTaskOccurenceEntriesWithWeeksAndDay = async (taskId, weeklyRythm, 
     }
 }
 
+exports.createTaskOccurences = async (taskId, weeklyRythm, dayOfWeek) => {
+    let weeks = getWeeksOfWeeklyRythm(weeklyRythm);
+    for (let week of weeks) {
+        await createTaskOccurenceEntryWithWeekAndDay(taskId, week, dayOfWeek);
+    }
+}
+
 exports.updateTaskOccurenceEntryWithWeekAndDay = async (taskId, week, dayOfWeek) => {
     try {
         let queryText = `UPDATE ${TABLE_TASKS_OCCURENCES} SET day_of_week = $3 WHERE id = $1 AND calendar_week = $2;`;

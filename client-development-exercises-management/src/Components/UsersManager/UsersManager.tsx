@@ -27,7 +27,7 @@ function UsersManager() {
     }, [])
 
     useEffect(() => {
-        let updatedSelectedUsers = getUpdatedSelectedUsers(users,selectedUsers);
+        let updatedSelectedUsers = getUpdatedSelectedUsers(users, selectedUsers);
         setSelectedUsers(updatedSelectedUsers);
     }, [users])
 
@@ -52,9 +52,9 @@ function UsersManager() {
         setSelectedUsers(selectedUsersCopy);
     }
 
-    const changeSelectedUserName = (newName : string) => {
-        if(!selectedUsers.containsExactlyOneUser()) return;
-        socket.emit("updateUserEntryWithName",{userId:selectedUsers.getList()[0].getId(), newName:newName});
+    const changeSelectedUserName = (name: string) => {
+        if (!selectedUsers.containsExactlyOneUser()) return;
+        socket.emit("updateUser", { id: selectedUsers.getList()[0].getId(), name: name });
     }
 
     return (
@@ -82,7 +82,7 @@ function UsersManager() {
                         />
                     </Grid>
                     <Grid item xs={4}>
-                        <DialogChangeEntityName 
+                        <DialogChangeEntityName
                             disabled={!selectedUsers.containsExactlyOneUser()}
                             entityName={selectedUsers.containsExactlyOneUser() ? selectedUsers.getList()[0].getName() : ""}
                             entityType="User"

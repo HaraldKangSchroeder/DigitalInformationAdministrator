@@ -104,6 +104,33 @@ exports.updateTaskOccurenceEntryWithWeekAndDay = async (taskId, week, dayOfWeek)
     }
 }
 
+exports.getUser = async (id) => {
+    try {
+        let queryText = `SELECT id, name FROM ${TABLE_USERS} WHERE id = $1`;
+        let queryValues = [id];
+        let { rows } = await pool.query(queryText, queryValues);
+        console.log(`getUser : get user by id ${id}`);
+        return rows[0];
+    }
+    catch (e) {
+        console.error(e);
+        console.log(`getUser : failed to get user by id ${id}`);
+    }
+}
+
+exports.updateUser = async (user) => {
+    try {
+        let queryText = `UPDATE ${TABLE_USERS} SET name = $2 WHERE id = $1`;
+        let queryValues = [user.id, user.name];
+        await pool.query(queryText, queryValues);
+        console.log(`updateUser`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`updateUser`);
+    }
+}
+
 exports.updateTaskEntryWithName = async (taskId, newName) => {
     try {
         let queryText = `UPDATE ${TABLE_TASKS} SET label = $2 WHERE id = $1;`;

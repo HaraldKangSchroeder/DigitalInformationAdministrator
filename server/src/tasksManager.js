@@ -256,15 +256,28 @@ exports.setUpSocketListeners = async (io, socket) => {
         logDivider();
     });
 
-    socket.on('updateUserEntryWithName', async ({ userId, newName }) => {
-        await databaseManager.updateUserEntryWithName(userId, newName);
+    // socket.on('updateUserEntryWithName', async ({ userId, newName }) => {
+    //     await databaseManager.updateUserEntryWithName(userId, newName);
+    //     let userEntries = await databaseManager.getUserEntries();
+    //     socket.emit("userEntries", userEntries);
+    //     logDivider();
+    //     let res = await getTasksAndUsersOfCurrentWeek();
+    //     io.emit("usersAndTasksOfCurrentWeek", res);
+    //     logDivider();
+    // });
+
+    socket.on('updateUser', async (data) => {
+        let user = await databaseManager.getUser(data.id);
+        if (data.name) user.name = data.name;
+        await databaseManager.updateUser(user);
+
         let userEntries = await databaseManager.getUserEntries();
         socket.emit("userEntries", userEntries);
         logDivider();
         let res = await getTasksAndUsersOfCurrentWeek();
         io.emit("usersAndTasksOfCurrentWeek", res);
         logDivider();
-    });
+    })
 
     socket.on('getUsersAndTasksOfCurrentWeek', async () => {
         let res = await getTasksAndUsersOfCurrentWeek();

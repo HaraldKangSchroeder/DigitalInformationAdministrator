@@ -9,7 +9,7 @@ let interval = null;
 let currentYear = 0;
 let currentWeek = 0;
 
-exports.startUpdateTaskAccomplishments = async (io) => {
+exports.startFrequentUpdates = async (io) => {
     let isNewWeek = updateCurrentDates();
     if (isNewWeek) await updateScoresOverYears();
     await updateTaskaccomplishments(io);
@@ -37,13 +37,13 @@ async function updateScoresOverYears() {
     let firstWeekOfYear = 1;
     if (currentWeek === firstWeekOfYear) {
         let previousYear = currentYear - 1;
-        await databaseManager.updateScoresOfYear(previousYear, 100); //100 is just a value above the max. number of weeks within a year (just to include all weeks)
-        await databaseManager.createScoresEntriesForYear(currentYear);
+        await databaseManager.updateYearlyScores(previousYear, 100); //100 is just a value above the max. number of weeks within a year (just to include all weeks)
+        await databaseManager.createYearlyScoresEntries(currentYear);
     }
     else {
         // Note : using the previous week is necessary when restarting the app (else, it will include points of the current week which should be only added after the weekend) 
         let previousWeek = currentWeek - 1;
-        await databaseManager.updateScoresOfYear(currentYear, previousWeek);
+        await databaseManager.updateYearlyScores(currentYear, previousWeek);
     }
 }
 
@@ -61,10 +61,7 @@ async function updateTaskaccomplishments(io) {
     logDivider();
 }
 
-async function resetTaskAccomplishmentsOfCurrentWeek(io) {
-    await databaseManager.deleteTaskAccomplishmentEntriesByWeekAndYear(currentWeek, currentYear);
-    await updateTaskaccomplishments(io);
-}
+
 
 
 exports.setUpSocketListeners = async (io, socket) => {
@@ -119,6 +116,10 @@ exports.setUpSocketListeners = async (io, socket) => {
         // emit all active tasks
         let activeTaskEntries = await databaseManager.getActiveTaskEntries();
         socket.emit('activeTaskEntries', activeTaskEntries);
+        logDivider();
+
+        let res = await getTasksAndUsersOfCurrentWeek();
+        io.emit("usersAndTasksOfCurrentWeek", res);
         logDivider();
     });
 
@@ -307,6 +308,11 @@ exports.setUpSocketListeners = async (io, socket) => {
     //     io.emit("usersAndTasksOfCurrentWeek", res);
     //     logDivider();
     // });
+}
+
+async function resetTaskAccomplishmentsOfCurrentWeek(io) {
+    await databaseManager.deleteTaskAccomplishmentEntriesByWeekAndYear(currentWeek, currentYear);
+    await updateTaskaccomplishments(io);
 }
 
 async function getTasksAndUsersOfCurrentWeek() {

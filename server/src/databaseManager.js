@@ -613,7 +613,7 @@ exports.updateTaskAccomplishmentEntryWithUserId = async (id, userId) => {
     }
 }
 
-exports.createScoresEntriesForYear = async (year) => {
+exports.createYearlyScoresEntries = async (year) => {
     try {
         let users = await this.getUserEntries();
         for (let user of users) {
@@ -626,11 +626,11 @@ exports.createScoresEntriesForYear = async (year) => {
     }
     catch (e) {
         console.error(e);
-        console.error(`createScoresEntriesForYear ${year} failed`);
+        console.error(`createYearlyScoresEntries ${year} failed`);
     }
 }
 
-exports.updateScoresOfYear = async (year, calendarWeekUntilScoreIsComputed) => {
+exports.updateYearlyScores = async (year, calendarWeekUntilScoreIsComputed) => {
     try {
         let users = await this.getUserEntries();
         for (let user of users) {
@@ -655,7 +655,7 @@ exports.updateScoresOfYear = async (year, calendarWeekUntilScoreIsComputed) => {
     }
     catch (e) {
         console.error(e);
-        console.error(`updateScoresOfYear for year ${year} failed`);
+        console.error(`updateYearlyScores for year ${year} failed`);
     }
 }
 

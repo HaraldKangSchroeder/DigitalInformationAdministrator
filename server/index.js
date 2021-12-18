@@ -45,7 +45,7 @@ async function setup() {
         });
     }
 
-    tasksManager.startUpdateTaskAccomplishments(io);
+    tasksManager.startFrequentUpdates(io);
     weatherManager.startUpdateWeatherData(io);
 
     io.on("connection", (socket) => {

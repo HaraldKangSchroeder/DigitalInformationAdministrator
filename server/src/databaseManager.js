@@ -104,6 +104,19 @@ exports.updateTaskOccurenceEntryWithWeekAndDay = async (taskId, week, dayOfWeek)
     }
 }
 
+exports.updateTaskOccurence = async (taskOccurence) => {
+    try {
+        let queryText = `UPDATE ${TABLE_TASKS_OCCURENCES} SET day_of_week = $3 WHERE id = $1 AND calendar_week = $2;`;
+        let queryValues = [taskOccurence.taskId, taskOccurence.calendarWeek, taskOccurence.dayOfWeek];
+        await pool.query(queryText, queryValues);
+        console.log(`updateTaskOccurence : Updated to row(${taskOccurence.taskId},${taskOccurence.calendarWeek},${taskOccurence.dayOfWeek}) in table ${TABLE_TASKS_OCCURENCES}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`updateTaskOccurence : Error`);
+    }
+}
+
 exports.getUser = async (id) => {
     try {
         let queryText = `SELECT id, name FROM ${TABLE_USERS} WHERE id = $1`;
@@ -301,6 +314,23 @@ exports.getTaskOccurenceEntries = async (taskId) => {
         return null;
     }
 }
+
+
+exports.getTaskOccurence = async (taskId, calendarWeek) => {
+    try {
+        let queryText = `SELECT id as "taskId", calendar_week AS "calendarWeek", day_of_week AS "dayOfWeek" FROM ${TABLE_TASKS_OCCURENCES} WHERE id = $1 AND calendar_week = $2;`;
+        let queryValues = [taskId, calendarWeek];
+        let { rows } = await pool.query(queryText, queryValues);
+        console.log(`getTaskOccurence by taskId ${taskId} and ${calendarWeek}`);
+        return rows[0];
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`getTaskOccurence : Error`);
+        return null;
+    }
+}
+
 
 exports.getTaskOccurenceEntriesOfWeek = async (week) => {
     try {

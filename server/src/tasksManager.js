@@ -141,14 +141,24 @@ exports.setUpSocketListeners = async (io, socket) => {
     //     await resetTaskAccomplishmentsOfCurrentWeek(io);
     // });
 
-    socket.on('updateTaskOccurenceEntryByRemovingDayOfWeek', async (data) => {
-        await databaseManager.updateTaskOccurenceEntryWithWeekAndDay(data.taskId, data.calendarWeek, null);
+    socket.on('updateTaskOccurence', async (data) => {
+        let taskOccurence = await databaseManager.getTaskOccurence(data.taskId, data.calendarWeek);
+        taskOccurence.dayOfWeek = data.dayOfWeek; //null if not set
+        await databaseManager.updateTaskOccurence(taskOccurence);
+
         let taskOccurenceEntries = await databaseManager.getTaskOccurenceEntries(data.taskId);
         socket.emit('taskOccurenceEntries', taskOccurenceEntries);
         logDivider();
-
-        await resetTaskAccomplishmentsOfCurrentWeek(io);
     });
+
+    // socket.on('updateTaskOccurenceEntryByRemovingDayOfWeek', async (data) => {
+    //     await databaseManager.updateTaskOccurenceEntryWithWeekAndDay(data.taskId, data.calendarWeek, null);
+    //     let taskOccurenceEntries = await databaseManager.getTaskOccurenceEntries(data.taskId);
+    //     socket.emit('taskOccurenceEntries', taskOccurenceEntries);
+    //     logDivider();
+
+    //     await resetTaskAccomplishmentsOfCurrentWeek(io);
+    // });
 
     socket.on('deleteTaskOccurenceEntryByWeek', async (data) => {
         await databaseManager.deleteTaskOccurenceEntryByWeek(data.taskId, data.calendarWeek);

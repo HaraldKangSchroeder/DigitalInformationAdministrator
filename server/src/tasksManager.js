@@ -114,27 +114,35 @@ exports.setUpSocketListeners = async (io, socket) => {
         await resetTaskAccomplishmentsOfCurrentWeek(io);
     });
 
-    socket.on('createTaskOccurenceEntryWithWeekAndDay', async (data) => {
-        await databaseManager.deleteTaskOccurenceEntryByWeek(data.taskId, data.calendarWeek);
-        await databaseManager.createTaskOccurenceEntryWithWeekAndDay(data.taskId, data.calendarWeek, data.dayOfWeek);
+    socket.on('createTaskOccurence', async (data) => {
+        await databaseManager.createTaskOccurence(data.taskId, data.calendarWeek, data.dayOfWeek);
+        console.log("CREATE TASK OCCURENCE");
         let taskOccurenceEntries = await databaseManager.getTaskOccurenceEntries(data.taskId);
         socket.emit('taskOccurenceEntries', taskOccurenceEntries);
         logDivider();
-
-        await resetTaskAccomplishmentsOfCurrentWeek(io);
     });
+
+    // socket.on('createTaskOccurenceEntryWithWeekAndDay', async (data) => {
+    //     await databaseManager.deleteTaskOccurenceEntryByWeek(data.taskId, data.calendarWeek);
+    //     await databaseManager.createTaskOccurenceEntryWithWeekAndDay(data.taskId, data.calendarWeek, data.dayOfWeek);
+    //     let taskOccurenceEntries = await databaseManager.getTaskOccurenceEntries(data.taskId);
+    //     socket.emit('taskOccurenceEntries', taskOccurenceEntries);
+    //     logDivider();
+
+    //     await resetTaskAccomplishmentsOfCurrentWeek(io);
+    // });
+
+    // socket.on('createTaskOccurenceEntryWithWeek', async (data) => {
+    //     await databaseManager.createTaskOccurenceEntryWithWeek(data.taskId, data.calendarWeek);
+    //     let taskOccurenceEntries = await databaseManager.getTaskOccurenceEntries(data.taskId);
+    //     socket.emit('taskOccurenceEntries', taskOccurenceEntries);
+    //     logDivider();
+
+    //     await resetTaskAccomplishmentsOfCurrentWeek(io);
+    // });
 
     socket.on('updateTaskOccurenceEntryByRemovingDayOfWeek', async (data) => {
         await databaseManager.updateTaskOccurenceEntryWithWeekAndDay(data.taskId, data.calendarWeek, null);
-        let taskOccurenceEntries = await databaseManager.getTaskOccurenceEntries(data.taskId);
-        socket.emit('taskOccurenceEntries', taskOccurenceEntries);
-        logDivider();
-
-        await resetTaskAccomplishmentsOfCurrentWeek(io);
-    });
-
-    socket.on('createTaskOccurenceEntryWithWeek', async (data) => {
-        await databaseManager.createTaskOccurenceEntryWithWeek(data.taskId, data.calendarWeek);
         let taskOccurenceEntries = await databaseManager.getTaskOccurenceEntries(data.taskId);
         socket.emit('taskOccurenceEntries', taskOccurenceEntries);
         logDivider();

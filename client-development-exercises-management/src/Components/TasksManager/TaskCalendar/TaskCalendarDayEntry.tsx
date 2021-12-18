@@ -33,28 +33,28 @@ const useStyle = makeStyles({
 });
 
 interface Props {
-    selectedTaskId : number;
-    calendarWeek : number;
-    dayOfWeek : number;
-    dayOfMonth : number;
-    taskOccurences : TaskOccurences;
+    selectedTaskId: number;
+    calendarWeek: number;
+    dayOfWeek: number;
+    dayOfMonth: number;
+    taskOccurences: TaskOccurences;
 }
 
-export function TaskCalendarDayEntry(props : Props) {
+export function TaskCalendarDayEntry(props: Props) {
     const [isTaskDay, setIsTaskDay] = useState(props.calendarWeek != null && props.taskOccurences.containsWeekAndDay(props.calendarWeek, props.dayOfWeek));
 
     useEffect(() => {
         let isCalendarWeekExistent = props.calendarWeek != null;
-        let isTaskOccurentOnCalendarWeekAndDay = props.taskOccurences.containsWeekAndDay(props.calendarWeek,props.dayOfWeek);
+        let isTaskOccurentOnCalendarWeekAndDay = props.taskOccurences.containsWeekAndDay(props.calendarWeek, props.dayOfWeek);
         setIsTaskDay(isCalendarWeekExistent && isTaskOccurentOnCalendarWeekAndDay);
     }, [props.calendarWeek, props.taskOccurences, props.dayOfWeek]);
 
-    const handleOnClick = (e : any) => {
+    const handleOnClick = (e: any) => {
         if (isTaskDay) {
             socket.emit("updateTaskOccurenceEntryByRemovingDayOfWeek", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek });
             return;
         }
-        socket.emit("createTaskOccurenceEntryWithWeekAndDay", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek, dayOfWeek: props.dayOfWeek });
+        socket.emit("createTaskOccurence", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek, dayOfWeek: props.dayOfWeek });
     }
 
     const classes = useStyle();

@@ -170,6 +170,19 @@ exports.updateTaskEntryWithImportance = async (taskId, newImportance) => {
     }
 }
 
+exports.createTaskOccurence = async (taskId, calendarWeek, dayOfWeek) => {
+    try {
+        let queryText = `INSERT INTO ${TABLE_TASKS_OCCURENCES} VALUES ($1,$2,$3);`;
+        let queryValues = [taskId, calendarWeek, dayOfWeek];
+        await pool.query(queryText, queryValues);
+        console.log(`createTaskOccurence : Added entry(${taskId},${calendarWeek},${dayOfWeek}) to table ${TABLE_TASKS_OCCURENCES}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`createTaskOccurence : Error when tried to add entry(${taskId} , ${calendarWeek}, ${dayOfWeek})`);
+    }
+}
+
 exports.updateTaskEntryWithWeeklyOccurence = async (taskId, newWeeklyOccurences) => {
     try {
         let queryText = `UPDATE ${TABLE_TASKS} SET weekly_occurences = $2 WHERE id = $1;`;

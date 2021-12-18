@@ -33,12 +33,12 @@ const useStyle = makeStyles({
 });
 
 interface Props {
-    selectedTaskId : number;
-    calendarWeek : number;
-    taskOccurences : TaskOccurences;
+    selectedTaskId: number;
+    calendarWeek: number;
+    taskOccurences: TaskOccurences;
 }
 
-export function TaskCalendarWeekEntry(props : Props) {
+export function TaskCalendarWeekEntry(props: Props) {
     const [isTaskWeek, setIsTaskWeek] = useState(props.taskOccurences.containsWeek(props.calendarWeek));
 
     useEffect(() => {
@@ -51,7 +51,7 @@ export function TaskCalendarWeekEntry(props : Props) {
             socket.emit("deleteTaskOccurenceEntryByWeek", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek });
             return;
         }
-        socket.emit("createTaskOccurenceEntryWithWeek", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek });
+        socket.emit("createTaskOccurence", { taskId: props.selectedTaskId, calendarWeek: props.calendarWeek });
     };
 
     const classes = useStyle();

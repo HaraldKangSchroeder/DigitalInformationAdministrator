@@ -50,9 +50,9 @@ export function TasksManager() {
         setSelectedTask(null);
     }
 
-    const changeSelectedTaskName = (newName : string) => {
+    const changeSelectedTaskName = (label: string) => {
         if (selectedTask == null) return;
-        socket.emit("updateTaskEntryWithName",{taskId:selectedTask.getId(), newName:newName});
+        socket.emit("updateTask", { id: selectedTask.getId(), label: label });
     }
 
     let selectedTasks = new Tasks(null);
@@ -94,11 +94,11 @@ export function TasksManager() {
                             disabled={!isTaskSelected}
                         /> */}
 
-                        <DialogChangeEntityName 
-                            entityName = {isTaskSelected ? selectedTask.getLabel() : ""}
-                            entityType = "Task"
-                            changeEntityName = {changeSelectedTaskName}
-                            disabled = {!isTaskSelected}
+                        <DialogChangeEntityName
+                            entityName={isTaskSelected ? selectedTask.getLabel() : ""}
+                            entityType="Task"
+                            changeEntityName={changeSelectedTaskName}
+                            disabled={!isTaskSelected}
                         />
                     </Grid>
                 </Grid>

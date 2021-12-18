@@ -24,11 +24,11 @@ const useStyles = makeStyles({
 })
 
 interface Props {
-    selectedTask : Task;
+    selectedTask: Task;
 }
 
 
-export function TaskInformation(props : Props) {
+export function TaskInformation(props: Props) {
     const [taskOccurences, setTaskOccurences] = useState(new TaskOccurences());
 
     useEffect(() => {
@@ -60,7 +60,7 @@ export function TaskInformation(props : Props) {
                     <DialogChangeTaskValue
                         menuItems={MENU_ITEMS_WEEKLY_OCCURENCES}
                         type="Weekly Occurence"
-                        messageId="updateTaskEntryWithWeeklyOccurence"
+                        k="weeklyOccurences"
                         selectedTask={props.selectedTask}
                     />
                 </div>
@@ -71,7 +71,7 @@ export function TaskInformation(props : Props) {
                     <DialogChangeTaskValue
                         menuItems={MENU_ITEMS_SCORES}
                         type="Score"
-                        messageId="updateTaskEntryWithScore"
+                        k="score"
                         selectedTask={props.selectedTask}
                     />
                 </div>
@@ -82,7 +82,7 @@ export function TaskInformation(props : Props) {
                     <DialogChangeTaskValue
                         menuItems={MENU_ITEMS_IMPORTANCES}
                         type="Importance"
-                        messageId="updateTaskEntryWithImportance"
+                        k="importance"
                         selectedTask={props.selectedTask}
                     />
                 </div>

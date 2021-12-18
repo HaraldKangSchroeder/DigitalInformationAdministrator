@@ -209,6 +209,33 @@ exports.getActiveTaskEntries = async () => {
     }
 }
 
+exports.getTask = async (id) => {
+    try {
+        let queryText = `SELECT id, label, score, importance, weekly_occurences AS "weeklyOccurences", active FROM ${TABLE_TASKS} WHERE id = $1`;
+        let queryValues = [id];
+        let { rows } = await pool.query(queryText, queryValues);
+        console.log(`getTaskEntry by id ${id}`)
+        return rows[0];
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`getTaskEntry : Error when trying to fetch task entry by id ${id}`);
+    }
+}
+
+exports.updateTask = async (task) => {
+    try {
+        let queryText = `UPDATE ${TABLE_TASKS} SET label = $2, score = $3, importance = $4, weekly_occurences = $5, active = $6 WHERE id = $1`;
+        let queryValues = [task.id, task.label, task.score, task.importance, task.weeklyOccurences, task.active];
+        await pool.query(queryText, queryValues);
+        console.log(`updateTask`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`updateTask : Error`);
+    }
+}
+
 exports.getTaskEntries = async () => {
     try {
         let { rows } = await pool.query(`SELECT id, label, score, importance, weekly_occurences AS "weeklyOccurences", active FROM ${TABLE_TASKS} ORDER BY label;`);
@@ -512,7 +539,7 @@ exports.updateTaskAccomplishmentEntryWithUserId = async (id, userId) => {
 exports.createScoresEntriesForYear = async (year) => {
     try {
         let users = await this.getUserEntries();
-        for(let user of users) {
+        for (let user of users) {
             let queryText = `
                 INSERT INTO ${TABLE_SCORES_OVER_YEARS} VALUES ($1,$2,0)
             `;
@@ -526,7 +553,7 @@ exports.createScoresEntriesForYear = async (year) => {
     }
 }
 
-exports.updateScoresOfYear = async (year,calendarWeekUntilScoreIsComputed) => {
+exports.updateScoresOfYear = async (year, calendarWeekUntilScoreIsComputed) => {
     try {
         let users = await this.getUserEntries();
         for (let user of users) {

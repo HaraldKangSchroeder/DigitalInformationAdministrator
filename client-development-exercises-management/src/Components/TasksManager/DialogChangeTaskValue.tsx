@@ -33,7 +33,7 @@ const useStyles = makeStyles({
 });
 
 interface Props {
-    messageId: string;
+    k: string;
     selectedTask: Task;
     type: string;
     menuItems: any[];
@@ -53,7 +53,8 @@ export function DialogChangeTaskValue(props: Props) {
     }
 
     const handleSubmit = () => {
-        socket.emit(props.messageId, { taskId: props.selectedTask.getId(), newValue: newValue });
+        console.log(props.k);
+        socket.emit("updateTask", { id: props.selectedTask.getId(), [props.k]: newValue });
         setNewValue("");
         setIsDialogOpen(false);
     }

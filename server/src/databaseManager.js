@@ -600,7 +600,7 @@ const createTaskAccomplishmentEntry = async (taskAccomplishment) => {
     }
 }
 
-exports.updateTaskAccomplishmentEntryWithUserId = async (id, userId) => {
+exports.updateTaskAccomplishment = async (id, userId) => {
     try {
         let queryText = `
             UPDATE ${TABLE_TASK_ACCOMPLISHMENTS} SET user_id = $2 WHERE id = $1;

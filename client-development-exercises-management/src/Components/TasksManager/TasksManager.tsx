@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { EntitiesSelection } from "../EntitiesSelection";
 import { DialogEntityDeletion } from "../DialogEntityDeletion";
 import { DialogCreateTask } from "./DialogCreateTask";
-import { DialogChangeTaskWeeklyRythm } from "./DialogChangeTaskWeeklyRythm";
 import { TaskInformation } from "./TaskInformation";
 import Grid from '@material-ui/core/Grid';
 import socket from "../../socket";
@@ -84,16 +83,6 @@ export function TasksManager() {
                         />
                     </Grid>
                     <Grid item xs={4}>
-                        {/* <DialogChangeTaskWeeklyRythm
-                            disabled={!isTaskSelected}
-                            selectedTask={selectedTask}
-                        />
-                         */}
-                        {/* <DialogChangeTaskName
-                            selectedTask={selectedTask}
-                            disabled={!isTaskSelected}
-                        /> */}
-
                         <DialogChangeEntityName
                             entityName={isTaskSelected ? selectedTask.getLabel() : ""}
                             entityType="Task"

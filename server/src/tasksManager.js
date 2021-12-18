@@ -216,24 +216,6 @@ exports.setUpSocketListeners = async (io, socket) => {
     //     await resetTaskAccomplishmentsOfCurrentWeek(io);
     // });
 
-    socket.on('updateTaskWeeklyRythm', async (data) => {
-        await databaseManager.deleteAllTaskOccurenceEntriesOfTask(data.taskId);
-        let isWeeklyRythmSet = data.weeklyRythm !== "";
-        if (isWeeklyRythmSet) {
-            let isDaySet = data.dayOfWeek !== "";
-            if (isDaySet) {
-                await databaseManager.createTaskOccurenceEntriesWithWeeksAndDay(data.taskId, data.weeklyRythm, data.dayOfWeek);
-            }
-            else {
-                await databaseManager.createTaskOccurenceEntriesWithWeeks(data.taskId, data.weeklyRythm);
-            }
-        }
-        let taskOccurenceEntries = await databaseManager.getTaskOccurenceEntries(data.taskId);
-        socket.emit('taskOccurenceEntries', taskOccurenceEntries);
-        logDivider();
-
-        await resetTaskAccomplishmentsOfCurrentWeek(io);
-    });
 
     socket.on('createUserEntry', async (data) => {
         let userId = await databaseManager.createUserEntry(data.name);

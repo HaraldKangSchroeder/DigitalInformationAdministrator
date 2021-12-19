@@ -60,13 +60,13 @@ export function UserCharts(props: Props) {
             setYears(yearsArray);
         });
 
-        socket.on("taskAccomplishmentEntries", (taskAccomplishmentEntries) => {
+        socket.on("taskAccomplishments", (taskAccomplishmentEntries) => {
             if (taskAccomplishmentEntries.length == 0) return;
             let newTaskAccomplishments = new TaskAccomplishments(taskAccomplishmentEntries);
             setTaskAccomplishments(newTaskAccomplishments);
         });
 
-        socket.on("taskEntries", (taskEntries) => {
+        socket.on("tasks", (taskEntries) => {
             if (taskEntries.length == 0) return;
             let newTasks = new Tasks(taskEntries);
             setTasks(newTasks);
@@ -77,8 +77,8 @@ export function UserCharts(props: Props) {
 
         return () => {
             socket.off("taskAccomplishmentYears");
-            socket.off("taskAccomplishmentEntries");
-            socket.off("taskEntries");
+            socket.off("taskAccomplishments");
+            socket.off("tasks");
         }
     }, [])
 

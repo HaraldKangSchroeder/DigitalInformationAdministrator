@@ -16,13 +16,13 @@ function UsersManager() {
 
     useEffect(() => {
         socket.connect();
-        socket.on("userEntries", (userEntries) => {
+        socket.on("users", (userEntries) => {
             setUsers(new Users(userEntries));
         });
         socket.emit("getUsers");
 
         return () => {
-            socket.off("userEntries");
+            socket.off("users");
         }
     }, [])
 

@@ -485,7 +485,7 @@ exports.createTaskAccomplishments = async (taskAccomplishments) => {
 const createTaskAccomplishment = async (taskAccomplishment) => {
     try {
         let queryText = `
-            INSERT INTO ${TABLE_TASK_ACCOMPLISHMENTS}  (task_id,task_label,importance,user_id,calendar_week,year,score,day_of_week) VALUES ($1,$2,$3,$4,$5,$6,$7,$8);
+            INSERT INTO ${TABLE_TASK_ACCOMPLISHMENTS}  (task_id,label,importance,user_id,calendar_week,year,score,day_of_week) VALUES ($1,$2,$3,$4,$5,$6,$7,$8);
         `;
         let queryValues = [
             taskAccomplishment.taskId,

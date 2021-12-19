@@ -32,12 +32,12 @@ export function TaskInformation(props: Props) {
     const [taskOccurences, setTaskOccurences] = useState(new TaskOccurences());
 
     useEffect(() => {
-        socket.on("taskOccurenceEntries", (taskOccurenceEntries) => {
+        socket.on("taskOccurences", (taskOccurenceEntries) => {
             let newTaskOccurences = new TaskOccurences(taskOccurenceEntries);
             setTaskOccurences(newTaskOccurences);
         })
         return () => {
-            socket.off("taskOccurenceEntries");
+            socket.off("taskOccurences");
         }
     }, [])
 

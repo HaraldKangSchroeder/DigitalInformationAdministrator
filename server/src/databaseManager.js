@@ -376,9 +376,32 @@ exports.getTaskAccomplishmentYears = async () => {
 }
 
 exports.getTaskAccomplishment = async (id) => {
-    // TODO
-    logDivider();
-    return { score: 5 };
+    try {
+        let queryText = `
+            SELECT 
+                "ta".id,
+                "ta".task_id AS "taskId",
+                "ta".user_id AS "userId",
+                "ta".calendar_week AS "calendarWeek",
+                "ta".year,
+                "ta".importance,
+                "ta".score,
+                "ta".label,
+                "ta".day_of_week AS "dayOfWeek"
+            FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS "ta" 
+            WHERE "ta".id = $1;
+        `;
+        let queryValues = [id];
+        let { rows } = await pool.query(queryText, queryValues);
+        console.log(`getTaskAccomplishment`);
+        logDivider();
+        return rows;
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`getTaskAccomplishment : failed`);
+        logDivider();
+    }
 }
 
 
@@ -430,13 +453,13 @@ exports.getTaskAccomplishmentsOfWeekInYear = async (week, year) => {
         `;
         let queryValues = [week, year];
         let { rows } = await pool.query(queryText, queryValues);
-        console.log(`getPendingTasks : get pending Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
+        console.log(`getTaskAccomplishmentsOfWeekInYear : get pending Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
         logDivider();
         return rows;
     }
     catch (e) {
         console.error(e);
-        console.error(`getPendingTasks : failed to get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
+        console.error(`getTaskAccomplishmentsOfWeekInYear : failed to get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
         logDivider();
     }
 }
@@ -479,11 +502,11 @@ const createTaskAccomplishment = async (taskAccomplishment) => {
             taskAccomplishment.dayOfWeek
         ];
         await pool.query(queryText, queryValues);
-        console.log(`createTaskAccomplishmentEntry : added taskAccomplishment ${taskAccomplishment}`);
+        console.log(`createTaskAccomplishment : added taskAccomplishment ${taskAccomplishment}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`createTaskAccomplishmentEntry : Failed to add taskAccomplishment ${taskAccomplishment}`);
+        console.error(`createTaskAccomplishment : Failed to add taskAccomplishment ${taskAccomplishment}`);
     }
     logDivider();
 }
@@ -515,36 +538,6 @@ exports.updateYearlyScore = async (year, userId, scoreChange) => {
     }
     catch (e) {
         console.error(e);
-    }
-    logDivider();
-}
-
-exports.updateYearlyScores = async (year, calendarWeekUntilScoreIsComputed) => {
-    try {
-        let users = await this.getUsers();
-        for (let user of users) {
-            let queryText = `
-                UPDATE ${TABLE_SCORES_OVER_YEARS} 
-                SET score = 
-                    (
-                        SELECT 
-                            COALESCE(sum((
-                                SELECT "t".score 
-                                    FROM ${TABLE_TASKS} AS t 
-                                    WHERE "t".id = "ta".task_id
-                            )), 0)
-                        FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS ta 
-                        WHERE "ta".user_id = $1 AND "ta".year = $2 AND "ta".calendar_week <= $3
-                    )
-                WHERE user_id = $1 AND year = $2
-            `;
-            let queryValues = [user.id, year, calendarWeekUntilScoreIsComputed];
-            await pool.query(queryText, queryValues);
-        }
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`updateYearlyScores for year ${year} failed`);
     }
     logDivider();
 }

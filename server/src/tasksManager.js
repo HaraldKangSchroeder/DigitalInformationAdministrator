@@ -34,7 +34,7 @@ async function updateTaskaccomplishments(io) {
             let taskAccomplishments = createTasksAccomplishments(taskOccurencesOfCurrentWeek, tasks, currentYear);
             await databaseManager.createTaskAccomplishments(taskAccomplishments);
         }
-        let res = await getTasksAndUsersOfCurrentWeek();
+        let res = await getCurrentWeekData();
         io.emit("usersAndTasksOfCurrentWeek", res);
     }
     catch (e) {
@@ -88,7 +88,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         let activeTasks = await databaseManager.getActiveTasks();
         socket.emit('activeTasks', activeTasks);
 
-        let res = await getTasksAndUsersOfCurrentWeek();
+        let res = await getCurrentWeekData();
         io.emit("usersAndTasksOfCurrentWeek", res);
     });
 
@@ -136,7 +136,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         if (newUserId != null) databaseManager.updateYearlyScore(newUserId, score);
         if (oldUserId != null) databaseManager.updateYearlyScore(oldUserId, -score);
 
-        let res = await getTasksAndUsersOfCurrentWeek();
+        let res = await getCurrentWeekData();
         io.emit("usersAndTasksOfCurrentWeek", res);
     });
 
@@ -158,7 +158,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         let users = await databaseManager.getUsers();
         socket.emit("users", users);
 
-        let res = await getTasksAndUsersOfCurrentWeek();
+        let res = await getCurrentWeekData();
         io.emit("usersAndTasksOfCurrentWeek", res);
     });
 
@@ -176,14 +176,14 @@ exports.setUpSocketListeners = async (io, socket) => {
         let users = await databaseManager.getUsers();
         socket.emit("users", users);
 
-        let res = await getTasksAndUsersOfCurrentWeek();
+        let res = await getCurrentWeekData();
         io.emit("usersAndTasksOfCurrentWeek", res);
     });
 
     /*-----------------------------------------------------------------*/
 
     socket.on('getCurrentWeekData', async () => {
-        let res = await getTasksAndUsersOfCurrentWeek();
+        let res = await getCurrentWeekData();
         socket.emit("usersAndTasksOfCurrentWeek", res);
     });
 }
@@ -194,7 +194,7 @@ async function resetTaskAccomplishmentsOfCurrentWeek(io) {
     await updateTaskaccomplishments(io);
 }
 
-async function getTasksAndUsersOfCurrentWeek() {
+async function getCurrentWeekData() {
     let taskAccomplishments = await databaseManager.getTaskAccomplishmentsOfWeekInYear(currentWeek, currentYear);
     let users = await databaseManager.getUsersWithScore(currentWeek, currentYear);
     // iterate overall user and add weeklyScore on year score, because year score does not include current week

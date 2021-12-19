@@ -1,4 +1,5 @@
 const pg = require("pg");
+const { logDivider } = require("./utils");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -24,11 +25,13 @@ exports.createConnection = async () => {
             console.log("Try to connect to DB");
             await pool.connect();
             console.log("Connection to DB established");
+            logDivider();
             return;
         }
         catch (e) {
             connectionRetries--;
             console.log(`Failed to connect to DB. Remaining retries : ${connectionRetries}`);
+            logDivider();
             await new Promise(res => setTimeout(res, 5000));
         }
     }
@@ -41,11 +44,13 @@ exports.createTask = async (taskLabel, score, importance, weeklyOccurences) => {
         let queryValues = [taskLabel, score, importance, weeklyOccurences];
         let res = await pool.query(queryText, queryValues);
         console.log(`createTask : Added row(${taskLabel},${score},${importance},${weeklyOccurences}) to table ${TABLE_TASKS}`);
+        logDivider();
         return res.rows[0].id;
     }
     catch (e) {
         console.error(e);
         console.error(`createTask : Error when tried to add ${taskLabel} , ${score}, ${importance},${weeklyOccurences}`);
+        logDivider();
     }
 }
 
@@ -67,6 +72,7 @@ exports.updateTaskOccurence = async (taskOccurence) => {
         console.error(e);
         console.error(`updateTaskOccurence : Error`);
     }
+    logDivider();
 }
 
 exports.getUser = async (id) => {
@@ -75,11 +81,13 @@ exports.getUser = async (id) => {
         let queryValues = [id];
         let { rows } = await pool.query(queryText, queryValues);
         console.log(`getUser : get user by id ${id}`);
+        logDivider();
         return rows[0];
     }
     catch (e) {
         console.error(e);
         console.log(`getUser : failed to get user by id ${id}`);
+        logDivider();
     }
 }
 
@@ -94,6 +102,7 @@ exports.updateUser = async (user) => {
         console.error(e);
         console.error(`updateUser`);
     }
+    logDivider();
 }
 
 exports.createTaskOccurence = async (taskId, calendarWeek, dayOfWeek) => {
@@ -107,6 +116,7 @@ exports.createTaskOccurence = async (taskId, calendarWeek, dayOfWeek) => {
         console.error(e);
         console.error(`createTaskOccurence : Error when tried to add entry(${taskId} , ${calendarWeek}, ${dayOfWeek})`);
     }
+    logDivider();
 }
 
 exports.deleteTask = async (taskId) => {
@@ -121,6 +131,7 @@ exports.deleteTask = async (taskId) => {
         console.error(e);
         console.error(`deleteTask : Error when tried to delete rows referencing id ${taskId}`);
     }
+    logDivider();
 }
 
 exports.deleteTaskOccurence = async (taskId, week) => {
@@ -134,18 +145,20 @@ exports.deleteTaskOccurence = async (taskId, week) => {
         console.error(e);
         console.error(`deleteTaskOccurence : Error when tried to delete row with id ${taskId} and week ${week} in table ${TABLE_TASKS_OCCURENCES}`);
     }
+    logDivider();
 }
 
 exports.getActiveTasks = async () => {
     try {
         let { rows } = await pool.query(`SELECT id, label, score, importance, weekly_occurences AS "weeklyOccurences", active FROM ${TABLE_TASKS} WHERE active IS TRUE ORDER BY label;`);
         console.log(`getActiveTasks : get all active tasks ${TABLE_TASKS}`);
+        logDivider();
         return rows;
     }
     catch (e) {
         console.error(e);
         console.error(`getActiveTasks : Error when tried to access all active tasks in ${TABLE_TASKS}`);
-        return null;
+        logDivider();
     }
 }
 
@@ -154,12 +167,14 @@ exports.getTask = async (id) => {
         let queryText = `SELECT id, label, score, importance, weekly_occurences AS "weeklyOccurences", active FROM ${TABLE_TASKS} WHERE id = $1`;
         let queryValues = [id];
         let { rows } = await pool.query(queryText, queryValues);
-        console.log(`getTaskEntry by id ${id}`)
+        console.log(`getTaskEntry by id ${id}`);
+        logDivider();
         return rows[0];
     }
     catch (e) {
         console.error(e);
         console.error(`getTaskEntry : Error when trying to fetch task entry by id ${id}`);
+        logDivider();
     }
 }
 
@@ -174,18 +189,20 @@ exports.updateTask = async (task) => {
         console.error(e);
         console.error(`updateTask : Error`);
     }
+    logDivider();
 }
 
 exports.getTasks = async () => {
     try {
         let { rows } = await pool.query(`SELECT id, label, score, importance, weekly_occurences AS "weeklyOccurences", active FROM ${TABLE_TASKS} ORDER BY label;`);
         console.log(`getTasks : get all tasks ${TABLE_TASKS}`);
+        logDivider();
         return rows;
     }
     catch (e) {
         console.error(e);
         console.error(`getTasks : Error when tried to access all tasks in ${TABLE_TASKS}`);
-        return null;
+        logDivider();
     }
 }
 
@@ -193,12 +210,13 @@ exports.getTaskOccurences = async (taskId) => {
     try {
         let { rows } = await pool.query(`SELECT id, calendar_week AS "calendarWeek", day_of_week AS "dayOfWeek" FROM ${TABLE_TASKS_OCCURENCES} WHERE id = ${taskId};`);
         console.log(`getTaskOccurences : get all tasks from ${TABLE_TASKS_OCCURENCES} with id = ${taskId}`);
+        logDivider();
         return rows;
     }
     catch (e) {
         console.error(e);
         console.error(`getTaskOccurences : Error when tried to access tasks in ${TABLE_TASKS_OCCURENCES} with id = ${taskId}`);
-        return null;
+        logDivider();
     }
 }
 
@@ -209,12 +227,13 @@ exports.getTaskOccurence = async (taskId, calendarWeek) => {
         let queryValues = [taskId, calendarWeek];
         let { rows } = await pool.query(queryText, queryValues);
         console.log(`getTaskOccurence by taskId ${taskId} and ${calendarWeek}`);
+        logDivider();
         return rows[0];
     }
     catch (e) {
         console.error(e);
         console.error(`getTaskOccurence : Error`);
-        return null;
+        logDivider();
     }
 }
 
@@ -229,11 +248,13 @@ exports.getTaskOccurencesOfWeek = async (week) => {
         let queryValues = [week];
         let { rows } = await pool.query(queryText, queryValues);
         console.log(`getTaskOccurencesOfWeek : get all Task Occurences Of week ${week}`);
+        logDivider();
         return rows;
     }
     catch (e) {
         console.error(e);
         console.error(`getTaskOccurencesOfWeek : Error when tried to get all Task Occurences Of week ${week}`);
+        logDivider();
     }
 }
 
@@ -249,11 +270,13 @@ exports.createUser = async (userName) => {
         queryText = `SELECT id FROM ${TABLE_USERS} WHERE name = $1;`;
         queryValues = [userName];
         let { rows } = await pool.query(queryText, queryValues);
+        logDivider();
         return rows[0].id;
     }
     catch (e) {
         console.error(e);
         console.error(`createUser : Error when tried to add row(${userName}) to table ${TABLE_USERS}`);
+        logDivider();
     }
 }
 
@@ -270,17 +293,20 @@ exports.createScoresOverYears = async (userId, year) => {
         console.error(e);
         console.error(`createScoresOverYears : Error when tried to add row to table ${TABLE_SCORES_OVER_YEARS}`);
     }
+    logDivider();
 }
 
 exports.getUsers = async () => {
     try {
         let { rows } = await pool.query(`SELECT id, name FROM ${TABLE_USERS} ORDER BY name`);
         console.log(`getUsers : get all users from table ${TABLE_USERS}`);
+        logDivider();
         return rows;
     }
     catch (e) {
         console.error(e);
         console.error(`getUsers : Error when tried to get all users from table ${TABLE_USERS}`);
+        logDivider();
     }
 }
 
@@ -313,10 +339,12 @@ exports.getUsersWithScore = async (week, year) => {
 
         let queryValues = [week, year];
         let { rows } = await pool.query(queryText, queryValues);
+        logDivider();
         return rows;
     }
     catch (e) {
         console.error(e);
+        logDivider();
     }
 }
 
@@ -331,6 +359,7 @@ exports.deleteUser = async (userId) => {
         console.error(e);
         console.error(`deleteUser : Error when tried to delete user with id ${userid}`);
     }
+    logDivider();
 }
 
 exports.getTaskAccomplishmentYears = async () => {
@@ -343,10 +372,12 @@ exports.getTaskAccomplishmentYears = async () => {
         console.error(e);
         console.error(`getTaskAccomplishmentYears : Error when tried to select all distinct years in ${TABLE_TASK_ACCOMPLISHMENTS}`);
     }
+    logDivider();
 }
 
 exports.getTaskAccomplishment = async (id) => {
     // TODO
+    logDivider();
     return { score: 5 };
 }
 
@@ -364,11 +395,13 @@ exports.getTaskAccomplishmentsByYear = async (year) => {
         let queryValues = [year];
         let { rows } = await pool.query(queryText, queryValues);
         console.log(`getTaskAccomplishmentsByYear : Select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year} with respect to the given userIds`);
+        logDivider();
         return rows;
     }
     catch (e) {
         console.error(e);
         console.error(`getTaskAccomplishmentsByYear : Error when tried to select all entries in ${TABLE_TASK_ACCOMPLISHMENTS} that occur in year ${year} with respect to the given userIds`);
+        logDivider();
     }
 }
 
@@ -387,11 +420,13 @@ exports.getTaskAccomplishmentsOfWeekInYear = async (week, year) => {
         let queryValues = [week, year];
         let { rows } = await pool.query(queryText, queryValues);
         console.log(`getTaskAccomplishmentsOfWeekInYear : get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
+        logDivider();
         return rows;
     }
     catch (e) {
         console.error(e);
         console.error(`getTaskAccomplishmentsOfWeekInYear : failed to get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
+        logDivider();
     }
 }
 
@@ -421,11 +456,13 @@ exports.getPendingTasks = async (week, year) => {
         let queryValues = [week, year];
         let { rows } = await pool.query(queryText, queryValues);
         console.log(`getPendingTasks : get pending Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
+        logDivider();
         return rows;
     }
     catch (e) {
         console.error(e);
         console.error(`getPendingTasks : failed to get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
+        logDivider();
     }
 }
 
@@ -442,6 +479,7 @@ exports.deleteTaskAccomplishments = async (week, year) => {
         console.error(e);
         console.error(`deleteTaskAccomplishments :  Error`);
     }
+    logDivider();
 }
 
 exports.createTaskAccomplishments = async (taskAccomplishments) => {
@@ -472,6 +510,7 @@ const createTaskAccomplishment = async (taskAccomplishment) => {
         console.error(e);
         console.error(`createTaskAccomplishmentEntry : Failed to add taskAccomplishment ${taskAccomplishment}`);
     }
+    logDivider();
 }
 
 exports.updateTaskAccomplishment = async (id, userId) => {
@@ -485,6 +524,7 @@ exports.updateTaskAccomplishment = async (id, userId) => {
     catch (e) {
         console.error(e);
     }
+    logDivider();
 }
 
 exports.updateYearlyScore = async (year, userId, scoreChange) => {
@@ -501,6 +541,7 @@ exports.updateYearlyScore = async (year, userId, scoreChange) => {
     catch (e) {
         console.error(e);
     }
+    logDivider();
 }
 
 exports.updateYearlyScores = async (year, calendarWeekUntilScoreIsComputed) => {
@@ -530,6 +571,7 @@ exports.updateYearlyScores = async (year, calendarWeekUntilScoreIsComputed) => {
         console.error(e);
         console.error(`updateYearlyScores for year ${year} failed`);
     }
+    logDivider();
 }
 
 exports.getGroceryCartEntries = async () => {
@@ -539,11 +581,13 @@ exports.getGroceryCartEntries = async () => {
         `;
         const { rows } = await pool.query(queryText);
         console.log("getGroceryCartEntries");
+        logDivider();
         return rows;
     }
     catch (e) {
         console.error(e);
         console.error("getGroceryCartEntries : Error");
+        logDivider();
     }
 }
 
@@ -560,6 +604,7 @@ exports.createGroceryEntry = async (name, type) => {
         console.error(e);
         console.error(`createGroceryEntry : Failed with ${name} and ${type}`);
     }
+    logDivider();
 }
 
 exports.getGroceryEntries = async () => {
@@ -569,11 +614,13 @@ exports.getGroceryEntries = async () => {
         `;
         const { rows } = await pool.query(queryText);
         console.log("getGroceryEntries");
+        logDivider();
         return rows;
     }
     catch (e) {
         console.error(e);
         console.error("getGroceryEntries : Error");
+        logDivider();
     }
 }
 
@@ -590,6 +637,7 @@ exports.createGroceryCartEntry = async (name, type, amount) => {
         console.error(e);
         console.error(`createGroceryCartEntry : Failed with ${name} and ${type} and ${amount}`);
     }
+    logDivider();
 }
 
 exports.updateGroceryCartEntryWithType = async (name, type) => {
@@ -605,6 +653,7 @@ exports.updateGroceryCartEntryWithType = async (name, type) => {
         console.error(e);
         console.error(`updateGroceryCartEntryWithType : Error with ${name} and ${type}`);
     }
+    logDivider();
 }
 
 exports.updateGroceryCartEntryWithName = async (name, newName) => {
@@ -620,6 +669,7 @@ exports.updateGroceryCartEntryWithName = async (name, newName) => {
         console.error(e);
         console.error(`updateGroceryCartEntryWithName : Error with old name ${name} and new name ${newName}`);
     }
+    logDivider();
 }
 
 exports.deleteGroceryCartEntry = async (name) => {
@@ -635,6 +685,7 @@ exports.deleteGroceryCartEntry = async (name) => {
         console.error(e);
         console.error(`deleteGroceryCartEntry : Failed with ${name}`);
     }
+    logDivider();
 }
 
 exports.updateGroceryEntryWithName = async (oldName, newName) => {
@@ -650,6 +701,7 @@ exports.updateGroceryEntryWithName = async (oldName, newName) => {
         console.error(e);
         console.error(`updateGroceryEntryWithName : Failed with ${oldName} and ${newName}`);
     }
+    logDivider();
 }
 
 exports.updateGroceryEntryWithType = async (name, newType) => {
@@ -665,6 +717,7 @@ exports.updateGroceryEntryWithType = async (name, newType) => {
         console.error(e);
         console.error(`updateGroceryEntryWithType : Failed with ${name} and ${newType}`);
     }
+    logDivider();
 }
 
 exports.deleteGroceryEntry = async (name) => {
@@ -680,6 +733,7 @@ exports.deleteGroceryEntry = async (name) => {
         console.error(e);
         console.error(`deleteGroceryEntry : Failed with ${name}`);
     }
+    logDivider();
 }
 
 exports.getGroceryTypeEntries = async () => {
@@ -689,11 +743,13 @@ exports.getGroceryTypeEntries = async () => {
         `;
         const { rows } = await pool.query(queryText);
         console.log("getGroceryTypeEntries");
+        logDivider();
         return rows;
     }
     catch (e) {
         console.error(e);
         console.error("getGroceryTypeEntries : Error");
+        logDivider();
     }
 }
 
@@ -710,6 +766,7 @@ exports.createGroceryTypeEntry = async (type, color) => {
         console.error(e);
         console.error(`createGroceryTypeEntry : Failed with ${type} and ${color}`);
     }
+    logDivider();
 }
 
 exports.updateGroceryTypeEntryWithType = async (oldType, newType) => {
@@ -725,6 +782,7 @@ exports.updateGroceryTypeEntryWithType = async (oldType, newType) => {
         console.error(e);
         console.error(`updateGroceryTypeEntryWithType : Failed with old type ${oldType} and new type ${newType}`);
     }
+    logDivider();
 }
 
 exports.updateGroceryTypeEntryWithColor = async (type, newColor) => {
@@ -740,6 +798,7 @@ exports.updateGroceryTypeEntryWithColor = async (type, newColor) => {
         console.error(e);
         console.error(`updateGroceryTypeEntryWithColor : Failed with type ${type} and color ${newColor}`);
     }
+    logDivider();
 }
 
 
@@ -756,6 +815,7 @@ exports.updateGroceryEntriesTypeToDefault = async (type) => {
         console.error(e);
         console.error(`updateGroceryEntriesTypeToDefault : Error with type ${type}`)
     }
+    logDivider();
 }
 
 
@@ -773,6 +833,7 @@ exports.deleteGroceryTypeEntry = async (type) => {
         console.error(e);
         console.error(`deleteGroceryTypeEntry : Failed with type ${type}`);
     }
+    logDivider();
 }
 
 exports.setupDatabase = async () => {
@@ -795,6 +856,7 @@ exports.setupDatabase = async () => {
     }
     catch (e) {
         console.log("Domains day_num,week_num,type_color already exists");
+        logDivider();
     }
     try {
         queryText = `
@@ -893,6 +955,7 @@ exports.setupDatabase = async () => {
     catch (e) {
         console.error(e);
         console.log("Failed to setup database");
+        logDivider();
     }
     try {
         queryText = `
@@ -902,6 +965,7 @@ exports.setupDatabase = async () => {
     }
     catch (e) {
         console.error(`${TABLE_GROCERY_TYPES} already contains (Default,#555555)`);
+        logDivider();
     }
 }
 

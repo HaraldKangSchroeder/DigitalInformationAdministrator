@@ -406,12 +406,13 @@ exports.getUserEntries = async () => {
 
 exports.getUserEntriesWithPoints = async (week, year) => {
     try {
+        // TODO : USE SCORE FROM TASK_ACCOMPLISHMENTS
         let queryText = `
             SELECT 
                 "u".id, 
                 "u".name,
                 (
-                    SELECT 
+                    SELECT
                     COALESCE(sum((
                             SELECT "t".score 
                             FROM ${TABLE_TASKS} AS t 
@@ -542,6 +543,12 @@ exports.getTaskAccomplishmentEntriesOfWeekInYear = async (week, year) => {
 }
 
 exports.getPendingTaskEntriesOfWeekInYear = async (week, year) => {
+    /*
+    (SELECT "t".label FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id),
+    (SELECT "t".score FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id),
+    (SELECT "t".importance FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id) AS importance,
+    (SELECT "t".day_of_week FROM ${TABLE_TASKS_OCCURENCES} AS "t" WHERE "t".id = "ta".task_id AND "ta".calendar_week = "t".calendar_week) AS "dayOfWeek"
+    */
     try {
         let queryText = `
             SELECT 
@@ -550,10 +557,10 @@ exports.getPendingTaskEntriesOfWeekInYear = async (week, year) => {
                 "ta".user_id AS "userId",
                 "ta".calendar_week AS "calendarWeek",
                 "ta".year,
-                (SELECT "t".label FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id),
-                (SELECT "t".score FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id),
-                (SELECT "t".importance FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id) AS importance,
-                (SELECT "t".day_of_week FROM ${TABLE_TASKS_OCCURENCES} AS "t" WHERE "t".id = "ta".task_id AND "ta".calendar_week = "t".calendar_week) AS "dayOfWeek"
+                "ta".importance,
+                "ta".score,
+                "ta".label,
+                "ta".day_of_week AS "dayOfWeek"
             FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS "ta" 
             WHERE "ta".calendar_week = $1 AND "ta".year = $2
             ORDER BY importance DESC,"dayOfWeek","ta".task_id, "ta".id;
@@ -593,9 +600,18 @@ exports.createTaskAccomplishmentEntries = async (taskAccomplishments) => {
 const createTaskAccomplishmentEntry = async (taskAccomplishment) => {
     try {
         let queryText = `
-            INSERT INTO ${TABLE_TASK_ACCOMPLISHMENTS}  (task_id,user_id,calendar_week,year,score) VALUES ($1,$2,$3,$4,$5);
+            INSERT INTO ${TABLE_TASK_ACCOMPLISHMENTS}  (task_id,task_label,importance,user_id,calendar_week,year,score,day_of_week) VALUES ($1,$2,$3,$4,$5,$6,$7,$8);
         `;
-        let queryValues = [taskAccomplishment.taskId, taskAccomplishment.userId, taskAccomplishment.calendarWeek, taskAccomplishment.year, taskAccomplishment.score];
+        let queryValues = [
+            taskAccomplishment.taskId,
+            taskAccomplishment.taskLabel,
+            taskAccomplishment.importance,
+            taskAccomplishment.userId,
+            taskAccomplishment.calendarWeek,
+            taskAccomplishment.year,
+            taskAccomplishment.score,
+            taskAccomplishment.dayOfWeek
+        ];
         await pool.query(queryText, queryValues);
         console.log(`createTaskAccomplishmentEntry : added taskAccomplishment ${taskAccomplishment}`);
     }
@@ -984,11 +1000,13 @@ exports.setupDatabase = async () => {
             (
                 id SERIAL PRIMARY KEY,
                 task_id INT NOT NULL,
+                task_label VARCHAR NOT NULL,
+                importance INT NOT NULL,
+                day_of_week INT,
                 user_id INT,
                 calendar_week week_num NOT NULL,
                 year INT NOT NULL,
                 score INT NOT NULL,
-                FOREIGN KEY (task_id) REFERENCES ${TABLE_TASKS}(id) ON DELETE CASCADE,
                 FOREIGN KEY (user_id) REFERENCES ${TABLE_USERS}(id) ON DELETE CASCADE
             );
         `;

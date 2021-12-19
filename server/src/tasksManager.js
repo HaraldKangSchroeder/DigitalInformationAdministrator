@@ -155,7 +155,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         // update scores
         let { score } = databaseManager.getTaskAccomplishment(taskAccomplishmentId);
         if (newUserId != null) databaseManager.updateYearlyScore(newUserId, score);
-        if (oldUserId != null) databaseManager.updateYearlyScore(oldUserId, score);
+        if (oldUserId != null) databaseManager.updateYearlyScore(oldUserId, -score);
 
         let res = await getTasksAndUsersOfCurrentWeek();
         io.emit("usersAndTasksOfCurrentWeek", res);
@@ -324,10 +324,13 @@ function createTasksAccomplishmentEntries(taskOccurenceEntries, taskEntries, yea
         for (let i = 0; i < task.weeklyOccurences; i++) {
             let taskAccomplishmentEntry = {};
             taskAccomplishmentEntry["taskId"] = taskOccurenceEntry.id;
+            taskAccomplishmentEntry["taskLabel"] = task.label;
+            taskAccomplishmentEntry["importance"] = task.importance;
             taskAccomplishmentEntry["userId"] = null;
             taskAccomplishmentEntry["calendarWeek"] = taskOccurenceEntry.calendarWeek;
             taskAccomplishmentEntry["year"] = year;
             taskAccomplishmentEntry["score"] = task.score;
+            taskAccomplishmentEntry["dayOfWeek"] = taskOccurenceEntry.dayOfWeek;
             taskAccomplishmentEntries.push(taskAccomplishmentEntry);
         }
     }

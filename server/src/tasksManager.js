@@ -197,10 +197,7 @@ async function resetTaskAccomplishmentsOfCurrentWeek(io) {
 async function getCurrentWeekData() {
     let taskAccomplishments = await databaseManager.getTaskAccomplishmentsOfWeekInYear(currentWeek, currentYear);
     let users = await databaseManager.getUsersWithScore(currentWeek, currentYear);
-    // iterate overall user and add weeklyScore on year score, because year score does not include current week
-    for (let user of users) {
-        user.scoreOfYear = parseInt(user.scoreOfYear) + parseInt(user.scoreOfWeek);
-    }
+
     let res = { tasks: taskAccomplishments, users: users }
     return res;
 }

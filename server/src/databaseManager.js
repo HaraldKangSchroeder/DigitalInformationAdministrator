@@ -312,19 +312,14 @@ exports.getUsers = async () => {
 
 exports.getUsersWithScore = async (week, year) => {
     try {
-        // TODO : USE SCORE FROM TASK_ACCOMPLISHMENTS
         let queryText = `
             SELECT 
                 "u".id, 
                 "u".name,
                 (
-                    SELECT
-                    COALESCE(sum((
-                            SELECT "t".score 
-                            FROM ${TABLE_TASKS} AS t 
-                            WHERE "t".id = "ta".task_id
-                            )),0)
-                    FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS ta WHERE "u".id = "ta".user_id AND "ta".calendar_week = $1 AND "ta".year = $2
+                    SELECT sum("ta".score)
+                    FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS ta 
+                    WHERE "u".id = "ta".user_id AND "ta".calendar_week = $1 AND "ta".year = $2
                 ) AS "scoreOfWeek",
                 (
                     SELECT 

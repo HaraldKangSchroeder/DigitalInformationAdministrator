@@ -135,7 +135,6 @@ exports.createTaskOccurence = async (taskId, calendarWeek, dayOfWeek) => {
 
 exports.deleteTask = async (taskId) => {
     try {
-        // TODO check table tasks accomplishments whether the taskId was solved by someone. If not, simply delete (on cascase is set on other table). Else set active to false so that it is still referenceable
         queryText = `DELETE FROM ${TABLE_TASKS} WHERE id = $1`;
         queryValues = [taskId];
         await pool.query(queryText, queryValues);
@@ -424,12 +423,6 @@ exports.getTaskAccomplishmentsByYear = async (year) => {
 }
 
 exports.getTaskAccomplishmentsOfWeekInYear = async (week, year) => {
-    /*
-    (SELECT "t".label FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id),
-    (SELECT "t".score FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id),
-    (SELECT "t".importance FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id) AS importance,
-    (SELECT "t".day_of_week FROM ${TABLE_TASKS_OCCURENCES} AS "t" WHERE "t".id = "ta".task_id AND "ta".calendar_week = "t".calendar_week) AS "dayOfWeek"
-    */
     try {
         let queryText = `
             SELECT 

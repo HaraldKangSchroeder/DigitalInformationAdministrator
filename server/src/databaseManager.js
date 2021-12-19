@@ -57,7 +57,20 @@ exports.createTask = async (taskLabel, score, importance, weeklyOccurences) => {
 exports.createTaskOccurences = async (taskId, weeklyRythm, dayOfWeek) => {
     let weeks = getWeeksOfWeeklyRythm(weeklyRythm);
     for (let week of weeks) {
-        await createTaskOccurenceEntryWithWeekAndDay(taskId, week, dayOfWeek);
+        await createTaskOccurenceWithWeekAndDay(taskId, week, dayOfWeek);
+    }
+}
+
+async function createTaskOccurenceWithWeekAndDay(taskId, week, dayOfWeek) {
+    try {
+        let queryText = `INSERT INTO ${TABLE_TASKS_OCCURENCES} VALUES ($1,$2,$3);`;
+        let queryValues = [taskId, week, dayOfWeek];
+        await pool.query(queryText, queryValues);
+        console.log(`createTaskOccurenceEntryWithWeekAndDay : Added row(${taskId},${week},${dayOfWeek}) to table ${TABLE_TASKS_OCCURENCES}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`createTaskOccurenceEntryWithWeekAndDay : Error when tried to add ${taskId} , ${week}, ${dayOfWeek}`);
     }
 }
 

@@ -61,6 +61,7 @@ exports.createTaskOccurences = async (taskId, weeklyRythm, dayOfWeek) => {
     }
 }
 
+
 exports.updateTaskOccurence = async (taskOccurence) => {
     try {
         let queryText = `UPDATE ${TABLE_TASKS_OCCURENCES} SET day_of_week = $3 WHERE id = $1 AND calendar_week = $2;`;
@@ -861,7 +862,7 @@ exports.setupDatabase = async () => {
             (
                 id SERIAL PRIMARY KEY,
                 task_id INT NOT NULL,
-                task_label VARCHAR NOT NULL,
+                label VARCHAR NOT NULL,
                 importance INT NOT NULL,
                 day_of_week INT,
                 user_id INT,

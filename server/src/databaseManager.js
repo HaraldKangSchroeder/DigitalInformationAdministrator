@@ -406,31 +406,6 @@ exports.getTaskAccomplishmentsByYear = async (year) => {
 }
 
 exports.getTaskAccomplishmentsOfWeekInYear = async (week, year) => {
-    try {
-        let queryText = `
-        SELECT  
-            id,
-            task_id AS "taskId",
-            user_id AS "userId",
-            calendar_week AS "calendarWeek",
-            year 
-        FROM ${TABLE_TASK_ACCOMPLISHMENTS} 
-        WHERE calendar_week = $1 AND year = $2
-        `;
-        let queryValues = [week, year];
-        let { rows } = await pool.query(queryText, queryValues);
-        console.log(`getTaskAccomplishmentsOfWeekInYear : get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
-        logDivider();
-        return rows;
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`getTaskAccomplishmentsOfWeekInYear : failed to get Tasks of table ${TABLE_TASK_ACCOMPLISHMENTS} of week in year`);
-        logDivider();
-    }
-}
-
-exports.getPendingTasks = async (week, year) => {
     /*
     (SELECT "t".label FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id),
     (SELECT "t".score FROM ${TABLE_TASKS} AS "t" WHERE "t".id = "ta".task_id),

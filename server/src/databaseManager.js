@@ -477,6 +477,11 @@ exports.getYearsOfTaskAccomplishmentEntries = async () => {
     }
 }
 
+exports.getTaskAccomplishment = async (id) => {
+    // TODO
+    return { score: 5 };
+}
+
 
 exports.getTaskAccomplishmentEntriesByYear = async (year) => {
     try {
@@ -627,6 +632,22 @@ exports.createYearlyScoresEntries = async (year) => {
     catch (e) {
         console.error(e);
         console.error(`createYearlyScoresEntries ${year} failed`);
+    }
+}
+
+exports.updateYearlyScore = async (year, userId, scoreChange) => {
+    try {
+        let queryText = `
+        UPDATE ${TABLE_SCORES_OVER_YEARS} 
+        SET score = 
+            (SELECT score + $3 FROM ${TABLE_SCORES_OVER_YEARS} WHERE year = $1 AND user_id = $2)
+        WHERE user_id = $1 AND year = $2
+    `;
+        let queryValues = [year, userId, scoreChange];
+        await pool.query(queryText, queryValues);
+    }
+    catch (e) {
+        console.error(e);
     }
 }
 

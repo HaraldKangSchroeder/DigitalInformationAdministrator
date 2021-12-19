@@ -5,15 +5,13 @@ export default class Task {
     score: number;
     importance: number;
     weeklyOccurences: number;
-    active: boolean;
 
-    constructor(id: number, label: string, score: number, importance: number, weeklyOccurences: number, active: boolean) {
+    constructor(id: number, label: string, score: number, importance: number, weeklyOccurences: number) {
         this.id = id;
         this.label = label;
         this.score = score;
         this.importance = importance;
         this.weeklyOccurences = weeklyOccurences;
-        this.active = active;
     }
 
     getId(): number {
@@ -34,9 +32,5 @@ export default class Task {
 
     getWeeklyOccurences(): number {
         return this.weeklyOccurences;
-    }
-
-    isActive(): boolean {
-        return this.active;
     }
 }

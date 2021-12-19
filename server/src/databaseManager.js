@@ -40,7 +40,7 @@ exports.createConnection = async () => {
 
 exports.createTask = async (taskLabel, score, importance, weeklyOccurences) => {
     try {
-        let queryText = `INSERT INTO ${TABLE_TASKS} (label,score,importance,weekly_occurences,active) VALUES ($1,$2,$3,$4,TRUE) RETURNING id;`;
+        let queryText = `INSERT INTO ${TABLE_TASKS} (label,score,importance,weekly_occurences) VALUES ($1,$2,$3,$4) RETURNING id;`;
         let queryValues = [taskLabel, score, importance, weeklyOccurences];
         let res = await pool.query(queryText, queryValues);
         console.log(`createTask : Added row(${taskLabel},${score},${importance},${weeklyOccurences}) to table ${TABLE_TASKS}`);
@@ -149,23 +149,9 @@ exports.deleteTaskOccurence = async (taskId, week) => {
     logDivider();
 }
 
-exports.getActiveTasks = async () => {
-    try {
-        let { rows } = await pool.query(`SELECT id, label, score, importance, weekly_occurences AS "weeklyOccurences", active FROM ${TABLE_TASKS} WHERE active IS TRUE ORDER BY label;`);
-        console.log(`getActiveTasks : get all active tasks ${TABLE_TASKS}`);
-        logDivider();
-        return rows;
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`getActiveTasks : Error when tried to access all active tasks in ${TABLE_TASKS}`);
-        logDivider();
-    }
-}
-
 exports.getTask = async (id) => {
     try {
-        let queryText = `SELECT id, label, score, importance, weekly_occurences AS "weeklyOccurences", active FROM ${TABLE_TASKS} WHERE id = $1`;
+        let queryText = `SELECT id, label, score, importance, weekly_occurences AS "weeklyOccurences" FROM ${TABLE_TASKS} WHERE id = $1`;
         let queryValues = [id];
         let { rows } = await pool.query(queryText, queryValues);
         console.log(`getTaskEntry by id ${id}`);
@@ -181,8 +167,8 @@ exports.getTask = async (id) => {
 
 exports.updateTask = async (task) => {
     try {
-        let queryText = `UPDATE ${TABLE_TASKS} SET label = $2, score = $3, importance = $4, weekly_occurences = $5, active = $6 WHERE id = $1`;
-        let queryValues = [task.id, task.label, task.score, task.importance, task.weeklyOccurences, task.active];
+        let queryText = `UPDATE ${TABLE_TASKS} SET label = $2, score = $3, importance = $4, weekly_occurences = $5 WHERE id = $1`;
+        let queryValues = [task.id, task.label, task.score, task.importance, task.weeklyOccurences];
         await pool.query(queryText, queryValues);
         console.log(`updateTask`);
     }
@@ -195,7 +181,7 @@ exports.updateTask = async (task) => {
 
 exports.getTasks = async () => {
     try {
-        let { rows } = await pool.query(`SELECT id, label, score, importance, weekly_occurences AS "weeklyOccurences", active FROM ${TABLE_TASKS} ORDER BY label;`);
+        let { rows } = await pool.query(`SELECT id, label, score, importance, weekly_occurences AS "weeklyOccurences" FROM ${TABLE_TASKS} ORDER BY label;`);
         console.log(`getTasks : get all tasks ${TABLE_TASKS}`);
         logDivider();
         return rows;
@@ -830,8 +816,7 @@ exports.setupDatabase = async () => {
                 label VARCHAR NOT NULL,
                 score INT NOT NULL CHECK (score >= 0),
                 importance INT NOT NULL CHECK (importance > 0),
-                weekly_occurences INT NOT NULL CHECK (weekly_occurences > 0),
-                active BOOLEAN NOT NULL
+                weekly_occurences INT NOT NULL CHECK (weekly_occurences > 0)
             );
         `;
         await pool.query(queryText);

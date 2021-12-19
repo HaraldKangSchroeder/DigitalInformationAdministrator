@@ -2,89 +2,89 @@ import Task from "./Task";
 
 export default class Tasks {
 
-    taskList : Task[];
+    taskList: Task[];
 
-    constructor(dataset? : any) {
+    constructor(dataset?: any) {
         this.taskList = [];
-        if(dataset != null){
+        if (dataset != null) {
             this.readDataset(dataset);
         }
     }
 
-    contains(otherTask : Task) : boolean {
-        for(let task of this.taskList){
-            if(task.getId() === otherTask.getId()){
+    contains(otherTask: Task): boolean {
+        for (let task of this.taskList) {
+            if (task.getId() === otherTask.getId()) {
                 return true;
             }
         }
         return false;
     }
 
-    getJsonListWithIdAndLabel(){
+    getJsonListWithIdAndLabel() {
         let jsonList = [];
-        for(let taskEntry of this.taskList){
-            jsonList.push({id:taskEntry.getId(), label:taskEntry.getLabel()});
+        for (let taskEntry of this.taskList) {
+            jsonList.push({ id: taskEntry.getId(), label: taskEntry.getLabel() });
         }
         return jsonList;
     }
 
-    getTasksByIds(ids : number[]) : Tasks{
+    getTasksByIds(ids: number[]): Tasks {
         let newTasks = new Tasks(null);
-        for(let taskId of ids){
+        for (let taskId of ids) {
             newTasks.addTask(this.getTaskById(taskId));
         }
         return newTasks;
     }
 
-    getList() : Task[]{
+    getList(): Task[] {
         return this.taskList;
     }
 
-    getTaskById(id : number) : Task{
-        for(let task of this.taskList){
-            if(task.getId() === id){
+    getTaskById(id: number): Task {
+        for (let task of this.taskList) {
+            if (task.getId() === id) {
                 return task;
             }
         }
         return null;
     }
 
-    getTaskIds() : number[]{
+    getTaskIds(): number[] {
         let ids = [];
-        for(let task of this.taskList){
+        for (let task of this.taskList) {
             ids.push(task.getId());
         }
         return ids;
     }
 
-    getTaskLabelsByIds(ids : number[]) : string[]{
-        let labels : string[] = [];
-        for(let taskId of ids){
+    getTaskLabelsByIds(ids: number[]): string[] {
+        let labels: string[] = [];
+        for (let taskId of ids) {
             let task = this.getTaskById(taskId);
-            if(task != null){
+            if (task != null) {
                 labels.push(task.getLabel());
             }
         }
         return labels;
     }
 
-    addTask(task : Task){
+    addTask(task: Task) {
         this.taskList.push(task);
     }
 
-    containsTaskById(taskId : number) : boolean{
-        for(let task of this.taskList){
-            if(task.getId() === taskId){
+    containsTaskById(taskId: number): boolean {
+        for (let task of this.taskList) {
+            if (task.getId() === taskId) {
                 return true;
             }
         }
         return false;
     }
 
-    readDataset(dataset : any){
-        for(let datasetEntry of dataset){
-            let task = new Task(datasetEntry.id,datasetEntry.label,datasetEntry.score,datasetEntry.importance,datasetEntry.weeklyOccurences,datasetEntry.active);
-            this.addTask(task);    
+    readDataset(dataset: any) {
+        for (let datasetEntry of dataset) {
+            let task = new Task(datasetEntry.id, datasetEntry.label, datasetEntry.score, datasetEntry.importance, datasetEntry.weeklyOccurences);
+            this.addTask(task);
         }
     }
 }

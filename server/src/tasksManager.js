@@ -30,7 +30,7 @@ async function updateTaskaccomplishments(io) {
         let tasksAccomplishmentsExistent = tasksAccomplishmentsOfWeekInYear.length > 0;
         if (!tasksAccomplishmentsExistent) {
             let taskOccurencesOfCurrentWeek = await databaseManager.getTaskOccurencesOfWeek(currentWeek);
-            let tasks = await databaseManager.getActiveTasks();
+            let tasks = await databaseManager.getTasks();
             let taskAccomplishments = createTasksAccomplishments(taskOccurencesOfCurrentWeek, tasks, currentYear);
             await databaseManager.createTaskAccomplishments(taskAccomplishments);
         }
@@ -45,9 +45,9 @@ async function updateTaskaccomplishments(io) {
 
 
 exports.setUpSocketListeners = async (io, socket) => {
-    socket.on('getActiveTasks', async () => {
-        let activeTasks = await databaseManager.getActiveTasks();
-        socket.emit('activeTasks', activeTasks);
+    socket.on('getTasks', async () => {
+        let tasks = await databaseManager.getTasks();
+        socket.emit('tasks', tasks);
     });
 
     socket.on('getTasks', async () => {
@@ -60,14 +60,14 @@ exports.setUpSocketListeners = async (io, socket) => {
         let isWeeklyRythmSet = task.week !== "";
         let isDayOfWeekSet = task.dayOfWeek !== "";
         if (isWeeklyRythmSet) await databaseManager.createTaskOccurences(taskId, task.weeklyRythm, isDayOfWeekSet ? task.dayOfWeek : null);
-        let activeTasks = await databaseManager.getActiveTasks();
-        socket.emit('activeTasks', activeTasks);
+        let tasks = await databaseManager.getTasks();
+        socket.emit('tasks', tasks);
     });
 
     socket.on('deleteTask', async (task) => {
         await databaseManager.deleteTask(task.id);
-        let activeTasks = await databaseManager.getActiveTasks();
-        socket.emit('activeTasks', activeTasks);
+        let tasks = await databaseManager.getTasks();
+        socket.emit('tasks', tasks);
     });
 
     socket.on('updateTask', async (data) => {
@@ -79,14 +79,13 @@ exports.setUpSocketListeners = async (io, socket) => {
         if (data.score) task.score = data.score;
         if (data.importance) task.importance = data.importance;
         if (data.weeklyOccurences) task.weeklyOccurences = data.weeklyOccurences;
-        if (data.active) task.active = data.active;
 
         // update task in db
         await databaseManager.updateTask(task);
 
         // emit all active tasks
-        let activeTasks = await databaseManager.getActiveTasks();
-        socket.emit('activeTasks', activeTasks);
+        let tasks = await databaseManager.getTasks();
+        socket.emit('tasks', tasks);
 
         let res = await getCurrentWeekData();
         io.emit("usersAndTasksOfCurrentWeek", res);

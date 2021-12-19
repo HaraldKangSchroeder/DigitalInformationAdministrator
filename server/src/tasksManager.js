@@ -319,17 +319,28 @@ async function getTasksAndUsersOfCurrentWeek() {
 function createTasksAccomplishmentEntries(taskOccurenceEntries, taskEntries, year) {
     let taskAccomplishmentEntries = [];
     for (let taskOccurenceEntry of taskOccurenceEntries) {
-        let weeklyOccurences = getWeeklyOccurences(taskOccurenceEntry.id, taskEntries);
-        for (let i = 0; i < weeklyOccurences; i++) {
+        let task = getTask(taskOccurenceEntry.id, taskEntries);
+        // let weeklyOccurences = getWeeklyOccurences(taskOccurenceEntry.id, taskEntries);
+        for (let i = 0; i < task.weeklyOccurences; i++) {
             let taskAccomplishmentEntry = {};
             taskAccomplishmentEntry["taskId"] = taskOccurenceEntry.id;
             taskAccomplishmentEntry["userId"] = null;
             taskAccomplishmentEntry["calendarWeek"] = taskOccurenceEntry.calendarWeek;
             taskAccomplishmentEntry["year"] = year;
+            taskAccomplishmentEntry["score"] = task.score;
             taskAccomplishmentEntries.push(taskAccomplishmentEntry);
         }
     }
     return taskAccomplishmentEntries;
+}
+
+function getTask(id, tasks) {
+    for (let task of tasks) {
+        if (task.id === id) {
+            return task;
+        }
+    }
+    return null;
 }
 
 function getWeeklyOccurences(taskId, taskEntries) {

@@ -593,9 +593,9 @@ exports.createTaskAccomplishmentEntries = async (taskAccomplishments) => {
 const createTaskAccomplishmentEntry = async (taskAccomplishment) => {
     try {
         let queryText = `
-            INSERT INTO ${TABLE_TASK_ACCOMPLISHMENTS}  (task_id,user_id,calendar_week,year) VALUES ($1,$2,$3,$4);
+            INSERT INTO ${TABLE_TASK_ACCOMPLISHMENTS}  (task_id,user_id,calendar_week,year,score) VALUES ($1,$2,$3,$4,$5);
         `;
-        let queryValues = [taskAccomplishment.taskId, taskAccomplishment.userId, taskAccomplishment.calendarWeek, taskAccomplishment.year];
+        let queryValues = [taskAccomplishment.taskId, taskAccomplishment.userId, taskAccomplishment.calendarWeek, taskAccomplishment.year, taskAccomplishment.score];
         await pool.query(queryText, queryValues);
         console.log(`createTaskAccomplishmentEntry : added taskAccomplishment ${taskAccomplishment}`);
     }
@@ -987,6 +987,7 @@ exports.setupDatabase = async () => {
                 user_id INT,
                 calendar_week week_num NOT NULL,
                 year INT NOT NULL,
+                score INT NOT NULL,
                 FOREIGN KEY (task_id) REFERENCES ${TABLE_TASKS}(id) ON DELETE CASCADE,
                 FOREIGN KEY (user_id) REFERENCES ${TABLE_USERS}(id) ON DELETE CASCADE
             );

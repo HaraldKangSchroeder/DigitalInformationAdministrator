@@ -54,7 +54,7 @@ export function UserCharts(props: Props) {
     const [visualizationMode, setVisualizationMode] = useState<string>(VISUALIZATION_MODES[0]);
 
     useEffect(() => {
-        socket.on("yearsOfTaskAccomplishmentEntries", (years) => {
+        socket.on("taskAccomplishmentYears", (years) => {
             let yearsArray = [];
             for (let element of years) yearsArray.push(element.year);
             setYears(yearsArray);
@@ -76,7 +76,7 @@ export function UserCharts(props: Props) {
         socket.emit("getTaskAccomplishmentYears");
 
         return () => {
-            socket.off("yearsOfTaskAccomplishmentEntries");
+            socket.off("taskAccomplishmentYears");
             socket.off("taskAccomplishmentEntries");
             socket.off("taskEntries");
         }

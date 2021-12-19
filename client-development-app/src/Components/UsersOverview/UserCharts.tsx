@@ -58,7 +58,7 @@ export function UserCharts() {
             let newUsers = new Users(userEntries);
             setUsers(newUsers);
         })
-        socket.on("yearsOfTaskAccomplishmentEntries", (years) => {
+        socket.on("taskAccomplishmentYears", (years) => {
             let yearsArray = [];
             for (let element of years) yearsArray.push(element.year);
             setYears(yearsArray);
@@ -79,7 +79,7 @@ export function UserCharts() {
         socket.emit("getUsers");
 
         return () => {
-            socket.off("yearsOfTaskAccomplishmentEntries");
+            socket.off("taskAccomplishmentYears");
             socket.off("taskAccomplishmentEntries");
             socket.off("taskEntries");
             socket.off("userEntries");

@@ -36,7 +36,8 @@ export function TaskInformation(props: Props) {
         socket.on("taskOccurences", (taskOccurenceEntries) => {
             let newTaskOccurences = new TaskOccurences(taskOccurenceEntries);
             setTaskOccurences(newTaskOccurences);
-        })
+        });
+
         return () => {
             socket.off("taskOccurences");
         }

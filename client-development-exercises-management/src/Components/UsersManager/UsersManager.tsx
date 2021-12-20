@@ -15,7 +15,7 @@ function UsersManager() {
     const [selectedUsers, setSelectedUsers] = useState(new Users());
 
     useEffect(() => {
-        socket.connect();
+        //socket.connect();
         socket.on("users", (userEntries) => {
             setUsers(new Users(userEntries));
         });

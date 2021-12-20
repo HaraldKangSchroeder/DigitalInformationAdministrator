@@ -11,10 +11,11 @@ import DialogChangeEntityName from "../DialogChangeEntityName";
 
 export function TasksManager() {
     const [selectedTask, setSelectedTask] = useState<Task>(null);
-    const [tasks, setTasks] = useState(new Tasks());
+    const [tasks, setTasks] = useState(null);
 
     useEffect(() => {
-        socket.connect();
+        if (!socket.connected) socket.connect();
+
         socket.on("tasks", (tasks) => {
             setTasks(new Tasks(tasks));
         });
@@ -59,6 +60,11 @@ export function TasksManager() {
     if (isTaskSelected) {
         selectedTasks.addTask(selectedTask);
     }
+
+    if (tasks === null) {
+        return <div></div>;
+    }
+
     return (
         <React.Fragment>
             <Grid container alignItems="flex-start">

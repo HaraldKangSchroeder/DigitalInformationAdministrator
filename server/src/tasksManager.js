@@ -179,7 +179,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         io.emit("currentWeekData", res);
     });
 
-    socket.on('resetTaskAccomplishments', async (data) => {
+    socket.on('resetCurrentWeekTasks', async (data) => {
         await resetCurrentWeekTasks(io);
 
         let res = await getCurrentWeekData();

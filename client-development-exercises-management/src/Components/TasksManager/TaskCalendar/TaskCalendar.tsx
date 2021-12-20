@@ -10,6 +10,7 @@ import { TaskCalendarWeekEntry } from "./TaskCalendarWeekEntry";
 import { TaskCalendarDayEntry } from "./TaskCalendarDayEntry";
 import { TaskCalendarEmptyEntry } from "./TaskCalendarEmptyEntry";
 import TaskOccurences from "../../../Classes/TaskOccurences";
+import Task from "../../../Classes/Task";
 
 
 const useStyle = makeStyles({
@@ -70,15 +71,15 @@ const calendarWeeksInYearPerMonth: number[][] = getCalendarWeeksInYearPerMonth(c
 
 interface Props {
     month: number;
-    selectedTaskId: number;
+    selectedTask: Task;
     taskOccurences: TaskOccurences;
 }
 
 export function TaskCalendar(props: Props) {
 
-    let datesInMonth : Date[] = datesInYearPerMonth[props.month];
-    let calendarWeeksInMonth : number[] = calendarWeeksInYearPerMonth[props.month];
-    let calendarRowsData : CalendarRowData[] = getCalendarRowsData(datesInMonth, calendarWeeksInMonth);
+    let datesInMonth: Date[] = datesInYearPerMonth[props.month];
+    let calendarWeeksInMonth: number[] = calendarWeeksInYearPerMonth[props.month];
+    let calendarRowsData: CalendarRowData[] = getCalendarRowsData(datesInMonth, calendarWeeksInMonth);
 
     const classes = useStyle();
     return (
@@ -110,7 +111,7 @@ export function TaskCalendar(props: Props) {
                                             :
                                             <TableCell className={classes.tableCellCalendarWeek} align="center">
                                                 <TaskCalendarWeekEntry
-                                                    selectedTaskId={props.selectedTaskId}
+                                                    selectedTask={props.selectedTask}
                                                     taskOccurences={props.taskOccurences}
                                                     calendarWeek={calendarRow.cw}
                                                 />
@@ -127,7 +128,7 @@ export function TaskCalendar(props: Props) {
                                         return (
                                             <TableCell className={classes.tableCellDefault} align="center">
                                                 <TaskCalendarDayEntry
-                                                    selectedTaskId={props.selectedTaskId}
+                                                    selectedTask={props.selectedTask}
                                                     taskOccurences={props.taskOccurences}
                                                     calendarWeek={calendarRow.cw}
                                                     dayOfMonth={date.getDate()}
@@ -180,7 +181,7 @@ function getDatesInMonth(year: number, month: number): Date[] {
 }
 
 
-function getWeekNumberByDate(d : Date) : number {
+function getWeekNumberByDate(d: Date): number {
     var copiedDate = new Date(d.getTime());
     // set hours to 6 to prevent having 00:00 which is ambigious
     copiedDate.setHours(6);

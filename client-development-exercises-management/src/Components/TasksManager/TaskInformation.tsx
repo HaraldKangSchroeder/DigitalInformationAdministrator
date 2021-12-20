@@ -7,6 +7,7 @@ import { MENU_ITEMS_SCORES, MENU_ITEMS_IMPORTANCES, MENU_ITEMS_WEEKLY_OCCURENCES
 import { makeStyles } from "@material-ui/core";
 import TaskOccurences from "../../Classes/TaskOccurences";
 import Task from "../../Classes/Task";
+import { DialogResetCurrentWeekTasks } from "./DialogResetCurrentWeekTasks";
 
 
 const useStyles = makeStyles({
@@ -76,7 +77,7 @@ export function TaskInformation(props: Props) {
                     />
                 </div>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
                 <div className={classes.text}>
                     Importance : {props.selectedTask.getImportance()}
                     <DialogChangeTaskValue
@@ -86,6 +87,9 @@ export function TaskInformation(props: Props) {
                         selectedTask={props.selectedTask}
                     />
                 </div>
+            </Grid>
+            <Grid item xs={1}>
+                <DialogResetCurrentWeekTasks />
             </Grid>
 
             <Grid item xs={4}>

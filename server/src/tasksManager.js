@@ -50,11 +50,6 @@ exports.setUpSocketListeners = async (io, socket) => {
         socket.emit('tasks', tasks);
     });
 
-    socket.on('getTasks', async () => {
-        let tasks = await databaseManager.getTasks();
-        socket.emit('tasks', tasks);
-    });
-
     socket.on('createTask', async (task) => {
         let taskId = await databaseManager.createTask(task.name, task.score, task.importance, task.weeklyOccurences);
         let isWeeklyRythmSet = task.week !== "";

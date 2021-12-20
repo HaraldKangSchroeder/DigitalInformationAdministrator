@@ -11,10 +11,10 @@ let currentWeek = 0;
 
 exports.startFrequentUpdates = async (io) => {
     updateCurrentDates();
-    await updateTaskaccomplishments(io);
+    await updateCurrentWeekTasks(io);
     interval = setInterval(async () => {
         updateCurrentDates();
-        await updateTaskaccomplishments(io);
+        await updateCurrentWeekTasks(io);
     }, getMillisecondsByMinute(UPDATE_TIME_STEP_MIN));
 }
 
@@ -24,18 +24,18 @@ function updateCurrentDates() {
     currentWeek = getWeekNumberByDate(dateToday);
 }
 
-async function updateTaskaccomplishments(io) {
+async function updateCurrentWeekTasks(io) {
     try {
-        let tasksAccomplishmentsOfWeekInYear = await databaseManager.getTaskAccomplishmentsOfWeekInYear(currentWeek, currentYear);
-        let tasksAccomplishmentsExistent = tasksAccomplishmentsOfWeekInYear.length > 0;
+        let taskAccomplishments = await databaseManager.getTaskAccomplishmentsOfWeekInYear(currentWeek, currentYear);
+        let tasksAccomplishmentsExistent = taskAccomplishments.length > 0;
         if (!tasksAccomplishmentsExistent) {
-            let taskOccurencesOfCurrentWeek = await databaseManager.getTaskOccurencesOfWeek(currentWeek);
+            let taskOccurences = await databaseManager.getTaskOccurencesOfWeek(currentWeek);
             let tasks = await databaseManager.getTasks();
-            let taskAccomplishments = createTasksAccomplishments(taskOccurencesOfCurrentWeek, tasks, currentYear);
+            let taskAccomplishments = createTaskAccomplishments(taskOccurences, tasks, currentYear);
             await databaseManager.createTaskAccomplishments(taskAccomplishments);
         }
         let res = await getCurrentWeekData();
-        io.emit("usersAndTasksOfCurrentWeek", res);
+        io.emit("currentWeekData", res);
     }
     catch (e) {
         console.log("Failed to update TaskAccomplishments");
@@ -88,7 +88,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         socket.emit('tasks', tasks);
 
         let res = await getCurrentWeekData();
-        io.emit("usersAndTasksOfCurrentWeek", res);
+        io.emit("currentWeekData", res);
     });
 
     /*-----------------------------------------------------------------*/
@@ -136,7 +136,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         if (oldUserId != null) databaseManager.updateYearlyScore(oldUserId, -score);
 
         let res = await getCurrentWeekData();
-        io.emit("usersAndTasksOfCurrentWeek", res);
+        io.emit("currentWeekData", res);
     });
 
     socket.on('getTaskAccomplishmentYears', async () => {
@@ -158,7 +158,7 @@ exports.setUpSocketListeners = async (io, socket) => {
         socket.emit("users", users);
 
         let res = await getCurrentWeekData();
-        io.emit("usersAndTasksOfCurrentWeek", res);
+        io.emit("currentWeekData", res);
     });
 
     socket.on('deleteUser', async (data) => {
@@ -176,25 +176,28 @@ exports.setUpSocketListeners = async (io, socket) => {
         socket.emit("users", users);
 
         let res = await getCurrentWeekData();
-        io.emit("usersAndTasksOfCurrentWeek", res);
+        io.emit("currentWeekData", res);
     });
 
     socket.on('resetTaskAccomplishments', async (data) => {
+        await resetCurrentWeekTasks(io);
 
+        let res = await getCurrentWeekData();
+        io.emit("currentWeekData", res);
     });
 
     /*-----------------------------------------------------------------*/
 
     socket.on('getCurrentWeekData', async () => {
         let res = await getCurrentWeekData();
-        socket.emit("usersAndTasksOfCurrentWeek", res);
+        socket.emit("currentWeekData", res);
     });
 }
 
 async function resetCurrentWeekTasks(io) {
     // TODO remove points of current week for each user
-    let users = databaseManager.getUsers();
-    let taskAccomplishments = databaseManager.getTaskAccomplishmentsOfWeekInYear(currentWeek, currentYear);
+    let users = await databaseManager.getUsers();
+    let taskAccomplishments = await databaseManager.getTaskAccomplishmentsOfWeekInYear(currentWeek, currentYear);
     for (let user of users) {
         let score = 0;
         for (let taskAccomplishment of taskAccomplishments) {
@@ -203,11 +206,11 @@ async function resetCurrentWeekTasks(io) {
             }
         }
         if (score !== 0) {
-            databaseManager.updateYearlyScore(currentYear, user.id, -score);
+            await databaseManager.updateYearlyScore(currentYear, user.id, -score);
         }
     }
     await databaseManager.deleteTaskAccomplishments(currentWeek, currentYear);
-    await updateTaskaccomplishments(io);
+    await updateCurrentWeekTasks(io);
 }
 
 async function getCurrentWeekData() {
@@ -218,11 +221,11 @@ async function getCurrentWeekData() {
     return res;
 }
 
-function createTasksAccomplishments(taskOccurences, tasks, year) {
+function createTaskAccomplishments(taskOccurences, tasks, year) {
     let taskAccomplishments = [];
     for (let taskOccurence of taskOccurences) {
         let task = getTask(taskOccurence.id, tasks);
-        // let weeklyOccurences = getWeeklyOccurences(taskOccurence.id, tasks);
+
         for (let i = 0; i < task.weeklyOccurences; i++) {
             let taskAccomplishment = {};
             taskAccomplishment["taskId"] = taskOccurence.id;

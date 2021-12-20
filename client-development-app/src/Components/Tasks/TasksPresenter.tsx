@@ -20,14 +20,14 @@ export default function TasksPresenter() {
 
     useEffect(() => {
         // request taskaccomplishments of current week and users and set state respectively
-        socket.on("usersAndTasksOfCurrentWeek", ({ tasks, users }) => {
+        socket.on("currentWeekData", ({ tasks, users }) => {
             console.log(new Users(users));
             setState({ tasks: new Tasks(tasks), users: new Users(users) });
         });
         socket.emit("getCurrentWeekData");
 
         return () => {
-            socket.off("usersAndTasksOfCurrentWeek");
+            socket.off("currentWeekData");
         }
     }, []);
 

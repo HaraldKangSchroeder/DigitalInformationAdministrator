@@ -10,11 +10,12 @@ const useStyles = makeStyles({
         display: "inline-block",
         paddingRight: "10px",
         margin: "10px",
-        background: props.isUserSelected ? "rgba(255,255,255,1)" : "rgb(185,185,185)",
+        background: props.selectedUser == null ? "rgb(175,175,175)" : props.selectedUser.getId() === props.user.getId() ? "rgba(255,255,255,1)" : "rgba(175,175,175,0.25)",
         borderRadius: "10px",
         justifyContent: "center",
         fontFamily: "Calibri",
         cursor: "pointer",
+        boxShadow: props.selectedUser == null ? "2px 2px 5px rgb(40,40,40)" : props.selectedUser.getId() === props.user.getId() ? "2px 2px 10px rgb(0,0,0)" : "2px 2px 5px rgb(80,80,80)"
     }),
     avatar: (props: Props) => ({
         float: "left",
@@ -29,7 +30,7 @@ const useStyles = makeStyles({
 interface Props {
     user: User;
     changeSelectedUser: Function;
-    isUserSelected: boolean;
+    selectedUser: User;
 }
 
 export default function UserElement(props: Props) {

@@ -28,7 +28,7 @@ export default function UsersCollection(props: Props) {
                 props.users.getList().map((user: User) =>
                     <Grid item xs={12}>
                         <UserElement
-                            isUserSelected={props.selectedUser != null && props.selectedUser.getId() === user.getId()}
+                            selectedUser={props.selectedUser}
                             changeSelectedUser={props.changeSelectedUser}
                             user={user}
                         />

@@ -3,15 +3,15 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import socket from "../../socket";
-import TasksPresentation from "./TasksPresentation";
-import UsersPresentation from "./UsersPresentation";
+import TasksCollection from "./TasksCollection";
+import UsersCollection from "./UsersCollection";
 import NavBar from '../Navbar/NavBar';
 import Users from "../../Classes/Users";
 import User from '../../Classes/User';
 import TaskAccomplishments from '../../Classes/TaskAccomplishments';
 // import './App.css';
 
-export default function TaskAccomplishmentsView() {
+export default function TasksView() {
     const [selectedUser, setSelectedUser] = useState(null);
     const [state, setState] = useState({
         taskAccomplishments: new TaskAccomplishments(),
@@ -46,10 +46,10 @@ export default function TaskAccomplishmentsView() {
                     <NavBar />
                 </Grid>
                 <Grid item xs={9}>
-                    <TasksPresentation selectedUser={selectedUser} users={state.users} taskAccomplishments={state.taskAccomplishments} />
+                    <TasksCollection selectedUser={selectedUser} users={state.users} taskAccomplishments={state.taskAccomplishments} />
                 </Grid>
                 <Grid container item xs={2}>
-                    <UsersPresentation selectedUser={selectedUser} changeSelectedUser={changeSelectedUser} users={state.users} />
+                    <UsersCollection selectedUser={selectedUser} changeSelectedUser={changeSelectedUser} users={state.users} />
                 </Grid>
             </Grid>
         </div>

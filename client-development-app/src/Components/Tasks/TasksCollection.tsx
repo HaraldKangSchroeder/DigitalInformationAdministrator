@@ -1,4 +1,4 @@
-import TaskPresentation from "./TaskPresentation";
+import TaskElement from "./TaskElement";
 import { makeStyles } from "@material-ui/core"
 import React from "react";
 import Tasks from "../../Classes/Tasks";
@@ -21,7 +21,7 @@ interface Props {
     selectedUser: User;
 }
 
-export default function TasksPresentation(props: Props) {
+export default function TasksCollection(props: Props) {
     const classes = useStyles();
     return (
         <div className={classes.root}>
@@ -29,7 +29,7 @@ export default function TasksPresentation(props: Props) {
                 props.taskAccomplishments.getTaskAccomplishmentsGroupedByImportance().map((groupedTaskAccomplishments) =>
                     <div style={{ marginBottom: "3vh" }}>
                         {groupedTaskAccomplishments.map((taskAccomplishment) => {
-                            return <TaskPresentation selectedUser={props.selectedUser} users={props.users} taskAccomplishment={taskAccomplishment} />
+                            return <TaskElement selectedUser={props.selectedUser} users={props.users} taskAccomplishment={taskAccomplishment} />
                         })}
                     </div>
                 )

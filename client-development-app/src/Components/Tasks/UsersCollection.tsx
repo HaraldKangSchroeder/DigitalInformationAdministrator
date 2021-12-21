@@ -1,4 +1,4 @@
-import UserPresentation from "./UserPresentation";
+import UserElement from "./UserElement";
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from "@material-ui/core"
 import User from "../../Classes/User";
@@ -7,30 +7,30 @@ import React from "react";
 
 interface Props {
     users: Users;
-    changeSelectedUser : Function;
-    selectedUser : User;
+    changeSelectedUser: Function;
+    selectedUser: User;
 }
 
 const useStyles = makeStyles({
-    root : {
-        background:"rgb(70,70,70)",
-        height:"100vh",
-        width:"100%",
+    root: {
+        background: "rgb(70,70,70)",
+        height: "100vh",
+        width: "100%",
         overflowY: "auto",
     }
 })
 
-export default function UsersPresentation(props: Props) {
+export default function UsersCollection(props: Props) {
     const classes = useStyles();
     return (
         <div className={classes.root}>
             {
                 props.users.getList().map((user: User) =>
                     <Grid item xs={12}>
-                        <UserPresentation 
-                            isUserSelected={props.selectedUser != null && props.selectedUser.getId() === user.getId()} 
-                            changeSelectedUser={props.changeSelectedUser} 
-                            user={user} 
+                        <UserElement
+                            isUserSelected={props.selectedUser != null && props.selectedUser.getId() === user.getId()}
+                            changeSelectedUser={props.changeSelectedUser}
+                            user={user}
                         />
                     </Grid>
                 )

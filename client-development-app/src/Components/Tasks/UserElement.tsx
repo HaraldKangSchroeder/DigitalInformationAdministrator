@@ -32,7 +32,7 @@ interface Props {
     isUserSelected: boolean;
 }
 
-export default function UserPresentation(props: Props) {
+export default function UserElement(props: Props) {
     const classes = useStyles(props);
     return (
         <div className={classes.root} onClick={(e) => { props.changeSelectedUser(props.user) }}>

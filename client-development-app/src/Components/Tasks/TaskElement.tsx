@@ -58,7 +58,7 @@ interface Props {
     selectedUser: User;
 }
 
-export default function TaskPresentation(props: Props) {
+export default function TaskElement(props: Props) {
 
     const handleClick = () => {
         let isUserSelected = props.selectedUser != null;

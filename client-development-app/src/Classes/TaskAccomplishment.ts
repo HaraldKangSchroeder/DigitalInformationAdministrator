@@ -1,3 +1,5 @@
+import { taskColors } from "../utils";
+
 export default class TaskAccomplishment {
 
     id: number;
@@ -80,6 +82,6 @@ export default class TaskAccomplishment {
     }
 
     getColor(): string {
-        return "#ffffff";
+        return taskColors[this.taskId % taskColors.length];
     }
 }

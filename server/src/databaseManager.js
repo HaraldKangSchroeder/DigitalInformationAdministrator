@@ -404,12 +404,17 @@ exports.getTaskAccomplishment = async (id) => {
 exports.getTaskAccomplishmentsByYear = async (year) => {
     try {
         let queryText = `
-        SELECT  id,
-                task_id AS "taskId",
-                user_id AS "userId",
-                calendar_week AS "calendarWeek",
-                year 
-        FROM ${TABLE_TASK_ACCOMPLISHMENTS} 
+        SELECT  
+            "ta".id,
+            "ta".task_id AS "taskId",
+            "ta".user_id AS "userId",
+            "ta".calendar_week AS "calendarWeek",
+            "ta".year,
+            "ta".importance,
+            "ta".score,
+            "ta".label,
+            "ta".day_of_week AS "dayOfWeek"
+        FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS "ta"
         WHERE year = $1 ORDER BY calendar_week;`;
         let queryValues = [year];
         let { rows } = await pool.query(queryText, queryValues);

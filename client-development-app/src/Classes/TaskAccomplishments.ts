@@ -1,4 +1,6 @@
+import Task from "./Task";
 import TaskAccomplishment from "./TaskAccomplishment";
+import Tasks from "./Tasks";
 
 export default class TaskAccomplishments {
 
@@ -16,6 +18,7 @@ export default class TaskAccomplishments {
     }
 
     addTaskAccomplishment(taskAccomplishment: TaskAccomplishment) {
+        console.log(taskAccomplishment);
         this.taskAccomplishmentList.push(taskAccomplishment);
     }
 
@@ -73,5 +76,18 @@ export default class TaskAccomplishments {
             taskAccomplishmentsGroupedByImportance[i] = this.getTaskAccomplishmentsByImportance(importances[i]);
         }
         return taskAccomplishmentsGroupedByImportance;
+    }
+
+    extractTasks(): Tasks {
+        let tasks = new Tasks();
+
+        for (let taskAccomplishment of this.taskAccomplishmentList) {
+            if (!tasks.containsTaskById(taskAccomplishment.getTaskId())) {
+                console.log(taskAccomplishment);
+                tasks.addTask(new Task(taskAccomplishment.getTaskId(), taskAccomplishment.getLabel()));
+            }
+        }
+
+        return tasks;
     }
 }

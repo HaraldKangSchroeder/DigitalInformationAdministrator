@@ -44,8 +44,8 @@ const useStyles = makeStyles({
 export function UserCharts() {
     const [taskAccomplishments, setTaskAccomplishments] = useState(new TaskAccomplishments(null));
     const [users, setUsers] = useState(new Users(null));
-    const [tasks, setTasks] = useState(new Tasks(null));
-    const [selectedTasks, setSelectedTasks] = useState(new Tasks(null));
+    const [tasks, setTasks] = useState(new Tasks());
+    const [selectedTasks, setSelectedTasks] = useState(new Tasks());
     const [year, setYear] = useState(0);
     const [years, setYears] = useState<number[]>([]);
     const [calendarWeekRange, setCalendarWeekRange] = useState({ start: 1, end: 1 });
@@ -65,15 +65,9 @@ export function UserCharts() {
         });
 
         socket.on("taskAccomplishments", (taskAccomplishmentEntries) => {
-            if (taskAccomplishmentEntries.length == 0) return;
+            if (taskAccomplishmentEntries.length === 0) return;
             let newTaskAccomplishments = new TaskAccomplishments(taskAccomplishmentEntries);
             setTaskAccomplishments(newTaskAccomplishments);
-        });
-
-        socket.on("tasks", (taskEntries) => {
-            if (taskEntries.length === 0) return;
-            let newTasks = new Tasks(taskEntries);
-            setTasks(newTasks);
         });
 
         socket.emit("getUsers");
@@ -81,13 +75,11 @@ export function UserCharts() {
         return () => {
             socket.off("taskAccomplishmentYears");
             socket.off("taskAccomplishments");
-            socket.off("tasks");
             socket.off("users");
         }
     }, [])
 
     useEffect(() => {
-        socket.emit("getTasks");
         socket.emit("getTaskAccomplishmentYears");
     }, [users])
 
@@ -101,8 +93,12 @@ export function UserCharts() {
     useEffect(() => {
         let isYearSet = year !== 0;
         if (!isYearSet) return;
-        socket.emit("getTaskAccomplishments", { year: year, userIds: users.getUserIds() });
+        socket.emit("getTaskAccomplishments", { year: year });
     }, [year])
+
+    useEffect(() => {
+        setTasks(taskAccomplishments.extractTasks());
+    }, [taskAccomplishments]);
 
     useEffect(() => {
         let latestCalendarWeek = taskAccomplishments.getLatestCalendarWeek();
@@ -113,7 +109,7 @@ export function UserCharts() {
             start: taskAccomplishments.getEarliestCalendarWeek(),
             end: newCalendarWeekEnd,
         });
-    }, [taskAccomplishments]);
+    }, [tasks])
 
     useEffect(() => {
         let visualizationData = getVisualizationData(users, tasks, selectedTasks, taskAccomplishments, calendarWeekRange.start, calendarWeekRange.end, visualizationMode);
@@ -141,7 +137,7 @@ export function UserCharts() {
     }
 
     const handleChangeSelectedTasksByIds = (taskIds: number[]) => {
-        let newSelectedTasks = new Tasks(null);
+        let newSelectedTasks = new Tasks();
         for (let taskId of taskIds) {
             newSelectedTasks.addTask(tasks.getTaskById(taskId));
         }
@@ -251,7 +247,7 @@ function getVisualizationData(
     }
     visualizationData.datasets = [];
     for (let user of users.getList()) {
-        let userVisualizationData = getVisualizationDatasetOfUser(user, tasks, selectedTasks, taskAccomplishments, calendarWeekStart, calendarWeekEnd, visualizationMode);
+        let userVisualizationData = getVisualizationDatasetOfUser(user, selectedTasks, taskAccomplishments, calendarWeekStart, calendarWeekEnd, visualizationMode);
         visualizationData.datasets.push(userVisualizationData);
     }
     return visualizationData;
@@ -259,7 +255,6 @@ function getVisualizationData(
 
 function getVisualizationDatasetOfUser(
     user: User,
-    tasks: Tasks,
     selectedTasks: Tasks,
     taskAccomplishments: TaskAccomplishments,
     calendarWeekStart: number,
@@ -268,10 +263,10 @@ function getVisualizationDatasetOfUser(
 ) {
     let data: any[] = [];
     if (visualizationMode === VISUALIZATION_MODE_NORMAL) {
-        data = getVisualizationDataOfUserNormal(user, tasks, selectedTasks, taskAccomplishments, calendarWeekStart, calendarWeekEnd);
+        data = getVisualizationDataOfUserNormal(user, selectedTasks, taskAccomplishments, calendarWeekStart, calendarWeekEnd);
     }
     else if (visualizationMode === VISUALIZATION_MODE_ACCUMULATED) {
-        data = getVisualizationDataOfUserAccumulated(user, tasks, selectedTasks, taskAccomplishments, calendarWeekStart, calendarWeekEnd);
+        data = getVisualizationDataOfUserAccumulated(user, selectedTasks, taskAccomplishments, calendarWeekStart, calendarWeekEnd);
     }
     return getVisualizationDataset(user, data);
 }
@@ -279,7 +274,6 @@ function getVisualizationDatasetOfUser(
 
 function getVisualizationDataOfUserNormal(
     user: User,
-    tasks: Tasks,
     selectedTasks: Tasks,
     taskAccomplishments: TaskAccomplishments,
     calendarWeekStart: number,
@@ -287,7 +281,7 @@ function getVisualizationDataOfUserNormal(
 ) {
     let data = [];
     for (let calendarWeek = calendarWeekStart; calendarWeek <= calendarWeekEnd; calendarWeek++) {
-        let score = getSummedScoreInCalendarWeekByUserId(user.getId(), tasks, selectedTasks, taskAccomplishments, calendarWeek);
+        let score = getSummedScoreInCalendarWeekByUserId(user.getId(), selectedTasks, taskAccomplishments, calendarWeek);
         data.push(score);
     }
     return data;
@@ -295,7 +289,6 @@ function getVisualizationDataOfUserNormal(
 
 function getVisualizationDataOfUserAccumulated(
     user: User,
-    tasks: Tasks,
     selectedTasks: Tasks,
     taskAccomplishments: TaskAccomplishments,
     calendarWeekStart: number,
@@ -304,7 +297,7 @@ function getVisualizationDataOfUserAccumulated(
     let data = [];
     let previousScore = 0;
     for (let calendarWeek = calendarWeekStart; calendarWeek <= calendarWeekEnd; calendarWeek++) {
-        let score = previousScore + getSummedScoreInCalendarWeekByUserId(user.getId(), tasks, selectedTasks, taskAccomplishments, calendarWeek);
+        let score = previousScore + getSummedScoreInCalendarWeekByUserId(user.getId(), selectedTasks, taskAccomplishments, calendarWeek);
         previousScore = score;
         data.push(score);
     }
@@ -335,7 +328,6 @@ function getVisualizationDataset(user: User, data: any) {
 
 function getSummedScoreInCalendarWeekByUserId(
     userId: number,
-    tasks: Tasks,
     selectedTasks: Tasks,
     taskAccomplishments: TaskAccomplishments,
     calendarWeek: number
@@ -344,9 +336,9 @@ function getSummedScoreInCalendarWeekByUserId(
     for (let taskAccomplishment of taskAccomplishments.getTaskAccomplishmentList()) {
         let isEntryInCalendarWeek = taskAccomplishment.getCalendarWeek() === calendarWeek;
         let isEntryOfUser = userId === taskAccomplishment.getUserId();
-        let isSelectedTask = selectedTasks.getList().length == 0 ? true : selectedTasks.containsTaskById(taskAccomplishment.getTaskId());
+        let isSelectedTask = selectedTasks.getList().length === 0 ? true : selectedTasks.containsTaskById(taskAccomplishment.getTaskId());
         if (isEntryInCalendarWeek && isEntryOfUser && isSelectedTask) {
-            score_sum += tasks.getTaskById(taskAccomplishment.getTaskId()).getScore();
+            score_sum += taskAccomplishment.getScore();
         }
     }
     return score_sum;

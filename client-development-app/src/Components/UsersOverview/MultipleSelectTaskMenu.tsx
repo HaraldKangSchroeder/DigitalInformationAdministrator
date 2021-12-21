@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
         minWidth: 250,
         maxWidth: 250,
-        height:34,
+        height: 34,
     }
 }));
 
@@ -28,42 +28,43 @@ const MenuProps = {
 
 
 interface Props {
-    selectedTasks : Tasks;
-    tasks : Tasks;
-    changeSelectedTasksByIds : Function;
+    selectedTasks: Tasks;
+    tasks: Tasks;
+    changeSelectedTasksByIds: Function;
 }
 
-export default function MultipleSelectTaskMenu(props : Props) {
+export default function MultipleSelectTaskMenu(props: Props) {
     const classes = useStyles();
 
-    const handleChange = (e : any) => {
+    const handleChange = (e: any) => {
         let ids = e.target.value;
         props.changeSelectedTasksByIds(ids);
     };
     let label = props.selectedTasks.getList().length > 0 ? "Selected Tasks" : "All Tasks in year";
+    console.log(props.tasks);
     return (
-            <FormControl
-                size="small"
-                variant="outlined"
-                className={classes.formControl}
+        <FormControl
+            size="small"
+            variant="outlined"
+            className={classes.formControl}
+        >
+            <InputLabel style={{ color: "rgb(200,200,200)" }}>{label}</InputLabel>
+            <Select
+                style={{ color: "rgb(200,200,200)" }}
+                multiple
+                value={props.selectedTasks.getTaskIds()}
+                label={label}
+                onChange={handleChange}
+                renderValue={(ids: any) => props.tasks.getTaskLabelsByIds(ids).join(', ')}
+                MenuProps={MenuProps}
             >
-                <InputLabel style={{color:"rgb(200,200,200)"}}>{label}</InputLabel>
-                <Select
-                    style={{color:"rgb(200,200,200)"}}
-                    multiple
-                    value={props.selectedTasks.getTaskIds()}
-                    label={label}
-                    onChange={handleChange}
-                    renderValue={(ids : any) => props.tasks.getTaskLabelsByIds(ids).join(', ')}
-                    MenuProps={MenuProps}
-                >
-                    {props.tasks.getList().map((task : Task) => (
-                        <MenuItem style={{padding:13}} key={task.getId()} value={task.getId()}>
-                            <Checkbox checked={props.selectedTasks.containsTaskById(task.getId())} />
-                            {task.getLabel()}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
+                {props.tasks.getList().map((task: Task) => (
+                    <MenuItem style={{ padding: 13 }} key={task.getId()} value={task.getId()}>
+                        <Checkbox checked={props.selectedTasks.containsTaskById(task.getId())} />
+                        {task.getLabel()}
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
     );
 }

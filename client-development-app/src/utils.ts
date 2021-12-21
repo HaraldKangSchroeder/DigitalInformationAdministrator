@@ -24,16 +24,16 @@ function deterministicShuffle(list: any[]) {
 function deterministicShuffleIteration(list: any[], distFactor: number) {
     let dif = Math.max(Math.floor(list.length / distFactor), 1);
     for (let i = list.length - 1; i > 0; i--) {
-        const j = i % 2 === 0 ? mod(i - dif,list.length) : mod(i + dif,list.length);
+        const j = i % 2 === 0 ? mod(i - dif, list.length) : mod(i + dif, list.length);
         [list[i], list[j]] = [list[j], list[i]];
     }
 }
 
-function mod(n : number, m : number) : number {
+function mod(n: number, m: number): number {
     return ((n % m) + m) % m;
 }
 
-export function getDayName(dayNum : number){
+export function getDayName(dayNum: number) {
     switch (dayNum) {
         case 0:
             return "Sunday"
@@ -52,6 +52,9 @@ export function getDayName(dayNum : number){
     }
 }
 
-export function round2Digits(num : number) : number {
+export function round2Digits(num: number): number {
     return Math.round(num * 100) / 100;
 }
+
+const taskColors = getHslList(30, 80, 93);
+export { taskColors }

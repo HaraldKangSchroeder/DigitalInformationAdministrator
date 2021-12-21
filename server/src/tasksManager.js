@@ -125,10 +125,13 @@ exports.setUpSocketListeners = async (io, socket) => {
     socket.on('updateTaskAccomplishment', async ({ taskAccomplishmentId, newUserId, oldUserId }) => {
         await databaseManager.updateTaskAccomplishment(taskAccomplishmentId, newUserId);
 
+        console.log(taskAccomplishmentId + " : " + newUserId + " : " + oldUserId);
+
         // update scores
-        let { score } = databaseManager.getTaskAccomplishment(taskAccomplishmentId);
-        if (newUserId != null) databaseManager.updateYearlyScore(newUserId, score);
-        if (oldUserId != null) databaseManager.updateYearlyScore(oldUserId, -score);
+        let { score } = await databaseManager.getTaskAccomplishment(taskAccomplishmentId);
+        console.log("score : " + score);
+        if (newUserId != null) await databaseManager.updateYearlyScore(currentYear, newUserId, score);
+        if (oldUserId != null) await databaseManager.updateYearlyScore(currentYear, oldUserId, -score);
 
         let res = await getCurrentWeekData();
         io.emit("currentWeekData", res);
@@ -211,6 +214,8 @@ async function resetCurrentWeekTasks(io) {
 async function getCurrentWeekData() {
     let taskAccomplishments = await databaseManager.getTaskAccomplishmentsOfWeekInYear(currentWeek, currentYear);
     let users = await databaseManager.getUsersWithScore(currentWeek, currentYear);
+
+    console.log(users);
 
     let res = { taskAccomplishments: taskAccomplishments, users: users }
     return res;

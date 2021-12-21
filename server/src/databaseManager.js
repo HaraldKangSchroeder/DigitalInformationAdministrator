@@ -316,9 +316,11 @@ exports.getUsersWithScore = async (week, year) => {
                 "u".id, 
                 "u".name,
                 (
-                    SELECT sum("ta".score)
-                    FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS ta 
-                    WHERE "u".id = "ta".user_id AND "ta".calendar_week = $1 AND "ta".year = $2
+                    COALESCE(
+                        (SELECT sum("ta".score)::int
+                        FROM ${TABLE_TASK_ACCOMPLISHMENTS} AS ta 
+                        WHERE "u".id = "ta".user_id AND "ta".calendar_week = $1 AND "ta".year = $2)
+                    , 0)
                 ) AS "scoreOfWeek",
                 (
                     SELECT 
@@ -389,7 +391,7 @@ exports.getTaskAccomplishment = async (id) => {
         let { rows } = await pool.query(queryText, queryValues);
         console.log(`getTaskAccomplishment`);
         logDivider();
-        return rows;
+        return rows[0];
     }
     catch (e) {
         console.error(e);
@@ -517,9 +519,8 @@ exports.updateYearlyScore = async (year, userId, scoreChange) => {
     try {
         let queryText = `
         UPDATE ${TABLE_SCORES_OVER_YEARS} 
-        SET score = 
-            (SELECT score + $3 FROM ${TABLE_SCORES_OVER_YEARS} WHERE year = $1 AND user_id = $2)
-        WHERE user_id = $1 AND year = $2
+        SET score = (SELECT score + $3 FROM ${TABLE_SCORES_OVER_YEARS} WHERE year = $1 AND user_id = $2)
+        WHERE user_id = $2 AND year = $1
     `;
         let queryValues = [year, userId, scoreChange];
         await pool.query(queryText, queryValues);

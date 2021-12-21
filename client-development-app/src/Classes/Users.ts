@@ -1,5 +1,5 @@
 import User from "./User";
-import { getHslList } from "../utils";
+import { userColors } from "../utils";
 
 export default class Users {
 
@@ -8,11 +8,8 @@ export default class Users {
     constructor(users?: any) {
         this.userList = [];
         if (users == null) return;
-        let lightness = 50;
-        let meanSaturation = 85;
-        let hslList = getHslList(users.length, lightness, meanSaturation);
         for (let i = 0; i < users.length; i++) {
-            let user = new User(users[i].id, users[i].name, users[i].scoreOfWeek, users[i].scoreOfYear, hslList[i]);
+            let user = new User(users[i].id, users[i].name, users[i].scoreOfWeek, users[i].scoreOfYear, userColors[i]);
             this.addUser(user);
         }
     }

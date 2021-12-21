@@ -1,7 +1,7 @@
 const MAX_SATURATION = 100;
 const MAX_HUE = 360;
 
-export function getHslList(length: number, lightness: number, meanSaturation: number) {
+function getHslList(length: number, lightness: number, meanSaturation: number) {
     let hslList: string[] = [];
     for (let i = 0; i < length; i++) {
         let hue = (i / length) * MAX_HUE;
@@ -57,4 +57,5 @@ export function round2Digits(num: number): number {
 }
 
 const taskColors = getHslList(30, 80, 93);
-export { taskColors }
+const userColors = getHslList(10, 50, 85);
+export { taskColors, userColors }

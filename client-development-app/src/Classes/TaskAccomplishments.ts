@@ -30,19 +30,48 @@ export default class TaskAccomplishments {
     }
 
     readDataset(dataset: any) {
-        for (let datasetEntry of dataset) {
-            let taskAccomplishment = new TaskAccomplishment(datasetEntry.taskId, datasetEntry.userId, datasetEntry.calendarWeek, datasetEntry.year);
+        for (let data of dataset) {
+            let taskAccomplishment = new TaskAccomplishment(data.id, data.taskId, data.userId, data.calendarWeek, data.year, data.label, data.importance, data.dayOfWeek, data.score);
             this.addTaskAccomplishment(taskAccomplishment);
         }
     }
 
-    getLatestCalendarWeek()  : number{
+    getLatestCalendarWeek(): number {
         if (this.taskAccomplishmentList.length === 0) return 0;
         return this.taskAccomplishmentList[this.taskAccomplishmentList.length - 1].getCalendarWeek(); // this is right, because it is ordered by calendar_week on serverside
     }
 
-    getEarliestCalendarWeek()  : number{
+    getEarliestCalendarWeek(): number {
         if (this.taskAccomplishmentList.length === 0) return 0;
         return this.taskAccomplishmentList[0].getCalendarWeek(); // this is right, because it is ordered by calendar_week on serverside
+    }
+
+    getImportances(): number[] {
+        let importances: number[] = [];
+        for (let taskAccomplishment of this.taskAccomplishmentList) {
+            if (!importances.includes(taskAccomplishment.getImportance())) {
+                importances.push(taskAccomplishment.getImportance());
+            }
+        }
+        return importances;
+    }
+
+    getTaskAccomplishmentsByImportance(importance: number): TaskAccomplishment[] {
+        let taskAccomplishments: TaskAccomplishment[] = [];
+        for (let taskAccomplishment of this.taskAccomplishmentList) {
+            if (taskAccomplishment.getImportance() === importance) {
+                taskAccomplishments.push(taskAccomplishment);
+            }
+        }
+        return taskAccomplishments;
+    }
+
+    getTaskAccomplishmentsGroupedByImportance(): TaskAccomplishment[][] {
+        let importances = this.getImportances().sort().reverse();
+        let taskAccomplishmentsGroupedByImportance: TaskAccomplishment[][] = [];
+        for (let i = 0; i < importances.length; i++) {
+            taskAccomplishmentsGroupedByImportance[i] = this.getTaskAccomplishmentsByImportance(importances[i]);
+        }
+        return taskAccomplishmentsGroupedByImportance;
     }
 }

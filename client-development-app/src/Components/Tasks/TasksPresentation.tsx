@@ -5,30 +5,31 @@ import Tasks from "../../Classes/Tasks";
 import { classicNameResolver } from "typescript";
 import Users from "../../Classes/Users";
 import User from "../../Classes/User";
+import TaskAccomplishments from "../../Classes/TaskAccomplishments";
 
 const useStyles = makeStyles({
-    root : {
-        paddingLeft : "1vw",
+    root: {
+        paddingLeft: "1vw",
         height: "100vh",
         overflowY: "auto",
     }
 })
 
 interface Props {
-    tasks : Tasks;
-    users : Users;
-    selectedUser : User;
+    taskAccomplishments: TaskAccomplishments;
+    users: Users;
+    selectedUser: User;
 }
 
-export default function TasksPresentation(props : Props){
+export default function TasksPresentation(props: Props) {
     const classes = useStyles();
     return (
         <div className={classes.root}>
             {
-                props.tasks.getTasksOrganizedByImportance().map((tasksOrganized) => 
-                    <div style={{marginBottom:"3vh"}}>
-                        {tasksOrganized.map((task) => {
-                            return <TaskPresentation selectedUser={props.selectedUser} users={props.users} task={task}/>
+                props.taskAccomplishments.getTaskAccomplishmentsGroupedByImportance().map((groupedTaskAccomplishments) =>
+                    <div style={{ marginBottom: "3vh" }}>
+                        {groupedTaskAccomplishments.map((taskAccomplishment) => {
+                            return <TaskPresentation selectedUser={props.selectedUser} users={props.users} taskAccomplishment={taskAccomplishment} />
                         })}
                     </div>
                 )

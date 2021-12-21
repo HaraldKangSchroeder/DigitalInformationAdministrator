@@ -5,7 +5,7 @@ import {
     Link
 } from "react-router-dom";
 import GroceryCartPresenter from "./Components/Groceries/GroceryCartPresenter";
-import TasksPresenter from './Components/Tasks/TasksPresenter';
+import TaskAccomplishentsView from './Components/Tasks/TaskAccomplishmentsView';
 import WeatherPresenter from "./Components/Weather/WeatherPresenter";
 import './App.css';
 import dotenv from "dotenv";
@@ -32,7 +32,7 @@ function App() {
                     <UserCharts />
                 </Route>
                 <Route exact path="/">
-                    <TasksPresenter />
+                    <TaskAccomplishentsView />
                 </Route>
             </Switch>
         </Router>

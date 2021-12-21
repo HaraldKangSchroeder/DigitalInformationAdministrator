@@ -3,10 +3,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import Task from "../../Classes/Task";
 import Users from "../../Classes/Users";
 import User from "../../Classes/User";
 import socket from "../../socket";
+import TaskAccomplishment from "../../Classes/TaskAccomplishment";
 
 const useStyles = makeStyles({
     root: (props: Props) => ({
@@ -15,7 +15,7 @@ const useStyles = makeStyles({
         borderRadius: "10px",
         justifyContent: "center",
         fontFamily: "Calibri",
-        background: props.task.getColor(),
+        background: props.taskAccomplishment.getColor(),
         boxShadow: "0 1px 5px 0 rgba(0, 0, 0, 0.4),0 -1px 5px 0 rgba(0, 0, 0, 0.4)",
         cursor: "pointer",
     }),
@@ -33,9 +33,9 @@ const useStyles = makeStyles({
         borderWidth: "1px",
     },
     userAvatar: (props: Props) => {
-        if (props.task.userId == null) return {};
+        if (props.taskAccomplishment.getUserId() == null) return {};
         return {
-            backgroundColor: props.users.getUserById(props.task.getUserId()).getAvatarColor(),
+            backgroundColor: props.users.getUserById(props.taskAccomplishment.getUserId()).getAvatarColor(),
             borderStyle: "solid",
             borderColor: "rgba(0,0,0,0)",
             borderWidth: "1px",
@@ -53,7 +53,7 @@ const useStyles = makeStyles({
 })
 
 interface Props {
-    task: Task;
+    taskAccomplishment: TaskAccomplishment;
     users: Users;
     selectedUser: User;
 }
@@ -62,31 +62,54 @@ export default function TaskPresentation(props: Props) {
 
     const handleClick = () => {
         let isUserSelected = props.selectedUser != null;
+
         if (isUserSelected) {
-            let isTaskAlreadyAssignedToUser = props.task.getUserId() != null;
-            if (isTaskAlreadyAssignedToUser && props.task.getUserId() === props.selectedUser.getId()) {
-                socket.emit("updateTaskAccomplishment", { id: props.task.getId(), userId: null });
-                return;
+            let isTaskAlreadyAssignedToUser = props.taskAccomplishment.getUserId() != null;
+            if (isTaskAlreadyAssignedToUser) {
+                if (props.taskAccomplishment.getUserId() === props.selectedUser.getId()) {
+                    return socket.emit("updateTaskAccomplishment",
+                        {
+                            taskAccomplishmentId: props.taskAccomplishment.getId(),
+                            newUserId: null,
+                            oldUserId: props.taskAccomplishment.getUserId()
+                        });
+                }
+                return socket.emit("updateTaskAccomplishment",
+                    {
+                        taskAccomplishmentId: props.taskAccomplishment.getId(),
+                        newUserId: props.selectedUser.getId(),
+                        oldUserId: props.taskAccomplishment.getUserId()
+                    });
             }
-            socket.emit("updateTaskAccomplishment", { id: props.task.getId(), userId: props.selectedUser.getId() });
-            return;
+            return socket.emit("updateTaskAccomplishment",
+                {
+                    taskAccomplishmentId: props.taskAccomplishment.getId(),
+                    newUserId: props.selectedUser.getId(),
+                    oldUserId: null
+                });
+
         }
-        socket.emit("updateTaskAccomplishment", { id: props.task.getId(), userId: null });
+        socket.emit("updateTaskAccomplishment",
+            {
+                taskAccomplishmentId: props.taskAccomplishment.getId(),
+                newUserId: null,
+                oldUserId: props.taskAccomplishment.getUserId()
+            });
     }
 
     const classes = useStyles(props);
-    let text = `${props.task.getLabel()} ${props.task.getDayOfWeekText()}`;
-    let hasUserDoneTask = props.task.getUserId() != null;
+    let text = `${props.taskAccomplishment.getLabel()} ${props.taskAccomplishment.getDayOfWeekText()}`;
+    let hasUserDoneTask = props.taskAccomplishment.getUserId() != null;
     const avatarClass = hasUserDoneTask ? `${classes.avatar} ${classes.userAvatar}` : `${classes.avatar} ${classes.taskPendingAvatar}`;
     return (
         <div className={classes.root} onClick={(e) => { handleClick(); }}>
             <ListItem>
                 <div>
                     <ListItemAvatar>
-                        <Avatar className={avatarClass}>{hasUserDoneTask ? props.users.getUserById(props.task.getUserId()).getNameCode() : " "}</Avatar>
+                        <Avatar className={avatarClass}>{hasUserDoneTask ? props.users.getUserById(props.taskAccomplishment.getUserId()).getNameCode() : " "}</Avatar>
                     </ListItemAvatar>
                 </div>
-                <ListItemText primary={text} secondary={"Score: " + props.task.getScore()} />
+                <ListItemText primary={text} secondary={"Score: " + props.taskAccomplishment.getScore()} />
             </ListItem>
         </div>
     )

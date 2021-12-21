@@ -6,23 +6,22 @@ import socket from "../../socket";
 import TasksPresentation from "./TasksPresentation";
 import UsersPresentation from "./UsersPresentation";
 import NavBar from '../Navbar/NavBar';
-import Tasks from "../../Classes/Tasks";
 import Users from "../../Classes/Users";
 import User from '../../Classes/User';
+import TaskAccomplishments from '../../Classes/TaskAccomplishments';
 // import './App.css';
 
-export default function TasksPresenter() {
+export default function TaskAccomplishmentsView() {
     const [selectedUser, setSelectedUser] = useState(null);
     const [state, setState] = useState({
-        tasks: new Tasks(),
+        taskAccomplishments: new TaskAccomplishments(),
         users: new Users()
     })
 
     useEffect(() => {
         // request taskaccomplishments of current week and users and set state respectively
-        socket.on("currentWeekData", ({ tasks, users }) => {
-            console.log(new Users(users));
-            setState({ tasks: new Tasks(tasks), users: new Users(users) });
+        socket.on("currentWeekData", ({ taskAccomplishments, users }) => {
+            setState({ taskAccomplishments: new TaskAccomplishments(taskAccomplishments), users: new Users(users) });
         });
         socket.emit("getCurrentWeekData");
 
@@ -47,7 +46,7 @@ export default function TasksPresenter() {
                     <NavBar />
                 </Grid>
                 <Grid item xs={9}>
-                    <TasksPresentation selectedUser={selectedUser} users={state.users} tasks={state.tasks} />
+                    <TasksPresentation selectedUser={selectedUser} users={state.users} taskAccomplishments={state.taskAccomplishments} />
                 </Grid>
                 <Grid container item xs={2}>
                     <UsersPresentation selectedUser={selectedUser} changeSelectedUser={changeSelectedUser} users={state.users} />

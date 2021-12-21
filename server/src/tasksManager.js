@@ -212,7 +212,7 @@ async function getCurrentWeekData() {
     let taskAccomplishments = await databaseManager.getTaskAccomplishmentsOfWeekInYear(currentWeek, currentYear);
     let users = await databaseManager.getUsersWithScore(currentWeek, currentYear);
 
-    let res = { tasks: taskAccomplishments, users: users }
+    let res = { taskAccomplishments: taskAccomplishments, users: users }
     return res;
 }
 

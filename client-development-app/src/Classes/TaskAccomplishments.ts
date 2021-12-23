@@ -82,7 +82,7 @@ export default class TaskAccomplishments {
         let tasks = new Tasks();
 
         for (let taskAccomplishment of this.taskAccomplishmentList) {
-            if (!tasks.containsTaskById(taskAccomplishment.getTaskId())) {
+            if (!tasks.containsTask(taskAccomplishment.getTaskId())) {
                 console.log(taskAccomplishment);
                 tasks.addTask(new Task(taskAccomplishment.getTaskId(), taskAccomplishment.getLabel()));
             }

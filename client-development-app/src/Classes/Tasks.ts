@@ -17,15 +17,15 @@ export default class Tasks {
         return this.taskList;
     }
 
-    getTasksByIds(ids: number[]): Tasks {
+    getTasks(ids: number[]): Tasks {
         let newTasks = new Tasks();
         for (let taskId of ids) {
-            newTasks.addTask(this.getTaskById(taskId));
+            newTasks.addTask(this.getTask(taskId));
         }
         return newTasks;
     }
 
-    getTaskById(id: number) {
+    getTask(id: number) {
         for (let task of this.taskList) {
             if (task.getId() === id) {
                 return task;
@@ -42,7 +42,7 @@ export default class Tasks {
         return ids;
     }
 
-    getTaskLabelsByIds(ids: number[]): string[] {
+    getTaskLabels(ids: number[]): string[] {
         let labels = [];
         for (let task of this.taskList) {
             if (ids.includes(task.getId())) {
@@ -52,7 +52,7 @@ export default class Tasks {
         return labels;
     }
 
-    containsTaskById(id: number) {
+    containsTask(id: number) {
         for (let task of this.taskList) {
             if (task.getId() === id) {
                 return true;

@@ -28,10 +28,10 @@ export default class Tasks {
         return jsonList;
     }
 
-    getTasksByIds(ids: number[]): Tasks {
+    getTasks(ids: number[]): Tasks {
         let newTasks = new Tasks(null);
         for (let taskId of ids) {
-            newTasks.addTask(this.getTaskById(taskId));
+            newTasks.addTask(this.getTask(taskId));
         }
         return newTasks;
     }
@@ -40,7 +40,7 @@ export default class Tasks {
         return this.taskList;
     }
 
-    getTaskById(id: number): Task {
+    getTask(id: number): Task {
         for (let task of this.taskList) {
             if (task.getId() === id) {
                 return task;
@@ -57,10 +57,10 @@ export default class Tasks {
         return ids;
     }
 
-    getTaskLabelsByIds(ids: number[]): string[] {
+    getTaskLabels(ids: number[]): string[] {
         let labels: string[] = [];
         for (let taskId of ids) {
-            let task = this.getTaskById(taskId);
+            let task = this.getTask(taskId);
             if (task != null) {
                 labels.push(task.getLabel());
             }
@@ -72,7 +72,7 @@ export default class Tasks {
         this.taskList.push(task);
     }
 
-    containsTaskById(taskId: number): boolean {
+    containsTask(taskId: number): boolean {
         for (let task of this.taskList) {
             if (task.getId() === taskId) {
                 return true;

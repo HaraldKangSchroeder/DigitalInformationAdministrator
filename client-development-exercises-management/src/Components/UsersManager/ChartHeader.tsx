@@ -27,7 +27,7 @@ interface Props {
     calendarWeekStart: number;
     calendarWeekEnd: number;
     calendarWeeks: number[];
-    changeSelectedTasksByIds: Function;
+    changeSelectedTasks: Function;
     changeCalendarWeekStart: Function;
     changeCalendarWeekEnd: Function;
     changeYear: Function;
@@ -44,7 +44,7 @@ export function ChartHeader(props: Props) {
             <MultipleSelectTaskMenu
                 tasks={props.tasks}
                 selectedTasks={props.selectedTasks}
-                changeSelectedTasksByIds={props.changeSelectedTasksByIds}
+                changeSelectedTasks={props.changeSelectedTasks}
             />
             per Calender Week from
             <SelectMenu
@@ -52,7 +52,7 @@ export function ChartHeader(props: Props) {
                 label={"CW"}
                 minWidth={80}
                 marginSide={10}
-                handleChange={(e : any) => {props.changeCalendarWeekStart(e) }}
+                handleChange={(e: any) => { props.changeCalendarWeekStart(e) }}
                 menuItems={props.calendarWeeks}
                 noNone={true}
             />
@@ -62,7 +62,7 @@ export function ChartHeader(props: Props) {
                 label={"CW"}
                 minWidth={80}
                 marginSide={10}
-                handleChange={(e : any) => {props.changeCalendarWeekEnd(e) }}
+                handleChange={(e: any) => { props.changeCalendarWeekEnd(e) }}
                 menuItems={props.calendarWeeks}
                 noNone={true}
             />
@@ -72,7 +72,7 @@ export function ChartHeader(props: Props) {
                 label={"Year"}
                 minWidth={80}
                 marginSide={10}
-                handleChange={(e : any) => {props.changeYear(e)}}
+                handleChange={(e: any) => { props.changeYear(e) }}
                 menuItems={props.years}
                 noNone={true}
             />
@@ -82,7 +82,7 @@ export function ChartHeader(props: Props) {
                 label={"Mode"}
                 minWidth={80}
                 marginSide={10}
-                handleChange={(e : any) => {props.changeVisualizationMode(e)}}
+                handleChange={(e: any) => { props.changeVisualizationMode(e) }}
                 menuItems={props.visualizationModes}
                 noNone={true}
             />

@@ -31,7 +31,7 @@ export function TasksManager() {
     useEffect(() => {
         if (selectedTask != null) {
             // get new version of the currently selected Task that came in with the latest server response
-            setSelectedTask(tasks.getTaskById(selectedTask.getId()));
+            setSelectedTask(tasks.getTask(selectedTask.getId()));
         }
     }, [tasks])
 

@@ -4,31 +4,28 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { ChangeEvent } from 'react';
-import { ReactNode } from 'react';
 
 const useStyles = makeStyles({
-    formControl: (props : Props) => ({
+    formControl: (props: Props) => ({
         minWidth: props.minWidth || 200,
-        padding:0,
-        height:34,
+        padding: 0,
+        height: 34,
         marginLeft: props.marginSide || 0,
         marginRight: props.marginSide || 0
     }),
 })
 
 interface Props {
-    minWidth? : number;
-    marginSide ?: number;
-    disabled? : boolean;
-    label : string;
-    value : any;
-    noNone? : boolean;
-    menuItems : any[];
-    handleChange : Function;
+    minWidth?: number;
+    marginSide?: number;
+    disabled?: boolean;
+    label: string;
+    value: any;
+    menuItems: any[];
+    handleChange: Function;
 }
 
-export function SelectMenu(props : Props) {
+export function SelectMenu(props: Props) {
     const classes = useStyles(props);
 
     return (
@@ -38,24 +35,19 @@ export function SelectMenu(props : Props) {
             disabled={props.disabled}
             size="small"
         >
-            <InputLabel style={{color:"rgb(200,200,200)"}}>{props.label}</InputLabel>
+            <InputLabel style={{ color: "rgb(200,200,200)" }}>{props.label}</InputLabel>
             <Select
-                style={{color:"rgb(200,200,200)"}}
+                style={{ color: "rgb(200,200,200)" }}
                 value={props.value}
-                onChange={(e : any) => {props.handleChange(e)}}
+                onChange={(e: any) => { props.handleChange(e) }}
                 label={props.label}
             >
-                {props.noNone ? <div></div> : 
-                    <MenuItem value="">
-                    <em>None</em>
-                    </MenuItem>
-                }
                 {
-                    props.menuItems.map((menuItem : any) => {
+                    props.menuItems.map((menuItem: any) => {
                         let value = menuItem.value != null ? menuItem.value : menuItem;
                         let label = menuItem.label != null ? menuItem.label : menuItem;
                         return (
-                            <MenuItem style={{padding:13}} value={value}>{label}</MenuItem>
+                            <MenuItem style={{ padding: 13 }} value={value}>{label}</MenuItem>
                         );
                     })
                 }

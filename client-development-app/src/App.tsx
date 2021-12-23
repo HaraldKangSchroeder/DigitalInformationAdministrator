@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import GroceryCartPresenter from "./Components/Groceries/GroceryCartPresenter";
 import TaskAccomplishentsView from './Components/Tasks/TasksView';
-import WeatherPresenter from "./Components/Weather/WeatherPresenter";
+import WeatherView from "./Components/Weather/WeatherView";
 import './App.css';
 import dotenv from "dotenv";
 import { UserCharts } from "./Components/UsersOverview/UserCharts";
@@ -14,8 +14,8 @@ dotenv.config();
 
 /*
 Note to deployment on subdirectory:
-either use basename with PUBLIC_URL (which set it equal to homepage/PUBLIC_URL) in case you have exact path="/",
-or just use path="/" without exact
+either use basename with PUBLIC_URL (which should be set equal to homepage/PUBLIC_URL) in case you have 'exact' path="/",
+or just use path="/" without 'exact'
 */
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
                     <GroceryCartPresenter />
                 </Route>
                 <Route exact path="/Weather">
-                    <WeatherPresenter />
+                    <WeatherView />
                 </Route>
                 <Route exact path="/UsersOverview">
                     <UserCharts />

@@ -5,7 +5,6 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import Task from '../../Classes/Task';
-import { Interface } from 'readline';
 import Tasks from '../../Classes/Tasks';
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +29,7 @@ const MenuProps = {
 interface Props {
     selectedTasks: Tasks;
     tasks: Tasks;
-    changeSelectedTasksByIds: Function;
+    changeSelectedTasks: Function;
 }
 
 export default function MultipleSelectTaskMenu(props: Props) {
@@ -38,10 +37,11 @@ export default function MultipleSelectTaskMenu(props: Props) {
 
     const handleChange = (e: any) => {
         let ids = e.target.value;
-        props.changeSelectedTasksByIds(ids);
+        props.changeSelectedTasks(ids);
     };
+
     let label = props.selectedTasks.getList().length > 0 ? "Selected Tasks" : "All Tasks in year";
-    console.log(props.tasks);
+
     return (
         <FormControl
             size="small"
@@ -55,12 +55,12 @@ export default function MultipleSelectTaskMenu(props: Props) {
                 value={props.selectedTasks.getTaskIds()}
                 label={label}
                 onChange={handleChange}
-                renderValue={(ids: any) => props.tasks.getTaskLabelsByIds(ids).join(', ')}
+                renderValue={(ids: any) => props.tasks.getTaskLabels(ids).join(', ')}
                 MenuProps={MenuProps}
             >
                 {props.tasks.getList().map((task: Task) => (
                     <MenuItem style={{ padding: 13 }} key={task.getId()} value={task.getId()}>
-                        <Checkbox checked={props.selectedTasks.containsTaskById(task.getId())} />
+                        <Checkbox checked={props.selectedTasks.containsTask(task.getId())} />
                         {task.getLabel()}
                     </MenuItem>
                 ))}

@@ -362,7 +362,9 @@ exports.getTaskAccomplishmentYears = async () => {
     try {
         let { rows } = await pool.query(`SELECT DISTINCT year FROM ${TABLE_TASK_ACCOMPLISHMENTS} ORDER BY year;`);
         console.log(`getTaskAccomplishmentYears : Select all distinct years in ${TABLE_TASK_ACCOMPLISHMENTS}`);
-        return rows;
+        let years = [];
+        for (let el of rows) years.push(el.year);
+        return years;
     }
     catch (e) {
         console.error(e);

@@ -3,12 +3,12 @@ import React from "react";
 import Groceries from "../../Classes/Groceries";
 import Grocery from "../../Classes/Grocery";
 import GroceryTypes from "../../Classes/GroceryTypes";
-import GroceryPresentation from "./GroceryPresentation";
+import GroceryElement from "./GroceryElement";
 
 
 const useStyles = makeStyles({
-    root : {
-        paddingLeft : "1vw",
+    root: {
+        paddingLeft: "1vw",
         height: "100vh",
         overflowY: "auto",
     }
@@ -20,7 +20,7 @@ interface Props {
     groceryCart: Groceries,
 }
 
-export default function GroceriesPresentation(props: Props) {
+export default function GroceriesCollection(props: Props) {
 
     const classes = useStyles();
     return (
@@ -29,7 +29,7 @@ export default function GroceriesPresentation(props: Props) {
                 props.groceries.getGroceriesOrganizedByType().map((groceriesOrganized) =>
                     <div style={{ marginBottom: "3vh" }}>
                         {groceriesOrganized.map((grocery: Grocery) =>
-                            <GroceryPresentation
+                            <GroceryElement
                                 backgroundColor={props.groceryTypes.getColorByType(grocery.getType())}
                                 isInGroceryCart={props.groceryCart.contains(grocery)}
                                 grocery={grocery}

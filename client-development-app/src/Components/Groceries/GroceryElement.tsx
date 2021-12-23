@@ -31,14 +31,14 @@ interface Props {
     backgroundColor: string,
 }
 
-export default function GroceryPresentation(props: Props) {
+export default function GroceryElement(props: Props) {
 
-    const handleSubmit = (e : any) => {
-        if(props.isInGroceryCart){
-            socket.emit("deleteGroceryCartEntry", {name : props.grocery.getName()});
+    const handleSubmit = (e: any) => {
+        if (props.isInGroceryCart) {
+            socket.emit("deleteGroceryCartEntry", { name: props.grocery.getName() });
             return;
         }
-        socket.emit("createGroceryCartEntry", {name : props.grocery.getName(), type : props.grocery.getType(), amount : ""});
+        socket.emit("createGroceryCartEntry", { name: props.grocery.getName(), type: props.grocery.getType(), amount: "" });
     }
 
     const classes = useStyles(props);

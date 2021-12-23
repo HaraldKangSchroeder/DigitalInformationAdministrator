@@ -4,7 +4,7 @@ import {
     Route,
     Link
 } from "react-router-dom";
-import GroceryCartPresenter from "./Components/Groceries/GroceryCartPresenter";
+import GroceryCartView from "./Components/Groceries/GroceryCartView";
 import TaskAccomplishentsView from './Components/Tasks/TasksView';
 import WeatherView from "./Components/Weather/WeatherView";
 import './App.css';
@@ -23,7 +23,7 @@ function App() {
         <Router basename={process.env.PUBLIC_URL}>
             <Switch>
                 <Route exact path="/Groceries">
-                    <GroceryCartPresenter />
+                    <GroceryCartView />
                 </Route>
                 <Route exact path="/Weather">
                     <WeatherView />

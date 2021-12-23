@@ -2,12 +2,12 @@ import { Grid } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import Groceries from '../../Classes/Groceries';
 import GroceryTypes from '../../Classes/GroceryTypes';
-import GroceriesPresentation from './GroceriesPresentation';
+import GroceriesCollection from './GroceriesCollection';
 import NavBar from '../Navbar/NavBar';
 import socket from '../../socket';
 
 
-export default function GroceryCartPresenter() {
+export default function GroceryCartView() {
     const [state, setState] = useState({
         groceries: new Groceries(),
         groceryTypes: new GroceryTypes(),
@@ -37,7 +37,7 @@ export default function GroceryCartPresenter() {
                     <NavBar />
                 </Grid>
                 <Grid item xs={11}>
-                    <GroceriesPresentation
+                    <GroceriesCollection
                         groceries={state.groceries}
                         groceryTypes={state.groceryTypes}
                         groceryCart={state.groceryCart}

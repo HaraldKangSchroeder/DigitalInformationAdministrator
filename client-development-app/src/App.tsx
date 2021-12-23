@@ -10,6 +10,7 @@ import WeatherView from "./Components/Weather/WeatherView";
 import './App.css';
 import dotenv from "dotenv";
 import { TaskAccomplishmentsView } from "./Components/TaskAccomplishmentsOverview/TaskAccomplishmentsView";
+import TasksView from "./Components/Tasks/TasksView";
 dotenv.config();
 
 /*
@@ -28,11 +29,11 @@ function App() {
                 <Route exact path="/Weather">
                     <WeatherView />
                 </Route>
-                <Route exact path="/UsersOverview">
+                <Route exact path="/TaskAccomplishmentsOverview">
                     <TaskAccomplishmentsView />
                 </Route>
                 <Route exact path="/">
-                    <TaskAccomplishentsView />
+                    <TasksView />
                 </Route>
             </Switch>
         </Router>

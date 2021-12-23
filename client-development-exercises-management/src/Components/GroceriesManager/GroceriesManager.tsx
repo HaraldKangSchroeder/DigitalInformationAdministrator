@@ -26,7 +26,7 @@ export default function GroceriesManager() {
     })
 
     useEffect(() => {
-        socket.on("allGroceryData", ({ groceryEntries, groceryTypeEntries }) => {
+        socket.on("groceryData", ({ groceryEntries, groceryTypeEntries }) => {
             console.log("all GroceryData received");
             setGroceryEntities({
                 groceries: new Groceries(groceryEntries),
@@ -37,7 +37,7 @@ export default function GroceriesManager() {
         socket.emit("getGroceryData");
 
         return () => {
-            socket.off("allGroceryData");
+            socket.off("groceryData");
         }
     }, [])
 

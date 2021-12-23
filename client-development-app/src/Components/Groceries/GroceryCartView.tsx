@@ -15,7 +15,7 @@ export default function GroceryCartView() {
     })
 
     useEffect(() => {
-        socket.on("allGroceryData", ({ groceryEntries, groceryTypeEntries, groceryCartEntries }) => {
+        socket.on("groceryData", ({ groceryEntries, groceryTypeEntries, groceryCartEntries }) => {
             setState({
                 groceries: new Groceries(groceryEntries),
                 groceryTypes: new GroceryTypes(groceryTypeEntries),
@@ -26,7 +26,7 @@ export default function GroceryCartView() {
         socket.emit("getGroceryData");
 
         return () => {
-            socket.off("allGroceryData");
+            socket.off("groceryData");
         }
     }, []);
 

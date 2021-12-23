@@ -76,5 +76,5 @@ async function getGroceryData(socket) {
     let groceryEntries = await databaseManager.getGroceryEntries();
     let groceryTypeEntries = await databaseManager.getGroceryTypeEntries();
     let groceryCartEntries = await databaseManager.getGroceryCartEntries();
-    socket.emit("allGroceryData", { groceryEntries: groceryEntries, groceryTypeEntries: groceryTypeEntries, groceryCartEntries: groceryCartEntries });
+    socket.emit("groceryData", { groceryEntries: groceryEntries, groceryTypeEntries: groceryTypeEntries, groceryCartEntries: groceryCartEntries });
 }

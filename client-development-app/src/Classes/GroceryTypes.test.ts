@@ -2,7 +2,7 @@ import GroceryType from "./GroceryType";
 import GroceryTypes from "./GroceryTypes";
 
 let groceryTypes = new GroceryTypes();
-    groceryTypes.addGroceryType("fruit", "red");
+groceryTypes.addGroceryType("fruit", "red");
 
 test("Add Grocery Type", () => {
     let list = [new GroceryType("fruit", "red")];
@@ -10,6 +10,6 @@ test("Add Grocery Type", () => {
 });
 
 test("Get Color By Type", () => {
-    let color = groceryTypes.getColorByType("fruit");
+    let color = groceryTypes.getColor("fruit");
     expect(color).toBe("red");
 });

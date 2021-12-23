@@ -33,12 +33,12 @@ export default class WeatherElement {
         }
     }
 
-    getDayShortName() : string {
+    getDayShortName(): string {
         let dayName = this.getDayName();
-        return dayName.substring(0,2);
+        return dayName.substring(0, 2);
     }
 
-    getHour() : number {
+    getHour(): number {
         return this.date.getHours();
     }
 
@@ -46,9 +46,8 @@ export default class WeatherElement {
         return this.temperature;
     }
 
-    getLabelPresentation() : string {
+    getLabelPresentation(): string {
         return `${this.getHour()} ${this.getDayShortName()}`;
-        // return [this.getHour(), this.getDayShortName()]
     }
 
     getPrecipitationProbability(): number {

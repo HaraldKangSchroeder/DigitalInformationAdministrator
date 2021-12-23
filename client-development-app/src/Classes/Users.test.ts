@@ -12,5 +12,5 @@ test("Add User", () => {
 
 test("Get User by Id", () => {
     let user = new User(0, "max", 5, 10, "red");
-    expect(users.getUserById(0)).toEqual(user);
+    expect(users.getUser(0)).toEqual(user);
 })

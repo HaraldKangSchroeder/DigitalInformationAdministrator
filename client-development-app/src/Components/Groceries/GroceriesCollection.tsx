@@ -30,7 +30,7 @@ export default function GroceriesCollection(props: Props) {
                     <div style={{ marginBottom: "3vh" }}>
                         {groceriesOrganized.map((grocery: Grocery) =>
                             <GroceryElement
-                                backgroundColor={props.groceryTypes.getColorByType(grocery.getType())}
+                                backgroundColor={props.groceryTypes.getColor(grocery.getType())}
                                 isInGroceryCart={props.groceryCart.contains(grocery)}
                                 grocery={grocery}
                             />

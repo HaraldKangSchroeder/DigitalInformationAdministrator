@@ -22,7 +22,7 @@ export default class Users {
         return this.userList;
     }
 
-    getUserById(userId: number): User {
+    getUser(userId: number): User {
         for (let user of this.userList) {
             if (user.getId() === userId) {
                 return user;

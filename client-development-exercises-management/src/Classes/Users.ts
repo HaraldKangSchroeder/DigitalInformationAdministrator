@@ -11,9 +11,9 @@ export default class Users {
         }
     }
 
-    contains(otherUser : User) : boolean {
-        for(let user of this.userList){
-            if(user.getId() === otherUser.getId()){
+    contains(otherUser: User): boolean {
+        for (let user of this.userList) {
+            if (user.getId() === otherUser.getId()) {
                 return true;
             }
         }
@@ -32,7 +32,7 @@ export default class Users {
         return this.userList;
     }
 
-    getUserById(id: number): User {
+    getUser(id: number): User {
         for (let userEntry of this.userList) {
             if (userEntry.getId() === id) {
                 return userEntry;
@@ -49,15 +49,15 @@ export default class Users {
         return jsonList;
     }
 
-    addUser(user : User) {
+    addUser(user: User) {
         this.userList.push(user);
     }
 
-    containsUser(user : User) : boolean{
+    containsUser(user: User): boolean {
         return this.containsUserById(user.getId());
     }
 
-    containsUserById(id : number) : boolean{
+    containsUserById(id: number): boolean {
         for (let userEntry of this.userList) {
             if (userEntry.getId() === id) {
                 return true;
@@ -66,15 +66,15 @@ export default class Users {
         return false;
     }
 
-    containsExactlyOneUser() : boolean{
+    containsExactlyOneUser(): boolean {
         return this.userList.length === 1;
     }
 
-    removeUser(user : User) {
+    removeUser(user: User) {
         this.removeUserById(user.getId())
     }
 
-    removeUserById(id : number) {
+    removeUserById(id: number) {
         let index = -1;
         for (let i = 0; i < this.userList.length; i++) {
             if (this.userList[i].getId() === id) {
@@ -87,14 +87,14 @@ export default class Users {
         }
     }
 
-    readDataset(dataset : any) {
+    readDataset(dataset: any) {
         for (let datasetEntry of dataset) {
             let user = new User(datasetEntry.id, datasetEntry.name);
             this.addUser(user);
         }
     }
 
-    getCopy() : Users{
+    getCopy(): Users {
         let users = new Users(null);
         for (let userEntry of this.userList) {
             users.addUser(userEntry);

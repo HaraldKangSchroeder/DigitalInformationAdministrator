@@ -35,7 +35,7 @@ const useStyles = makeStyles({
     userAvatar: (props: Props) => {
         if (props.taskAccomplishment.getUserId() == null) return {};
         return {
-            backgroundColor: props.users.getUserById(props.taskAccomplishment.getUserId()).getAvatarColor(),
+            backgroundColor: props.users.getUser(props.taskAccomplishment.getUserId()).getAvatarColor(),
             borderStyle: "solid",
             borderColor: "rgba(0,0,0,0)",
             borderWidth: "1px",
@@ -106,7 +106,7 @@ export default function TaskElement(props: Props) {
             <ListItem>
                 <div>
                     <ListItemAvatar>
-                        <Avatar className={avatarClass}>{hasUserDoneTask ? props.users.getUserById(props.taskAccomplishment.getUserId()).getNameCode() : " "}</Avatar>
+                        <Avatar className={avatarClass}>{hasUserDoneTask ? props.users.getUser(props.taskAccomplishment.getUserId()).getNameCode() : " "}</Avatar>
                     </ListItemAvatar>
                 </div>
                 <ListItemText primary={text} secondary={"Score: " + props.taskAccomplishment.getScore()} />

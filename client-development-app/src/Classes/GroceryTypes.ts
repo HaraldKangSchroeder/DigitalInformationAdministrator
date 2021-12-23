@@ -2,35 +2,35 @@ import GroceryType from "./GroceryType";
 
 export default class GroceryTypes {
 
-    groceryTypeList : GroceryType[];
+    groceryTypeList: GroceryType[];
 
-    constructor(datasetEntries? : any){
+    constructor(datasetEntries?: any) {
         this.groceryTypeList = [];
-        if(datasetEntries != null){
+        if (datasetEntries != null) {
             this.readDataset(datasetEntries);
         }
     }
 
-    addGroceryType(type : string,color : string){
-        this.groceryTypeList.push(new GroceryType(type,color));
+    addGroceryType(type: string, color: string) {
+        this.groceryTypeList.push(new GroceryType(type, color));
     }
 
-    getList(){
+    getList() {
         return this.groceryTypeList;
     }
 
-    getColorByType(type : string){
-        for(let groceryType of this.groceryTypeList){
-            if(type === groceryType.getType()){
+    getColor(type: string) {
+        for (let groceryType of this.groceryTypeList) {
+            if (type === groceryType.getType()) {
                 return groceryType.getColor();
             }
         }
         return "";
     }
 
-    readDataset(datasetEntries : any){ 
-        for(let entry of datasetEntries){
-            this.addGroceryType(entry.type,entry.color);
+    readDataset(datasetEntries: any) {
+        for (let entry of datasetEntries) {
+            this.addGroceryType(entry.type, entry.color);
         }
     }
 }

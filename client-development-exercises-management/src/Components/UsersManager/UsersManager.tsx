@@ -104,7 +104,7 @@ function UsersManager() {
 function getUpdatedSelectedUsers(users: Users, selectedUsers: Users): Users {
     let updatedSelectedUsers = new Users(null);
     for (let user of selectedUsers.getList()) {
-        let updatedUser = users.getUserById(user.getId());
+        let updatedUser = users.getUser(user.getId());
         if (updatedUser == null) continue;
         updatedSelectedUsers.addUser(updatedUser);
     }

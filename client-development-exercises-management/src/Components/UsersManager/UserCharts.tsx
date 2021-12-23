@@ -43,7 +43,7 @@ interface Props {
     selectedUsers: Users;
 }
 
-export function UserCharts(props: Props) {
+export function TaskAccomplishmentsView(props: Props) {
     const [taskAccomplishments, setTaskAccomplishments] = useState(new TaskAccomplishments(null));
     const [tasks, setTasks] = useState(new Tasks(null));
     const [selectedTasks, setSelectedTasks] = useState(new Tasks(null));

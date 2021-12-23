@@ -41,7 +41,7 @@ const useStyles = makeStyles({
 })
 
 
-export function UserCharts() {
+export function TaskAccomplishmentsView() {
     const [taskAccomplishments, setTaskAccomplishments] = useState(new TaskAccomplishments(null));
     const [users, setUsers] = useState(new Users(null));
     const [tasks, setTasks] = useState(new Tasks());

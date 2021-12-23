@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { EntitiesSelection } from "../EntitiesSelection";
 import { DialogEntityDeletion } from "../DialogEntityDeletion";
 import { DialogCreateUser } from "./DialogCreateUser";
-import { UserCharts } from "./UserCharts";
+import { TaskAccomplishmentsView } from "./TaskAccomplishmentsView";
 import Grid from '@material-ui/core/Grid';
 import socket from "../../socket";
 import Users from "../../Classes/Users";
@@ -92,7 +92,7 @@ function UsersManager() {
                 </Grid>
                 <Grid container item xs={10} >
                     <Grid item xs={12}>
-                        <UserCharts selectedUsers={selectedUsers} />
+                        <TaskAccomplishmentsView selectedUsers={selectedUsers} />
                     </Grid>
                 </Grid>
 

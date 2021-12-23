@@ -15,11 +15,11 @@ const useStyles = makeStyles({
 
 interface Props {
     weather: Weather,
-    selectedDay : number,
-    setSelectedDay : Function,
+    selectedDay: number,
+    setSelectedDay: Function,
 }
 
-export default function WeatherCards({ weather ,selectedDay, setSelectedDay}: Props) {
+export default function WeatherCards({ weather, selectedDay, setSelectedDay }: Props) {
 
     const classes = useStyles();
     return (
@@ -28,9 +28,9 @@ export default function WeatherCards({ weather ,selectedDay, setSelectedDay}: Pr
                 weather.getDays().map(day =>
                     <WeatherCard
                         dayName={weather.getDayName(day)}
-                        averageTemperature={round2Digits(weather.getAverageTemperatureOnDay(day))}
-                        averagePrecipitationProbability={round2Digits(weather.getAveragePrecipitationProbabilitiesOnDay(day))}
-                        setSelectedDay={() => {setSelectedDay(day)}}
+                        averageTemperature={round2Digits(weather.getAverageTemperature(day))}
+                        averagePrecipitationProbability={round2Digits(weather.getAveragePrecipitationProbabilities(day))}
+                        setSelectedDay={() => { setSelectedDay(day) }}
                         isSelectedDay={day === selectedDay}
                     />
                 )

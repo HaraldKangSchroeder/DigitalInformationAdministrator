@@ -6,7 +6,7 @@ import socket from "../../socket";
 import WeatherCards from "./WeatherCards";
 import WeatherGraph from "./WeatherGraph";
 
-export default function WeatherPresenter() {
+export default function WeatherView() {
     const [weather, setWeather] = useState(new Weather());
     const [selectedDay, setSelectedDay] = useState(0);
 
@@ -23,7 +23,7 @@ export default function WeatherPresenter() {
     }, []);
 
     useEffect(() => {
-        if(weather.getList().length === 0) return;
+        if (weather.getList().length === 0) return;
         setSelectedDay(weather.getList()[0].getDate().getDay());
     }, [weather]);
 
@@ -36,10 +36,10 @@ export default function WeatherPresenter() {
                 <Grid item xs={11} style={{ padding: "30px" }}>
                     <Grid item container xs={12}>
                         <Grid item xs={12}>
-                            <WeatherCards weather={weather} selectedDay={selectedDay} setSelectedDay={setSelectedDay}/>
+                            <WeatherCards weather={weather} selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
                         </Grid>
                         <Grid item xs={12}>
-                            <WeatherGraph weather={weather} selectedDay={selectedDay}/>
+                            <WeatherGraph weather={weather} selectedDay={selectedDay} />
                         </Grid>
                     </Grid>
                 </Grid>

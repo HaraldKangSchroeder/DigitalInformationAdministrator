@@ -16,7 +16,7 @@ export default function WeatherGraph({ weather, selectedDay }: Props) {
     return (
         <div style={{ width: "100%", height: "70vh" }}>
             <Line
-                data={{ labels: getWeatherLabels(weather, selectedDay), datasets: getWeatherDatasets(weather, selectedDay) }}
+                data={{ labels: weather.getLabels(selectedDay), datasets: getWeatherDatasets(weather, selectedDay) }}
                 type="line"
                 options={{
                     maintainAspectRatio: false,
@@ -73,17 +73,6 @@ export default function WeatherGraph({ weather, selectedDay }: Props) {
     )
 }
 
-function getWeatherLabels(weather: Weather, selectedDay: number) {
-    if (weather == null) return [];
-    let labels: any[] = [];
-    for (let weatherElement of weather.getList()) {
-        if (weatherElement.getDate().getDay() === selectedDay) {
-            labels.push(weatherElement.getLabelPresentation());
-        }
-    }
-    return labels;
-}
-
 function getWeatherDatasets(weather: Weather, selectedDay: number) {
     if (weather == null) return [];
     return [
@@ -94,7 +83,7 @@ function getWeatherDatasets(weather: Weather, selectedDay: number) {
 
 function getWeatherTemperatureDatasets(weather: Weather, selectedDay: number, fill: any): any[][] {
     let datasets: any[][] = [];
-    let weatherOnDay = weather.getWeatherOnDay(selectedDay);
+    let weatherOnDay = weather.getWeather(selectedDay);
     let temperatureData = weatherOnDay.getTemperatureData();
     let dataset = getDataset("Temp in Celsius", "Temperature", temperatureData, "temperature", "rgb(0,255,0)", CHART_BACKGROUND_COLORS[0], fill, 13);
     datasets.push(dataset);
@@ -103,7 +92,7 @@ function getWeatherTemperatureDatasets(weather: Weather, selectedDay: number, fi
 
 function getWeatherPrecipitationProbabilityDatasets(weather: Weather, selectedDay: number): any[][] {
     let datasets: any[][] = [];
-    let weatherOnDay = weather.getWeatherOnDay(selectedDay);
+    let weatherOnDay = weather.getWeather(selectedDay);
     let precipitationProbabilityData = weatherOnDay.getPrecipitationProbabilityData();
     let dataset = getDataset(" " + getDayName(selectedDay) + " PrecProb", "PrecipitationProbability", precipitationProbabilityData, "precipitationProbability", "rgb(255,0,0)", null, false, 0);
     datasets.push(dataset);

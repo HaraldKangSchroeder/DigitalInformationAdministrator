@@ -48,7 +48,7 @@ export default class Weather {
         }
     }
 
-    getAverageTemperatureOnDay(day: number): number {
+    getAverageTemperature(day: number): number {
         let temperatures: number[] = [];
         for (let weatherElement of this.weatherData) {
             if (day === weatherElement.getDate().getDay()) {
@@ -64,7 +64,7 @@ export default class Weather {
         return sum / temperatures.length;
     }
 
-    getAveragePrecipitationProbabilitiesOnDay(day: number): number {
+    getAveragePrecipitationProbabilities(day: number): number {
         let precipitationProbabilities: number[] = [];
         for (let weatherElement of this.weatherData) {
             if (day === weatherElement.getDate().getDay()) {
@@ -80,19 +80,19 @@ export default class Weather {
         return sum / precipitationProbabilities.length;
     }
 
-    getWeatherOnDay(day: number): Weather {
+    getWeather(day: number): Weather {
         let weather = new Weather(null);
         for (let weatherElement of this.weatherData) {
             if (day === weatherElement.getDate().getDay()) {
                 weather.addWeatherElement(weatherElement);
             }
         }
-        let weatherElementAtMidnight = this.getWeatherElementOnDayAndHour((day + 1) % 7, 0);
+        let weatherElementAtMidnight = this.getWeatherElement((day + 1) % 7, 0);
         if (weatherElementAtMidnight != null) weather.addWeatherElement(weatherElementAtMidnight);
         return weather;
     }
 
-    getWeatherElementOnDayAndHour(day: number, hour: number) {
+    getWeatherElement(day: number, hour: number) {
         for (let weatherElement of this.weatherData) {
             if (weatherElement.getDate().getDay() === day && weatherElement.getDate().getHours() == hour) {
                 return weatherElement;
@@ -115,6 +115,16 @@ export default class Weather {
             precipitationProbabilityData.push({ "x": weatherElement.getLabelPresentation(), precipitationProbability: weatherElement.getPrecipitationProbability() })
         }
         return precipitationProbabilityData;
+    }
+
+    getLabels(day: number) {
+        let labels: any[] = [];
+        for (let weatherElement of this.weatherData) {
+            if (weatherElement.getDate().getDay() === day) {
+                labels.push(weatherElement.getLabelPresentation());
+            }
+        }
+        return labels;
     }
 
     readDataset(dataEntries: any) {

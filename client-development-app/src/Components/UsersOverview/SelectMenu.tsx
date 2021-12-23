@@ -22,7 +22,7 @@ interface Props {
     label: string;
     value: any;
     menuItems: any[];
-    handleChange: Function;
+    onChange: Function;
 }
 
 export function SelectMenu(props: Props) {
@@ -39,7 +39,7 @@ export function SelectMenu(props: Props) {
             <Select
                 style={{ color: "rgb(200,200,200)" }}
                 value={props.value}
-                onChange={(e: any) => { props.handleChange(e) }}
+                onChange={(e: any) => { props.onChange(e) }}
                 label={props.label}
             >
                 {

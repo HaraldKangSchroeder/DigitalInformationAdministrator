@@ -51,7 +51,7 @@ export function ChartHeader(props: Props) {
                 label={"CW"}
                 minWidth={80}
                 marginSide={10}
-                handleChange={(e: any) => { props.changeCalendarWeekStart(e) }}
+                onChange={(e: any) => { props.changeCalendarWeekStart(e) }}
                 menuItems={props.calendarWeeks}
             />
             to
@@ -60,7 +60,7 @@ export function ChartHeader(props: Props) {
                 label={"CW"}
                 minWidth={80}
                 marginSide={10}
-                handleChange={(e: any) => { props.changeCalendarWeekEnd(e) }}
+                onChange={(e: any) => { props.changeCalendarWeekEnd(e) }}
                 menuItems={props.calendarWeeks}
             />
             of Year
@@ -69,7 +69,7 @@ export function ChartHeader(props: Props) {
                 label={"Year"}
                 minWidth={80}
                 marginSide={10}
-                handleChange={(e: any) => { props.changeYear(e) }}
+                onChange={(e: any) => { props.changeYear(e) }}
                 menuItems={props.years}
             />
             - Mode :
@@ -78,7 +78,7 @@ export function ChartHeader(props: Props) {
                 label={"Mode"}
                 minWidth={80}
                 marginSide={10}
-                handleChange={(e: any) => { props.changeVisualizationMode(e) }}
+                onChange={(e: any) => { props.changeVisualizationMode(e) }}
                 menuItems={props.visualizationModes}
             />
         </div>

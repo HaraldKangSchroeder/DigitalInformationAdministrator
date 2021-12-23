@@ -23,7 +23,7 @@ export default function GroceryCartView() {
             })
         });
 
-        socket.emit("getAllGroceryData");
+        socket.emit("getGroceryData");
 
         return () => {
             socket.off("allGroceryData");

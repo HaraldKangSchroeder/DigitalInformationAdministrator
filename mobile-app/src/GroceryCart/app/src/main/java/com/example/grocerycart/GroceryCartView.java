@@ -63,7 +63,7 @@ public class GroceryCartView extends AppCompatActivity {
         GroceryCartNetworkManager.startListener("connect", onConnect);
         GroceryCartNetworkManager.startListener("disconnect", onDisconnect);
         GroceryCartNetworkManager.startListener("allGroceryData", onMessageAllGroceryData);
-        GroceryCartNetworkManager.emit("getAllGroceryData");
+        GroceryCartNetworkManager.emit("getGroceryData");
         changeColorOfConnectionIndicator();
     }
 
@@ -82,7 +82,7 @@ public class GroceryCartView extends AppCompatActivity {
         GroceryCartNetworkManager.startListener("connect", onConnect);
         GroceryCartNetworkManager.startListener("disconnect", onDisconnect);
         GroceryCartNetworkManager.startListener("allGroceryData", onMessageAllGroceryData);
-        GroceryCartNetworkManager.emit("getAllGroceryData");
+        GroceryCartNetworkManager.emit("getGroceryData");
         changeColorOfConnectionIndicator();
     }
 

@@ -1,5 +1,7 @@
 import GroceryType from "./GroceryType";
 
+const DEFAULT_COLOR = "#AAAAAA";
+
 export default class GroceryTypes {
 
     groceryTypeList: GroceryType[];
@@ -20,6 +22,8 @@ export default class GroceryTypes {
     }
 
     getColor(type: string) {
+        if (type == null) return DEFAULT_COLOR;
+
         for (let groceryType of this.groceryTypeList) {
             if (type === groceryType.getType()) {
                 return groceryType.getColor();

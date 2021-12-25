@@ -54,85 +54,6 @@ exports.createTask = async (taskLabel, score, importance, weeklyOccurences) => {
     }
 }
 
-exports.createTaskOccurences = async (taskId, weeklyRythm, dayOfWeek) => {
-    let weeks = getWeeksOfWeeklyRythm(weeklyRythm);
-    for (let week of weeks) {
-        await createTaskOccurenceWithWeekAndDay(taskId, week, dayOfWeek);
-    }
-}
-
-async function createTaskOccurenceWithWeekAndDay(taskId, week, dayOfWeek) {
-    try {
-        let queryText = `INSERT INTO ${TABLE_TASKS_OCCURENCES} VALUES ($1,$2,$3);`;
-        let queryValues = [taskId, week, dayOfWeek];
-        await pool.query(queryText, queryValues);
-        console.log(`createTaskOccurenceEntryWithWeekAndDay : Added row(${taskId},${week},${dayOfWeek}) to table ${TABLE_TASKS_OCCURENCES}`);
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`createTaskOccurenceEntryWithWeekAndDay : Error when tried to add ${taskId} , ${week}, ${dayOfWeek}`);
-    }
-}
-
-
-exports.updateTaskOccurence = async (taskOccurence) => {
-    try {
-        let queryText = `UPDATE ${TABLE_TASKS_OCCURENCES} SET day_of_week = $3 WHERE id = $1 AND calendar_week = $2;`;
-        let queryValues = [taskOccurence.taskId, taskOccurence.calendarWeek, taskOccurence.dayOfWeek];
-        await pool.query(queryText, queryValues);
-        console.log(`updateTaskOccurence : Updated to row(${taskOccurence.taskId},${taskOccurence.calendarWeek},${taskOccurence.dayOfWeek}) in table ${TABLE_TASKS_OCCURENCES}`);
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`updateTaskOccurence : Error`);
-    }
-    logDivider();
-}
-
-exports.getUser = async (id) => {
-    try {
-        let queryText = `SELECT id, name FROM ${TABLE_USERS} WHERE id = $1`;
-        let queryValues = [id];
-        let { rows } = await pool.query(queryText, queryValues);
-        console.log(`getUser : get user by id ${id}`);
-        logDivider();
-        return rows[0];
-    }
-    catch (e) {
-        console.error(e);
-        console.log(`getUser : failed to get user by id ${id}`);
-        logDivider();
-    }
-}
-
-exports.updateUser = async (user) => {
-    try {
-        let queryText = `UPDATE ${TABLE_USERS} SET name = $2 WHERE id = $1`;
-        let queryValues = [user.id, user.name];
-        await pool.query(queryText, queryValues);
-        console.log(`updateUser`);
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`updateUser`);
-    }
-    logDivider();
-}
-
-exports.createTaskOccurence = async (taskId, calendarWeek, dayOfWeek) => {
-    try {
-        let queryText = `INSERT INTO ${TABLE_TASKS_OCCURENCES} VALUES ($1,$2,$3);`;
-        let queryValues = [taskId, calendarWeek, dayOfWeek];
-        await pool.query(queryText, queryValues);
-        console.log(`createTaskOccurence : Added entry(${taskId},${calendarWeek},${dayOfWeek}) to table ${TABLE_TASKS_OCCURENCES}`);
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`createTaskOccurence : Error when tried to add entry(${taskId} , ${calendarWeek}, ${dayOfWeek})`);
-    }
-    logDivider();
-}
-
 exports.deleteTask = async (taskId) => {
     try {
         queryText = `DELETE FROM ${TABLE_TASKS} WHERE id = $1`;
@@ -143,20 +64,6 @@ exports.deleteTask = async (taskId) => {
     catch (e) {
         console.error(e);
         console.error(`deleteTask : Error when tried to delete rows referencing id ${taskId}`);
-    }
-    logDivider();
-}
-
-exports.deleteTaskOccurence = async (taskId, week) => {
-    try {
-        let queryText = `DELETE FROM ${TABLE_TASKS_OCCURENCES} WHERE id = $1 AND calendar_week = $2`;
-        let queryValues = [taskId, week];
-        await pool.query(queryText, queryValues);
-        console.log(`deleteTaskOccurence : delete row with id ${taskId} and week ${week} in table ${TABLE_TASKS_OCCURENCES}`);
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`deleteTaskOccurence : Error when tried to delete row with id ${taskId} and week ${week} in table ${TABLE_TASKS_OCCURENCES}`);
     }
     logDivider();
 }
@@ -205,6 +112,56 @@ exports.getTasks = async () => {
     }
 }
 
+
+exports.createTaskOccurences = async (taskId, weeklyRythm, dayOfWeek) => {
+    let weeks = getWeeksOfWeeklyRythm(weeklyRythm);
+    for (let week of weeks) {
+        await createTaskOccurence(taskId, week, dayOfWeek);
+    }
+}
+
+exports.createTaskOccurence = async (taskId, calendarWeek, dayOfWeek) => {
+    try {
+        let queryText = `INSERT INTO ${TABLE_TASKS_OCCURENCES} VALUES ($1,$2,$3);`;
+        let queryValues = [taskId, calendarWeek, dayOfWeek];
+        await pool.query(queryText, queryValues);
+        console.log(`createTaskOccurence : Added entry(${taskId},${calendarWeek},${dayOfWeek}) to table ${TABLE_TASKS_OCCURENCES}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`createTaskOccurence : Error when tried to add entry(${taskId} , ${calendarWeek}, ${dayOfWeek})`);
+    }
+    logDivider();
+}
+
+exports.updateTaskOccurence = async (taskOccurence) => {
+    try {
+        let queryText = `UPDATE ${TABLE_TASKS_OCCURENCES} SET day_of_week = $3 WHERE id = $1 AND calendar_week = $2;`;
+        let queryValues = [taskOccurence.taskId, taskOccurence.calendarWeek, taskOccurence.dayOfWeek];
+        await pool.query(queryText, queryValues);
+        console.log(`updateTaskOccurence : Updated to row(${taskOccurence.taskId},${taskOccurence.calendarWeek},${taskOccurence.dayOfWeek}) in table ${TABLE_TASKS_OCCURENCES}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`updateTaskOccurence : Error`);
+    }
+    logDivider();
+}
+
+exports.deleteTaskOccurence = async (taskId, week) => {
+    try {
+        let queryText = `DELETE FROM ${TABLE_TASKS_OCCURENCES} WHERE id = $1 AND calendar_week = $2`;
+        let queryValues = [taskId, week];
+        await pool.query(queryText, queryValues);
+        console.log(`deleteTaskOccurence : delete row with id ${taskId} and week ${week} in table ${TABLE_TASKS_OCCURENCES}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`deleteTaskOccurence : Error when tried to delete row with id ${taskId} and week ${week} in table ${TABLE_TASKS_OCCURENCES}`);
+    }
+    logDivider();
+}
+
 exports.getTaskOccurences = async (taskId) => {
     try {
         let { rows } = await pool.query(`SELECT id, calendar_week AS "calendarWeek", day_of_week AS "dayOfWeek" FROM ${TABLE_TASKS_OCCURENCES} WHERE id = ${taskId};`);
@@ -218,7 +175,6 @@ exports.getTaskOccurences = async (taskId) => {
         logDivider();
     }
 }
-
 
 exports.getTaskOccurence = async (taskId, calendarWeek) => {
     try {
@@ -235,7 +191,6 @@ exports.getTaskOccurence = async (taskId, calendarWeek) => {
         logDivider();
     }
 }
-
 
 exports.getTaskOccurencesOfWeek = async (week) => {
     try {
@@ -257,7 +212,35 @@ exports.getTaskOccurencesOfWeek = async (week) => {
     }
 }
 
+exports.getUser = async (id) => {
+    try {
+        let queryText = `SELECT id, name FROM ${TABLE_USERS} WHERE id = $1`;
+        let queryValues = [id];
+        let { rows } = await pool.query(queryText, queryValues);
+        console.log(`getUser : get user by id ${id}`);
+        logDivider();
+        return rows[0];
+    }
+    catch (e) {
+        console.error(e);
+        console.log(`getUser : failed to get user by id ${id}`);
+        logDivider();
+    }
+}
 
+exports.updateUser = async (user) => {
+    try {
+        let queryText = `UPDATE ${TABLE_USERS} SET name = $2 WHERE id = $1`;
+        let queryValues = [user.id, user.name];
+        await pool.query(queryText, queryValues);
+        console.log(`updateUser`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`updateUser`);
+    }
+    logDivider();
+}
 
 exports.createUser = async (userName) => {
     try {
@@ -279,22 +262,6 @@ exports.createUser = async (userName) => {
     }
 }
 
-exports.createScoresOverYears = async (userId, year) => {
-    try {
-        let queryText = `
-            INSERT INTO ${TABLE_SCORES_OVER_YEARS} VALUES ($1, $2, 0);
-        `;
-        let queryValues = [userId, year];
-        await pool.query(queryText, queryValues);
-        console.log(`createScoresOverYears : added row to table ${TABLE_SCORES_OVER_YEARS}`);
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`createScoresOverYears : Error when tried to add row to table ${TABLE_SCORES_OVER_YEARS}`);
-    }
-    logDivider();
-}
-
 exports.getUsers = async () => {
     try {
         let { rows } = await pool.query(`SELECT id, name FROM ${TABLE_USERS} ORDER BY name`);
@@ -307,6 +274,20 @@ exports.getUsers = async () => {
         console.error(`getUsers : Error when tried to get all users from table ${TABLE_USERS}`);
         logDivider();
     }
+}
+
+exports.deleteUser = async (userId) => {
+    try {
+        let queryText = `DELETE FROM ${TABLE_USERS} WHERE id = $1;`;
+        let queryValues = [userId];
+        await pool.query(queryText, queryValues);
+        console.log(`deleteUser : deleted user with id ${userId}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`deleteUser : Error when tried to delete user with id ${userid}`);
+    }
+    logDivider();
 }
 
 exports.getUsersWithScore = async (week, year) => {
@@ -344,16 +325,18 @@ exports.getUsersWithScore = async (week, year) => {
     }
 }
 
-exports.deleteUser = async (userId) => {
+exports.createScoresOverYears = async (userId, year) => {
     try {
-        let queryText = `DELETE FROM ${TABLE_USERS} WHERE id = $1;`;
-        let queryValues = [userId];
+        let queryText = `
+            INSERT INTO ${TABLE_SCORES_OVER_YEARS} VALUES ($1, $2, 0);
+        `;
+        let queryValues = [userId, year];
         await pool.query(queryText, queryValues);
-        console.log(`deleteUser : deleted user with id ${userId}`);
+        console.log(`createScoresOverYears : added row to table ${TABLE_SCORES_OVER_YEARS}`);
     }
     catch (e) {
         console.error(e);
-        console.error(`deleteUser : Error when tried to delete user with id ${userid}`);
+        console.error(`createScoresOverYears : Error when tried to add row to table ${TABLE_SCORES_OVER_YEARS}`);
     }
     logDivider();
 }
@@ -538,21 +521,20 @@ exports.updateYearlyScore = async (year, userId, scoreChange) => {
     logDivider();
 }
 
-exports.getGroceryCartEntries = async () => {
+exports.createGrocery = async (name, type) => {
     try {
         let queryText = `
-            SELECT * FROM ${TABLE_GROCERY_CART} ORDER BY type,name;
+            INSERT INTO ${TABLE_GROCERIES} VALUES ($1,$2);
         `;
-        const { rows } = await pool.query(queryText);
-        console.log("getGroceryCartEntries");
-        logDivider();
-        return rows;
+        let queryValues = [name, type];
+        await pool.query(queryText, queryValues);
+        console.log(`createGrocery : with ${name} and ${type}`);
     }
     catch (e) {
         console.error(e);
-        console.error("getGroceryCartEntries : Error");
-        logDivider();
+        console.error(`createGrocery : Failed with ${name} and ${type}`);
     }
+    logDivider();
 }
 
 exports.getGrocery = async (name) => {
@@ -572,121 +554,21 @@ exports.getGrocery = async (name) => {
     }
 }
 
-
-
-exports.getGroceryType = async (type) => {
-    try {
-        let queryText = `SELECT type, color FROM ${TABLE_GROCERY_TYPES} WHERE type = $1;`
-        let queryValues = [type];
-        let { rows } = await pool.query(queryText, queryValues);
-        console.log("getGroceryType");
-        console.log(rows);
-        logDivider();
-        if (rows.length === 0) return null;
-        return rows[0];
-    }
-    catch (e) {
-        console.error(e);
-        console.error("getGroceryType failed");
-        logDivider();
-    }
-}
-
-exports.createGrocery = async (name, type) => {
-    try {
-        let queryText = `
-            INSERT INTO ${TABLE_GROCERIES} VALUES ($1,$2);
-        `;
-        let queryValues = [name, type];
-        await pool.query(queryText, queryValues);
-        console.log(`createGrocery : with ${name} and ${type}`);
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`createGrocery : Failed with ${name} and ${type}`);
-    }
-    logDivider();
-}
-
-exports.getGroceryEntries = async () => {
+exports.getGroceries = async () => {
     try {
         let queryText = `
             SELECT * FROM ${TABLE_GROCERIES} ORDER BY name,type;
         `;
         const { rows } = await pool.query(queryText);
-        console.log("getGroceryEntries");
+        console.log("getGroceries");
         logDivider();
         return rows;
     }
     catch (e) {
         console.error(e);
-        console.error("getGroceryEntries : Error");
+        console.error("getGroceries : Error");
         logDivider();
     }
-}
-
-exports.createGroceryCartEntry = async (name, type, amount) => {
-    try {
-        let queryText = `
-            INSERT INTO ${TABLE_GROCERY_CART} VALUES ($1,$2,$3);
-        `;
-        let queryValues = [name, type, amount];
-        await pool.query(queryText, queryValues);
-        console.log(`createGroceryCartEntry : with ${name} and ${type} and ${amount}`);
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`createGroceryCartEntry : Failed with ${name} and ${type} and ${amount}`);
-    }
-    logDivider();
-}
-
-exports.updateGroceryCartEntryWithType = async (name, type) => {
-    try {
-        let queryText = `
-            UPDATE ${TABLE_GROCERY_CART} SET type = $2 WHERE name = $1;
-        `;
-        let queryValues = [name, type];
-        await pool.query(queryText, queryValues);
-        console.log(`updateGroceryCartEntryWithType : with ${name} and ${type}`);
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`updateGroceryCartEntryWithType : Error with ${name} and ${type}`);
-    }
-    logDivider();
-}
-
-exports.updateGroceryCartEntryWithName = async (name, newName) => {
-    try {
-        let queryText = `
-            UPDATE ${TABLE_GROCERY_CART} SET name = $2 WHERE name = $1;
-        `;
-        let queryValues = [name, newName];
-        await pool.query(queryText, queryValues);
-        console.log(`updateGroceryCartEntryWithName : with old name ${name} and new name ${newName}`);
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`updateGroceryCartEntryWithName : Error with old name ${name} and new name ${newName}`);
-    }
-    logDivider();
-}
-
-exports.deleteGroceryCartEntry = async (name) => {
-    try {
-        let queryText = `
-            DELETE FROM ${TABLE_GROCERY_CART} WHERE name = $1;
-        `;
-        let queryValues = [name];
-        await pool.query(queryText, queryValues);
-        console.log(`deleteGroceryCartEntry : with ${name}`);
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`deleteGroceryCartEntry : Failed with ${name}`);
-    }
-    logDivider();
 }
 
 exports.updateGrocery = async (name, grocery) => {
@@ -719,6 +601,73 @@ exports.deleteGrocery = async (name) => {
         console.error(`deleteGrocery : Failed with ${name}`);
     }
     logDivider();
+}
+
+exports.createGroceryCartEntry = async (name, type, amount) => {
+    try {
+        let queryText = `
+            INSERT INTO ${TABLE_GROCERY_CART} VALUES ($1,$2,$3);
+        `;
+        let queryValues = [name, type, amount];
+        await pool.query(queryText, queryValues);
+        console.log(`createGroceryCartEntry : with ${name} and ${type} and ${amount}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`createGroceryCartEntry : Failed with ${name} and ${type} and ${amount}`);
+    }
+    logDivider();
+}
+
+exports.getGroceryCartEntries = async () => {
+    try {
+        let queryText = `
+            SELECT * FROM ${TABLE_GROCERY_CART} ORDER BY type,name;
+        `;
+        const { rows } = await pool.query(queryText);
+        console.log("getGroceryCartEntries");
+        logDivider();
+        return rows;
+    }
+    catch (e) {
+        console.error(e);
+        console.error("getGroceryCartEntries : Error");
+        logDivider();
+    }
+}
+
+exports.deleteGroceryCartEntry = async (name) => {
+    try {
+        let queryText = `
+            DELETE FROM ${TABLE_GROCERY_CART} WHERE name = $1;
+        `;
+        let queryValues = [name];
+        await pool.query(queryText, queryValues);
+        console.log(`deleteGroceryCartEntry : with ${name}`);
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`deleteGroceryCartEntry : Failed with ${name}`);
+    }
+    logDivider();
+}
+
+exports.getGroceryType = async (type) => {
+    try {
+        let queryText = `SELECT type, color FROM ${TABLE_GROCERY_TYPES} WHERE type = $1;`
+        let queryValues = [type];
+        let { rows } = await pool.query(queryText, queryValues);
+        console.log("getGroceryType");
+        console.log(rows);
+        logDivider();
+        if (rows.length === 0) return null;
+        return rows[0];
+    }
+    catch (e) {
+        console.error(e);
+        console.error("getGroceryType failed");
+        logDivider();
+    }
 }
 
 exports.getGroceryTypes = async () => {
@@ -769,24 +718,6 @@ exports.updateGroceryType = async (type, groceryType) => {
     }
     logDivider();
 }
-
-exports.updateGroceriesTypeToDefault = async (type) => {
-    try {
-        let queryText = `
-            UPDATE ${TABLE_GROCERIES} SET type = 'Default' WHERE type = $1;
-        `;
-        let queryValues = [type];
-        await pool.query(queryText, queryValues);
-        console.log(`updateGroceryEntriesTypeToDefault : with type ${type}`)
-    }
-    catch (e) {
-        console.error(e);
-        console.error(`updateGroceryEntriesTypeToDefault : Error with type ${type}`)
-    }
-    logDivider();
-}
-
-
 
 exports.deleteGroceryType = async (type) => {
     try {
@@ -925,16 +856,6 @@ exports.setupDatabase = async () => {
         console.log("Failed to setup database");
         logDivider();
     }
-    // try {
-    //     queryText = `
-    //         INSERT INTO ${TABLE_GROCERY_TYPES} VALUES ('Default' , '#555555');
-    //     `;
-    //     await pool.query(queryText);
-    // }
-    // catch (e) {
-    //     console.error(`${TABLE_GROCERY_TYPES} already contains (Default,#555555)`);
-    //     logDivider();
-    // }
 }
 
 

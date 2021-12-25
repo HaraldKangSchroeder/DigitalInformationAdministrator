@@ -64,7 +64,7 @@ exports.setupSocketListeners = (io, socket) => {
 }
 
 async function getGroceryData(socket) {
-    let groceries = await databaseManager.getGroceryEntries();
+    let groceries = await databaseManager.getGroceries();
     let groceryTypes = await databaseManager.getGroceryTypes();
     let groceryCartEntries = await databaseManager.getGroceryCartEntries();
     socket.emit("groceryData", { groceries: groceries, groceryTypes: groceryTypes, groceryCartEntries: groceryCartEntries });

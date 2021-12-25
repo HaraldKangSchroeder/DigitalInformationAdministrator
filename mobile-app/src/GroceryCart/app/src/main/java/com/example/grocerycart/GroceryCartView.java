@@ -234,13 +234,13 @@ public class GroceryCartView extends AppCompatActivity {
                     JSONObject data = (JSONObject) args[0];
                     try {
                         System.out.println(data);
-                        String groceryTypesUnformatted = data.getString("groceryTypeEntries");
+                        String groceryTypesUnformatted = data.getString("groceryTypes");
                         ArrayList<JSONObject> groceryTypes = Utils.stringJsonArrayToJsonArray(groceryTypesUnformatted);
 
                         String groceryCartUnformatted = data.getString("groceryCartEntries");
                         ArrayList<JSONObject> groceryCart = Utils.stringJsonArrayToJsonArray(groceryCartUnformatted);
 
-                        String groceriesUnformatted = data.getString("groceryEntries");
+                        String groceriesUnformatted = data.getString("groceries");
                         ArrayList<JSONObject> groceries = Utils.stringJsonArrayToJsonArray(groceriesUnformatted);
 
                         GroceryCartManager.groceryTypes.readDataset(groceryTypes);

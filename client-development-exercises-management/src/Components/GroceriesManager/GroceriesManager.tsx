@@ -25,10 +25,10 @@ export default function GroceriesManager() {
     })
 
     useEffect(() => {
-        socket.on("groceryData", ({ groceryEntries, groceryTypeEntries }) => {
+        socket.on("groceryData", ({ groceries, groceryTypes }) => {
             setGroceryEntities({
-                groceries: new Groceries(groceryEntries),
-                groceryTypes: new GroceryTypes(groceryTypeEntries),
+                groceries: new Groceries(groceries),
+                groceryTypes: new GroceryTypes(groceryTypes),
             })
         });
 

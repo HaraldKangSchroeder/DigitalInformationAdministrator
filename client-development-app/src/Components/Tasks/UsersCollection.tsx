@@ -3,7 +3,6 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from "@material-ui/core"
 import User from "../../Classes/User";
 import Users from "../../Classes/Users";
-import React from "react";
 
 interface Props {
     users: Users;

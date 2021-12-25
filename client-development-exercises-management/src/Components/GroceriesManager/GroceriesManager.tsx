@@ -43,7 +43,7 @@ export default function GroceriesManager() {
     useEffect(() => {
         let isGrocerySelected = selections.selectedGrocery != null;
         if (isGrocerySelected) {
-            let updatedSelectedGrocery = groceryEntities.groceries.getGroceryByName(selections.selectedGrocery.getName());
+            let updatedSelectedGrocery = groceryEntities.groceries.getGrocery(selections.selectedGrocery.getName());
             // happens after renaming grocery name
             if (updatedSelectedGrocery == null) {
                 setSelections({

@@ -107,7 +107,7 @@ export default function DialogCreateGrocery(props: Props) {
                     <SelectMenu
                         value={state.type}
                         label={"Grocery Type"}
-                        menuItems={props.groceryTypes.getGroceryTypesAsList()}
+                        menuItems={props.groceryTypes.getGroceryTypeList()}
                         onChange={handleChangeType}
                     />
                 </DialogContent>

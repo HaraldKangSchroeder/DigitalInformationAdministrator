@@ -1,4 +1,3 @@
-import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -18,19 +17,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-    entities : any;
-    entityType : string;
-    selectedEntities : any;
-    changeSelectedEntities : Function;
+    entities: any;
+    entityType: string;
+    selectedEntities: any;
+    changeSelectedEntities: Function;
 }
 
-export function EntitiesSelection(props : Props) {
+export function EntitiesSelection(props: Props) {
     const classes = useStyles();
 
     return (
         <Paper className={classes.root} elevation={1}>
             <List subheader={<ListSubheader disableSticky={true}>{props.entityType}</ListSubheader>}>
-                {props.entities.getList().map((entity : any) => {
+                {props.entities.getList().map((entity: any) => {
                     let isEntitySelected = props.selectedEntities.contains(entity);
                     return (
                         <ListItem
@@ -40,10 +39,10 @@ export function EntitiesSelection(props : Props) {
                             selected={isEntitySelected}
                         >
 
-                            <ListItemText 
+                            <ListItemText
                                 primary={
                                     typeof entity.getLabel != 'undefined' ? entity.getLabel() : entity.getName()
-                                } 
+                                }
                             />
                         </ListItem>
                     );

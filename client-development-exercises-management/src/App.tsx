@@ -4,8 +4,7 @@ import NavBar from './Components/NavBar';
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
-    Link
+    Route
 } from "react-router-dom";
 import GroceriesManager from "./Components/GroceriesManager/GroceriesManager";
 import dotenv from "dotenv";

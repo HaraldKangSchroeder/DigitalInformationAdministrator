@@ -22,7 +22,7 @@ export default class TaskAccomplishments {
         this.taskAccomplishmentList.push(taskAccomplishment);
     }
 
-    getTaskIdsInCalendarWeekRange(calendarWeekStart: number, calendarWeekEnd: number): number[] {
+    getTaskIdsInWeekRange(calendarWeekStart: number, calendarWeekEnd: number): number[] {
         let ids: number[] = [];
         for (let taskAccomplishment of this.taskAccomplishmentList) {
             if (taskAccomplishment.getCalendarWeek() >= calendarWeekStart && taskAccomplishment.getCalendarWeek() <= calendarWeekEnd && !ids.includes(taskAccomplishment.getTaskId())) {

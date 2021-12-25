@@ -28,7 +28,7 @@ public class Groceries {
         return false;
     }
 
-    public Grocery getGroceryByName(String name){
+    public Grocery getGrocery(String name){
         String nameUppercase = name.toUpperCase();
         for(int i = 0; i < groceryList.size(); i++){
             String _nameUpperCase = groceryList.get(i).getName().toUpperCase();

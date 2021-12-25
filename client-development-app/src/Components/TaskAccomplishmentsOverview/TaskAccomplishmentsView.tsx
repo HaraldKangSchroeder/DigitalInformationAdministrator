@@ -1,6 +1,5 @@
 import { Grid, makeStyles } from "@material-ui/core";
-import React, { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Line } from 'react-chartjs-2';
 import { ChartHeader } from "./ChartHeader";
 import socket from "../../socket";
@@ -148,7 +147,7 @@ export function TaskAccomplishmentsView() {
 
 
     const classes = useStyles();
-    let tasksInCalendarWeekRange = tasks.getTasks(taskAccomplishments.getTaskIdsInCalendarWeekRange(calendarWeekRange.start, calendarWeekRange.end));
+    let tasksInCalendarWeekRange = tasks.getTasks(taskAccomplishments.getTaskIdsInWeekRange(calendarWeekRange.start, calendarWeekRange.end));
     return (
 
         <div className="App">

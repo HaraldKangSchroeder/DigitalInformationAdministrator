@@ -20,14 +20,6 @@ export default class Tasks {
         return false;
     }
 
-    getJsonListWithIdAndLabel() {
-        let jsonList = [];
-        for (let taskEntry of this.taskList) {
-            jsonList.push({ id: taskEntry.getId(), label: taskEntry.getLabel() });
-        }
-        return jsonList;
-    }
-
     getTasks(ids: number[]): Tasks {
         let newTasks = new Tasks(null);
         for (let taskId of ids) {

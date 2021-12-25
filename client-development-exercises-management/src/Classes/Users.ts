@@ -41,14 +41,6 @@ export default class Users {
         return null;
     }
 
-    getJsonListWithIdAndLabel() {
-        let jsonList = [];
-        for (let userEntry of this.userList) {
-            jsonList.push({ id: userEntry.getId(), label: userEntry.getName() });
-        }
-        return jsonList;
-    }
-
     addUser(user: User) {
         this.userList.push(user);
     }

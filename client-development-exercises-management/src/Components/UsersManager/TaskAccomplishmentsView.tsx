@@ -143,7 +143,7 @@ export function TaskAccomplishmentsView(props: Props) {
 
 
     const classes = useStyles();
-    let tasksInCalendarWeekRange = tasks.getTasks(taskAccomplishments.getTaskIdsInCalendarWeekRange(calendarWeekRange.start, calendarWeekRange.end));
+    let tasksInCalendarWeekRange = tasks.getTasks(taskAccomplishments.getTaskIdsInWeekRange(calendarWeekRange.start, calendarWeekRange.end));
     return (
         <React.Fragment>
             <ChartHeader

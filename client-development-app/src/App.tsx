@@ -1,11 +1,9 @@
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
-    Link
+    Route
 } from "react-router-dom";
 import GroceryCartView from "./Components/Groceries/GroceryCartView";
-import TaskAccomplishentsView from './Components/Tasks/TasksView';
 import WeatherView from "./Components/Weather/WeatherView";
 import './App.css';
 import dotenv from "dotenv";

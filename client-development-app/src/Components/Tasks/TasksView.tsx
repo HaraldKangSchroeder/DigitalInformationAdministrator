@@ -1,6 +1,4 @@
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import socket from "../../socket";
 import TasksCollection from "./TasksCollection";

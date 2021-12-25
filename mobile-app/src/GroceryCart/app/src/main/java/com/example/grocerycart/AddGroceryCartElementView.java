@@ -52,7 +52,7 @@ public class AddGroceryCartElementView extends AppCompatActivity {
                 groceryName = s.toString();
                 groceryName = groceryName.substring(0, 1).toUpperCase() + groceryName.substring(1);
                 if(GroceryCartManager.groceries.containsGroceryByName(groceryName) && !specificGroceryWritten){
-                    String type = GroceryCartManager.groceries.getGroceryByName(groceryName).getType();
+                    String type = GroceryCartManager.groceries.getGrocery(groceryName).getType();
                     String[] singleType = {type};
                     setGroceryTypesAsSpinnerValues(singleType);
                     specificGroceryWritten = true;

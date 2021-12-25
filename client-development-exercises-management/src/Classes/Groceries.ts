@@ -2,43 +2,43 @@ import Grocery from "./Grocery";
 
 export default class Groceries {
 
-    groceryList : Grocery[];
+    groceryList: Grocery[];
 
-    constructor(groceryDataset? : any[]){
+    constructor(groceryDataset?: any[]) {
         this.groceryList = [];
-        if(groceryDataset != null){
+        if (groceryDataset != null) {
             this.readDataset(groceryDataset);
         }
     }
 
-    contains(otherGrocery : Grocery) : boolean {
-        for(let grocery of this.groceryList){
-            if(grocery.getName() === otherGrocery.getName()){
+    contains(otherGrocery: Grocery): boolean {
+        for (let grocery of this.groceryList) {
+            if (grocery.getName() === otherGrocery.getName()) {
                 return true;
             }
         }
         return false;
     }
 
-    getList() : Grocery[] {
+    getList(): Grocery[] {
         return this.groceryList;
     }
 
-    addGrocery(grocery : Grocery){
+    addGrocery(grocery: Grocery) {
         this.groceryList.push(grocery);
     }
 
-    getGroceryByName(name : string) : Grocery {
-        for(let grocery of this.groceryList){
-            if(grocery.getName() === name){
+    getGrocery(name: string): Grocery {
+        for (let grocery of this.groceryList) {
+            if (grocery.getName() === name) {
                 return grocery;
             }
         }
         return null;
     }
 
-    readDataset(entries : any[]){
-        for(let entry of entries){
+    readDataset(entries: any[]) {
+        for (let entry of entries) {
             this.addGrocery(new Grocery(entry.name, entry.type));
         }
     }

@@ -1,8 +1,5 @@
 import TaskElement from "./TaskElement";
 import { makeStyles } from "@material-ui/core"
-import React from "react";
-import Tasks from "../../Classes/Tasks";
-import { classicNameResolver } from "typescript";
 import Users from "../../Classes/Users";
 import User from "../../Classes/User";
 import TaskAccomplishments from "../../Classes/TaskAccomplishments";

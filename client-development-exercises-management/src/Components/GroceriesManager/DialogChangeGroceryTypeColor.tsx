@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@material-ui/core";
 import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core"
-import React, { useState } from "react";
+import { useState } from "react";
 import { SketchPicker } from "react-color";
 import socket from "../../socket";
 

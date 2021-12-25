@@ -19,7 +19,7 @@ export default class TaskAccomplishments {
         this.taskAccomplishmentList.push(taskAccomplishment);
     }
 
-    getTaskIdsInCalendarWeekRange(calendarWeekStart: number, calendarWeekEnd: number): number[] {
+    getTaskIdsInWeekRange(calendarWeekStart: number, calendarWeekEnd: number): number[] {
         let ids: number[] = [];
         for (let taskAccomplishment of this.taskAccomplishmentList) {
             if (taskAccomplishment.getCalendarWeek() >= calendarWeekStart && taskAccomplishment.getCalendarWeek() <= calendarWeekEnd && !ids.includes(taskAccomplishment.getTaskId())) {
@@ -36,12 +36,12 @@ export default class TaskAccomplishments {
         }
     }
 
-    getLatestCalendarWeek()  : number{
+    getLatestCalendarWeek(): number {
         if (this.taskAccomplishmentList.length === 0) return 0;
         return this.taskAccomplishmentList[this.taskAccomplishmentList.length - 1].getCalendarWeek(); // this is right, because it is ordered by calendar_week on serverside
     }
 
-    getEarliestCalendarWeek()  : number{
+    getEarliestCalendarWeek(): number {
         if (this.taskAccomplishmentList.length === 0) return 0;
         return this.taskAccomplishmentList[0].getCalendarWeek(); // this is right, because it is ordered by calendar_week on serverside
     }

@@ -832,7 +832,7 @@ exports.setupDatabase = async () => {
             CREATE TABLE IF NOT EXISTS ${TABLE_GROCERY_CART}
             (
                 name VARCHAR PRIMARY KEY,
-                type VARCHAR NOT NULL,
+                type VARCHAR,
                 amount VARCHAR,
                 FOREIGN KEY (type) REFERENCES ${TABLE_GROCERY_TYPES}(type) ON UPDATE CASCADE ON DELETE SET NULL
             );

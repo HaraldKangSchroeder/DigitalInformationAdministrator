@@ -163,6 +163,9 @@ exports.setUpSocketListeners = async (io, socket) => {
         await databaseManager.deleteUser(data.id);
         let users = await databaseManager.getUsers();
         socket.emit("users", users);
+
+        let res = await getCurrentWeekData();
+        io.emit("currentWeekData", res);
     })
 
     socket.on('updateUser', async (data) => {

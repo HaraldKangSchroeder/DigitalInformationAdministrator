@@ -1,4 +1,5 @@
 package com.example.grocerycart;
+import android.graphics.Color;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -6,6 +7,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class GroceryTypes {
+
+    final String DEFAULT_COLOR = "#AAAAAA";
 
     private ArrayList<GroceryType> groceryTypeList;
 
@@ -22,6 +25,7 @@ public class GroceryTypes {
     }
 
     public int getParsedColorByType(String type){
+        if(type == "null") return Color.parseColor(DEFAULT_COLOR);
         for(int i = 0; i < groceryTypeList.size(); i++){
             if(groceryTypeList.get(i).getType().equals(type)){
                 return groceryTypeList.get(i).getParsedColor();

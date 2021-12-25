@@ -116,7 +116,7 @@ exports.getTasks = async () => {
 exports.createTaskOccurences = async (taskId, weeklyRythm, dayOfWeek) => {
     let weeks = getWeeksOfWeeklyRythm(weeklyRythm);
     for (let week of weeks) {
-        await createTaskOccurence(taskId, week, dayOfWeek);
+        await this.createTaskOccurence(taskId, week, dayOfWeek);
     }
 }
 

@@ -2,67 +2,60 @@ const { logDivider } = require("./utils");
 const databaseManager = require("./databaseManager");
 
 exports.setupSocketListeners = (io, socket) => {
-    socket.on('createGroceryEntry', async ({ name, type }) => {
-        await databaseManager.createGroceryEntry(name, type);
+    socket.on('createGrocery', async ({ name, type }) => {
+        console.log(name + " : " + type);
+        await databaseManager.createGrocery(name, type);
         await getGroceryData(io);
-        logDivider();
     });
 
-    socket.on('updateGroceryEntryWithName', async ({ name, newName }) => {
-        await databaseManager.updateGroceryEntryWithName(name, newName);
-        await databaseManager.updateGroceryCartEntryWithName(name, newName);
+    socket.on('updateGrocery', async (data) => {
+        let grocery = await databaseManager.getGrocery(data.name);
+
+        console.log(data);
+
+        if (data.newName != null) grocery.name = data.newName;
+        if (data.type != null) grocery.type = data.type === "" ? null : data.type;
+
+        await databaseManager.updateGrocery(data.name, grocery);
         await getGroceryData(io);
-        logDivider();
     });
 
-    socket.on('updateGroceryEntryWithType', async ({ name, type }) => {
-        await databaseManager.updateGroceryEntryWithType(name, type);
-        await databaseManager.updateGroceryCartEntryWithType(name, type);
+
+    socket.on('createGroceryType', async ({ type, color }) => {
+        await databaseManager.createGroceryType(type, color);
         await getGroceryData(io);
-        logDivider();
     });
 
-    socket.on('createGroceryTypeEntry', async ({ type, color }) => {
-        await databaseManager.createGroceryTypeEntry(type, color);
-        await getGroceryData(io);
-        logDivider();
-    });
+    socket.on('updateGroceryType', async (data) => {
+        console.log(data);
+        let groceryType = await databaseManager.getGroceryType(data.type);
+        console.log(groceryType);
 
-    socket.on('updateGroceryTypeEntryWithType', async ({ type, newType }) => {
+        if (data.newType != null) groceryType.type = data.newType;
+        if (data.color != null) groceryType.color = data.color;
         // changes also grocery cart table due to update on cascade on foreign key
-        await databaseManager.updateGroceryTypeEntryWithType(type, newType);
+        await databaseManager.updateGroceryType(data.type, groceryType);
         await getGroceryData(io);
-        logDivider();
     });
 
-    socket.on('updateGroceryTypeEntryWithColor', async ({ type, color }) => {
-        await databaseManager.updateGroceryTypeEntryWithColor(type, color);
+    socket.on('deleteGrocery', async ({ name }) => {
+        await databaseManager.deleteGrocery(name);
         await getGroceryData(io);
-        logDivider();
-    });
-
-    socket.on('deleteGroceryEntry', async ({ name }) => {
-        await databaseManager.deleteGroceryEntry(name);
-        await getGroceryData(io);
-        logDivider();
     })
 
-    socket.on('deleteGroceryTypeEntry', async ({ type }) => {
-        await databaseManager.updateGroceryEntriesTypeToDefault(type);
-        await databaseManager.deleteGroceryTypeEntry(type);
+    socket.on('deleteGroceryType', async ({ type }) => {
+        // await databaseManager.updateGroceriesTypeToDefault(type);
+        await databaseManager.deleteGroceryType(type);
         await getGroceryData(io);
-        logDivider();
     });
 
     socket.on('getGroceryData', async () => {
         await getGroceryData(socket);
-        logDivider();
     });
 
     socket.on('createGroceryCartEntry', async ({ name, type, amount }) => {
         await databaseManager.createGroceryCartEntry(name, type, amount);
         await getGroceryData(io);
-        logDivider();
     })
 
     socket.on('deleteGroceryCartEntry', async ({ name }) => {
@@ -74,7 +67,7 @@ exports.setupSocketListeners = (io, socket) => {
 
 async function getGroceryData(socket) {
     let groceryEntries = await databaseManager.getGroceryEntries();
-    let groceryTypeEntries = await databaseManager.getGroceryTypeEntries();
+    let groceryTypeEntries = await databaseManager.getGroceryTypes();
     let groceryCartEntries = await databaseManager.getGroceryCartEntries();
     socket.emit("groceryData", { groceryEntries: groceryEntries, groceryTypeEntries: groceryTypeEntries, groceryCartEntries: groceryCartEntries });
 }

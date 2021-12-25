@@ -9,7 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { SelectMenu} from '../SelectMenu';
+import { SelectMenu } from '../SelectMenu';
 import socket from "../../socket";
 import GroceryTypes from "../../Classes/GroceryTypes";
 
@@ -27,16 +27,16 @@ const useStyles = makeStyles({
 })
 
 interface Props {
-    groceryTypes : GroceryTypes
+    groceryTypes: GroceryTypes
 }
 
-export default function DialogCreateGrocery(props : Props) {
+export default function DialogCreateGrocery(props: Props) {
     const classes = useStyles();
 
     const [open, setOpen] = useState(false);
     const [state, setState] = useState({
         name: "",
-        type: "",
+        type: null,
     });
 
     const handleOpen = () => {
@@ -46,36 +46,37 @@ export default function DialogCreateGrocery(props : Props) {
     const handleClose = () => {
         setState({
             name: "",
-            type: "",
+            type: null,
         })
         setOpen(false);
     };
 
-    const handleChangeName = (e : any) => {
+    const handleChangeName = (e: any) => {
         setState({
             ...state,
             name: e.target.value
         })
     }
 
-    const handleChangeType = (e : any) => {
+    const handleChangeType = (e: any) => {
         setState({
             ...state,
-            type : e.target.value,
+            type: e.target.value,
         })
     }
 
     const handleSubmit = () => {
-        socket.emit("createGroceryEntry", {name:state.name, type:state.type});
+        socket.emit("createGrocery", { name: state.name, type: state.type });
         setState({
             name: "",
-            type: "",
+            type: null,
         })
         setOpen(false);
     }
 
     let isNameSet = state.name !== "";
-    let isTypeSet = state.type !== "";
+
+    console.log(state.type === null);
 
     return (
         <div>
@@ -107,7 +108,7 @@ export default function DialogCreateGrocery(props : Props) {
                         value={state.type}
                         label={"Grocery Type"}
                         menuItems={props.groceryTypes.getGroceryTypesAsList()}
-                        handleChange={handleChangeType}
+                        onChange={handleChangeType}
                     />
                 </DialogContent>
 
@@ -115,7 +116,7 @@ export default function DialogCreateGrocery(props : Props) {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button disabled={!isNameSet || !isTypeSet} onClick={handleSubmit} color="primary">
+                    <Button disabled={!isNameSet} onClick={handleSubmit} color="primary">
                         Add Grocery
                     </Button>
                 </DialogActions>

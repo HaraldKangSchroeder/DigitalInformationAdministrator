@@ -57,15 +57,8 @@ export default function DialogCreateGroceryType() {
         })
     }
 
-    const handleChangeColor = (e: any) => {
-        setState({
-            ...state,
-            color: e.target.value,
-        })
-    }
-
     const handleSubmit = () => {
-        socket.emit("createGroceryTypeEntry", { type: state.type, color: state.color });
+        socket.emit("createGroceryType", { type: state.type, color: state.color });
         setState({
             type: "",
             color: "#ff0000",
@@ -104,7 +97,7 @@ export default function DialogCreateGroceryType() {
                     </DialogContentText>
                     <SketchPicker
                         color={state.color}
-                        onChange={(color : any) => {setState({...state, color:color.hex})}}
+                        onChange={(color: any) => { setState({ ...state, color: color.hex }) }}
                     />
                 </DialogContent>
 

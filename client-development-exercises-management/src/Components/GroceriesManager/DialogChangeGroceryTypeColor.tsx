@@ -8,12 +8,12 @@ import socket from "../../socket";
 
 interface Props {
     color: string,
-    type : string,
+    type: string,
 }
 
 const useStyles = makeStyles({
-    root : {
-        float :"right",
+    root: {
+        float: "right",
     },
     paper: (props: Props) => ({
         background: props.color,
@@ -44,13 +44,13 @@ export default function DialogChangeGroceryTypeColor(props: Props) {
     }
 
     const handleSubmit = () => {
-        socket.emit('updateGroceryTypeEntryWithColor', {type : props.type, color : color});
+        socket.emit('updateGroceryType', { type: props.type, color: color });
         setOpen(false);
     }
 
     const classes = useStyles(props);
     return (
-        <div onClick={(e : any) => {e.preventDefault(); e.stopPropagation();}} className={classes.root}>
+        <div onClick={(e: any) => { e.preventDefault(); e.stopPropagation(); }} className={classes.root}>
             <div onClick={handleOpen} >
                 <Paper className={classes.paper} elevation={3} />
             </div>
@@ -62,7 +62,7 @@ export default function DialogChangeGroceryTypeColor(props: Props) {
                     </DialogContentText>
                     <SketchPicker
                         color={color}
-                        onChange={(color: any) => { setColor(color.hex)}}
+                        onChange={(color: any) => { setColor(color.hex) }}
                     />
                 </DialogContent>
 

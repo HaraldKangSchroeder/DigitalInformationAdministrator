@@ -1,4 +1,3 @@
-const { logDivider } = require("./utils");
 const databaseManager = require("./databaseManager");
 
 exports.setupSocketListeners = (io, socket) => {
@@ -61,13 +60,12 @@ exports.setupSocketListeners = (io, socket) => {
     socket.on('deleteGroceryCartEntry', async ({ name }) => {
         await databaseManager.deleteGroceryCartEntry(name);
         await getGroceryData(io);
-        logDivider();
     })
 }
 
 async function getGroceryData(socket) {
-    let groceryEntries = await databaseManager.getGroceryEntries();
-    let groceryTypeEntries = await databaseManager.getGroceryTypes();
+    let groceries = await databaseManager.getGroceryEntries();
+    let groceryTypes = await databaseManager.getGroceryTypes();
     let groceryCartEntries = await databaseManager.getGroceryCartEntries();
-    socket.emit("groceryData", { groceryEntries: groceryEntries, groceryTypeEntries: groceryTypeEntries, groceryCartEntries: groceryCartEntries });
+    socket.emit("groceryData", { groceries: groceries, groceryTypes: groceryTypes, groceryCartEntries: groceryCartEntries });
 }

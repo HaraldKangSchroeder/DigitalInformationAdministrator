@@ -803,7 +803,7 @@ exports.setupDatabase = async () => {
                 calendar_week week_num NOT NULL,
                 year INT NOT NULL,
                 score INT NOT NULL,
-                FOREIGN KEY (user_id) REFERENCES ${TABLE_USERS}(id) ON DELETE CASCADE
+                FOREIGN KEY (user_id) REFERENCES ${TABLE_USERS}(id) ON DELETE SET NULL
             );
         `;
         await pool.query(queryText);

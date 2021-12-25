@@ -8,27 +8,26 @@ import { ChangeEvent } from 'react';
 import { ReactNode } from 'react';
 
 const useStyles = makeStyles({
-    formControl: (props : Props) => ({
+    formControl: (props: Props) => ({
         minWidth: props.minWidth || 200,
-        padding:0,
-        height:34,
+        padding: 0,
+        height: 34,
         marginLeft: props.marginSide || 0,
         marginRight: props.marginSide || 0
     }),
 })
 
 interface Props {
-    minWidth? : number;
-    marginSide ?: number;
-    disabled? : boolean;
-    label : string;
-    value : any;
-    noNone? : boolean;
-    menuItems : any[];
-    handleChange : Function;
+    minWidth?: number;
+    marginSide?: number;
+    disabled?: boolean;
+    label: string;
+    value: any;
+    menuItems: any[];
+    onChange: Function;
 }
 
-export function SelectMenu(props : Props) {
+export function SelectMenu(props: Props) {
     const classes = useStyles(props);
 
     return (
@@ -41,16 +40,11 @@ export function SelectMenu(props : Props) {
             <InputLabel>{props.label}</InputLabel>
             <Select
                 value={props.value}
-                onChange={(e : any) => {props.handleChange(e)}}
+                onChange={(e: any) => { props.onChange(e) }}
                 label={props.label}
             >
-                {props.noNone ? <div></div> : 
-                    <MenuItem value="">
-                    <em>None</em>
-                    </MenuItem>
-                }
                 {
-                    props.menuItems.map((menuItem : any) => {
+                    props.menuItems.map((menuItem: any) => {
                         let value = menuItem.value != null ? menuItem.value : menuItem;
                         let label = menuItem.label != null ? menuItem.label : menuItem;
                         return (

@@ -85,7 +85,7 @@ export function DialogChangeTaskValue(props: Props) {
                         value={newValue}
                         label={props.type}
                         menuItems={props.menuItems}
-                        handleChange={handleChangeValue}
+                        onChange={handleChangeValue}
                     />
                 </DialogContent>
 

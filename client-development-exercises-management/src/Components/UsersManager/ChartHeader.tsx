@@ -1,6 +1,5 @@
 import { makeStyles } from "@material-ui/core"
 import { SelectMenu } from "../SelectMenu";
-import React from "react";
 import MultipleSelectTaskMenu from "./MultipleSelectTaskMenu";
 import Tasks from "../../Classes/Tasks";
 
@@ -52,9 +51,8 @@ export function ChartHeader(props: Props) {
                 label={"CW"}
                 minWidth={80}
                 marginSide={10}
-                handleChange={(e: any) => { props.changeCalendarWeekStart(e) }}
+                onChange={(e: any) => { props.changeCalendarWeekStart(e) }}
                 menuItems={props.calendarWeeks}
-                noNone={true}
             />
             to
             <SelectMenu
@@ -62,9 +60,8 @@ export function ChartHeader(props: Props) {
                 label={"CW"}
                 minWidth={80}
                 marginSide={10}
-                handleChange={(e: any) => { props.changeCalendarWeekEnd(e) }}
+                onChange={(e: any) => { props.changeCalendarWeekEnd(e) }}
                 menuItems={props.calendarWeeks}
-                noNone={true}
             />
             of Year
             <SelectMenu
@@ -72,9 +69,8 @@ export function ChartHeader(props: Props) {
                 label={"Year"}
                 minWidth={80}
                 marginSide={10}
-                handleChange={(e: any) => { props.changeYear(e) }}
+                onChange={(e: any) => { props.changeYear(e) }}
                 menuItems={props.years}
-                noNone={true}
             />
             - Mode :
             <SelectMenu
@@ -82,9 +78,8 @@ export function ChartHeader(props: Props) {
                 label={"Mode"}
                 minWidth={80}
                 marginSide={10}
-                handleChange={(e: any) => { props.changeVisualizationMode(e) }}
+                onChange={(e: any) => { props.changeVisualizationMode(e) }}
                 menuItems={props.visualizationModes}
-                noNone={true}
             />
         </div>
     )

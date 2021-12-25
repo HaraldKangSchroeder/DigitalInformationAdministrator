@@ -5,7 +5,6 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import Task from '../../Classes/Task';
-import { Interface } from 'readline';
 import Tasks from '../../Classes/Tasks';
 
 const useStyles = makeStyles((theme) => ({

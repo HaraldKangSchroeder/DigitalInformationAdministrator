@@ -148,7 +148,7 @@ export function DialogCreateTask() {
                         value={state.score}
                         label={"Score"}
                         menuItems={MENU_ITEMS_SCORES}
-                        handleChange={handleChangeScore}
+                        onChange={handleChangeScore}
                     />
 
                     <DialogContentText className={classes.informationText}>
@@ -158,7 +158,7 @@ export function DialogCreateTask() {
                         value={state.importance}
                         label={"Importance"}
                         menuItems={MENU_ITEMS_IMPORTANCES}
-                        handleChange={handleChangeImportance}
+                        onChange={handleChangeImportance}
                     />
 
                     <DialogContentText className={classes.informationText}>
@@ -168,8 +168,7 @@ export function DialogCreateTask() {
                         value={state.weeklyOccurences}
                         label={"Weekly Occurences"}
                         menuItems={MENU_ITEMS_WEEKLY_OCCURENCES}
-                        handleChange={handleChangeWeeklyOccurences}
-                        noNone={true}
+                        onChange={handleChangeWeeklyOccurences}
                     />
 
                     <DialogContentText className={classes.informationText}>
@@ -179,7 +178,7 @@ export function DialogCreateTask() {
                         value={state.weeklyRythm}
                         label={"Weekly Rythm"}
                         menuItems={MENU_ITEMS_WEEKLY_RYTHMS}
-                        handleChange={handleChangeWeeklyRythm}
+                        onChange={handleChangeWeeklyRythm}
                     />
 
                     <DialogContentText className={classes.informationText}>
@@ -189,7 +188,7 @@ export function DialogCreateTask() {
                         value={state.dayOfWeek}
                         label={"Day"}
                         menuItems={MENU_ITEMS_DAYS}
-                        handleChange={handleChangeDay}
+                        onChange={handleChangeDay}
                         disabled={!isWeeklyRythmSet}
                     />
 

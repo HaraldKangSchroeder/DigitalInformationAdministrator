@@ -81,9 +81,6 @@ exports.setUpSocketListeners = async (io, socket) => {
         // emit all active tasks
         let tasks = await databaseManager.getTasks();
         socket.emit('tasks', tasks);
-
-        let res = await getCurrentWeekData();
-        io.emit("currentWeekData", res);
     });
 
     /*-----------------------------------------------------------------*/
@@ -95,7 +92,7 @@ exports.setUpSocketListeners = async (io, socket) => {
 
     socket.on('createTaskOccurence', async (data) => {
         await databaseManager.createTaskOccurence(data.taskId, data.calendarWeek, data.dayOfWeek);
-        console.log("CREATE TASK OCCURENCE");
+
         let taskOccurences = await databaseManager.getTaskOccurences(data.taskId);
         socket.emit('taskOccurences', taskOccurences);
     });
@@ -124,8 +121,6 @@ exports.setUpSocketListeners = async (io, socket) => {
 
     socket.on('updateTaskAccomplishment', async ({ taskAccomplishmentId, newUserId, oldUserId }) => {
         await databaseManager.updateTaskAccomplishment(taskAccomplishmentId, newUserId);
-
-        console.log(taskAccomplishmentId + " : " + newUserId + " : " + oldUserId);
 
         // update scores
         let { score } = await databaseManager.getTaskAccomplishment(taskAccomplishmentId);
@@ -196,7 +191,6 @@ exports.setUpSocketListeners = async (io, socket) => {
 }
 
 async function resetCurrentWeekTasks(io) {
-    // TODO remove points of current week for each user
     let users = await databaseManager.getUsers();
     let taskAccomplishments = await databaseManager.getTaskAccomplishmentsOfWeekInYear(currentWeek, currentYear);
     for (let user of users) {
@@ -217,8 +211,6 @@ async function resetCurrentWeekTasks(io) {
 async function getCurrentWeekData() {
     let taskAccomplishments = await databaseManager.getTaskAccomplishmentsOfWeekInYear(currentWeek, currentYear);
     let users = await databaseManager.getUsersWithScore(currentWeek, currentYear);
-
-    console.log(taskAccomplishments);
 
     let res = { taskAccomplishments: taskAccomplishments, users: users }
     return res;

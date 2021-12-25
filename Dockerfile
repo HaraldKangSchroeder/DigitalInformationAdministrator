@@ -32,11 +32,11 @@ RUN cd client-development-app && \
 
 RUN mkdir -p public${REACT_APP_BASEPATH_MANAGEMENT}
 
-COPY client-development-exercises-management/ ./client-development-exercises-management
+COPY client-development-management/ ./client-development-management
 
 ENV PUBLIC_URL ${REACT_APP_BASEPATH_MANAGEMENT}
 
-RUN cd client-development-exercises-management && \
+RUN cd client-development-management && \
     npm install && \
     npm run build && \
     mv -v build/* ../public${REACT_APP_BASEPATH_MANAGEMENT}

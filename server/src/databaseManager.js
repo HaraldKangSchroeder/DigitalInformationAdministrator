@@ -822,8 +822,7 @@ exports.setupDatabase = async () => {
             (
                 name VARCHAR PRIMARY KEY,
                 type VARCHAR,
-                FOREIGN KEY (type) REFERENCES ${TABLE_GROCERY_TYPES}(type) ON UPDATE CASCADE ON DELETE SET NULL,
-                CONSTRAINT unique_constraint UNIQUE (name,type)
+                FOREIGN KEY (type) REFERENCES ${TABLE_GROCERY_TYPES}(type) ON UPDATE CASCADE ON DELETE SET NULL
             );
         `;
         await pool.query(queryText);

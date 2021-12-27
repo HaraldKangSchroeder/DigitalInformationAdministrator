@@ -45,6 +45,9 @@ public class Groceries {
             try{
                 String name = dataset.get(i).getString("name");
                 String type = dataset.get(i).getString("type");
+                if(type.equals("null")){
+                    type = "-";
+                }
                 addGrocery(new Grocery(name,type));
             }
             catch (JSONException e) {

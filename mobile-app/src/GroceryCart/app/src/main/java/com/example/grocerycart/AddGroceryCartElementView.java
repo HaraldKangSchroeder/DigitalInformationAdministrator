@@ -81,7 +81,6 @@ public class AddGroceryCartElementView extends AppCompatActivity {
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 amount = s.toString();
-                System.out.println(amount);
             }
         });
     }
@@ -98,7 +97,6 @@ public class AddGroceryCartElementView extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 selectedType = types[position];
-                System.out.println(selectedType);
                 changeTypeColorIndicator(GroceryCartManager.groceryTypes.getParsedColorByType(selectedType));
             }
             @Override
@@ -131,7 +129,10 @@ public class AddGroceryCartElementView extends AppCompatActivity {
                 try{
                     JSONObject newEntry = new JSONObject();
                     newEntry.put("name", groceryName);
-                    newEntry.put("type", selectedType);
+                    if(!selectedType.equals("-"))
+                    {
+                        newEntry.put("type", selectedType);
+                    }
                     newEntry.put("amount", amount);
                     GroceryCartNetworkManager.emit("createGroceryCartEntry", newEntry);
                     startActivity(new Intent(AddGroceryCartElementView.this, destinationClass));

@@ -58,7 +58,6 @@ public class GroceryCartNetworkManager extends AppCompatActivity {
     }
 
     public static void handleChangeSocketPath(String socketPath){
-        System.out.println("Handle socket path " + socketPath);
         setSocketPath(socketPath);
         resetSocket();
     }
@@ -89,7 +88,7 @@ public class GroceryCartNetworkManager extends AppCompatActivity {
 
     public static void resetSocket() {
         if(isSocketDefined()){
-            System.out.println("DISCONNECT SOCKET DUE TO CHANGE");
+            System.out.println("DISCONNECT SOCKET DUE TO RESET");
             socket.disconnect();
         }
         setupSocket();
@@ -200,7 +199,6 @@ public class GroceryCartNetworkManager extends AppCompatActivity {
 
         String userPassword = username + ":" + password;
         String userPasswordEncoded = Base64.encodeToString(userPassword.getBytes(), Base64.NO_WRAP);
-        System.out.println(userPasswordEncoded);
         // set as an option
         IO.Options opts = new IO.Options();
         opts.path = socketPath;

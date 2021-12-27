@@ -26,6 +26,9 @@ public class GroceryCart {
             try{
                 String name = dataset.get(i).getString("name");
                 String type = dataset.get(i).getString("type");
+                if(type.equals("null")){
+                    type = "-";
+                }
                 String amount = dataset.get(i).getString("amount");
                 addGroceryCartElement(new GroceryCartElement(name,type,amount));
             }

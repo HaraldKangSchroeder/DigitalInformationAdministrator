@@ -173,7 +173,6 @@ public class OptionsView extends AppCompatActivity {
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 remoteHost = s.toString();
-                System.out.println(remoteHost);
             }
         });
     }
@@ -188,7 +187,6 @@ public class OptionsView extends AppCompatActivity {
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 socketPath = s.toString();
-                System.out.println(socketPath);
             }
         });
     }
@@ -203,7 +201,6 @@ public class OptionsView extends AppCompatActivity {
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 username = s.toString();
-                System.out.println(username);
             }
         });
     }
@@ -218,7 +215,6 @@ public class OptionsView extends AppCompatActivity {
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 password = s.toString();
-                System.out.println(password);
             }
         });
     }

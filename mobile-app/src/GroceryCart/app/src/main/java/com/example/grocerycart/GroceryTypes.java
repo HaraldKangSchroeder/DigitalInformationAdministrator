@@ -25,17 +25,17 @@ public class GroceryTypes {
     }
 
     public int getParsedColorByType(String type){
-        if(type == "null") return Color.parseColor(DEFAULT_COLOR);
         for(int i = 0; i < groceryTypeList.size(); i++){
             if(groceryTypeList.get(i).getType().equals(type)){
                 return groceryTypeList.get(i).getParsedColor();
             }
         }
-        return 0;
+        return Color.parseColor(DEFAULT_COLOR);
     }
 
     public void readDataset(ArrayList<JSONObject> dataset){
         groceryTypeList = new ArrayList<GroceryType>();
+        addGroceryType(new GroceryType("-", DEFAULT_COLOR));
         for(int i = 0; i < dataset.size(); i++){
             try{
                 String type = dataset.get(i).getString("type");

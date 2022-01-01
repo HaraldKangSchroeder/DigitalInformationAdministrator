@@ -98,13 +98,9 @@ export function TaskAccomplishmentsView() {
     }, [taskAccomplishments]);
 
     useEffect(() => {
-        let latestCalendarWeek = taskAccomplishments.getLatestCalendarWeek();
-        let isCalendarWeekEndSet = calendarWeekRange.end !== 0;
-        let isCalendarWeekEndWithingNewRange = calendarWeekRange.end <= latestCalendarWeek;
-        let newCalendarWeekEnd = isCalendarWeekEndSet && isCalendarWeekEndWithingNewRange ? calendarWeekRange.end : latestCalendarWeek;
         setCalendarWeekRange({
             start: taskAccomplishments.getEarliestCalendarWeek(),
-            end: newCalendarWeekEnd,
+            end: taskAccomplishments.getLatestCalendarWeek(),
         });
     }, [tasks])
 

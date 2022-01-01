@@ -26,6 +26,15 @@ function updateCurrentDates() {
 
 async function updateCurrentWeekTasks(io) {
     try {
+        // check if the year has changed
+        let scoresOverYear = await databaseManager.getScoresOverYears();
+        if (!containsYear(currentYear, scoresOverYear)) {
+            let users = await databaseManager.getUsers();
+            for (let user of users) {
+                await databaseManager.createScoresOverYears(user.id, currentYear);
+            }
+        }
+
         let taskAccomplishments = await databaseManager.getTaskAccomplishmentsOfWeekInYear(currentWeek, currentYear);
         let tasksAccomplishmentsExistent = taskAccomplishments.length > 0;
         if (!tasksAccomplishmentsExistent) {
@@ -40,7 +49,15 @@ async function updateCurrentWeekTasks(io) {
     catch (e) {
         console.log("Failed to update TaskAccomplishments");
     }
+}
 
+function containsYear(year, scoresOverYears) {
+    for (let scoreOverYear of scoresOverYears) {
+        if (scoreOverYear.year === year) {
+            return true;
+        }
+    }
+    return false;
 }
 
 

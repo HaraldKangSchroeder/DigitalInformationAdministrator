@@ -341,6 +341,18 @@ exports.createScoresOverYears = async (userId, year) => {
     logDivider();
 }
 
+exports.getScoresOverYears = async () => {
+    try {
+        let { rows } = await pool.query(`SELECT user_id AS "userId", year , score FROM ${TABLE_SCORES_OVER_YEARS}`);
+        console.log("getScoresOverYears");
+        return rows;
+    }
+    catch (e) {
+        console.error(e);
+        console.error(`getScoresOverYears fetch error`);
+    }
+}
+
 exports.getTaskAccomplishmentYears = async () => {
     try {
         let { rows } = await pool.query(`SELECT DISTINCT year FROM ${TABLE_TASK_ACCOMPLISHMENTS} ORDER BY year;`);

@@ -2,7 +2,7 @@ import { makeStyles, Paper } from "@material-ui/core";
 import { useState, useEffect } from "react";
 import Task from "../../../Classes/Task";
 import TaskOccurences from "../../../Classes/TaskOccurences";
-import socket from "../../../socket";
+import { socketTasks as socket } from "../../../socket";
 
 const useStyle = makeStyles({
     calendarEntry: ({ isTaskSelected }: { isTaskSelected: boolean }) => ({

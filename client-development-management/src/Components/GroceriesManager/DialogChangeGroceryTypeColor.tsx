@@ -3,7 +3,7 @@ import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core"
 import { useState } from "react";
 import { SketchPicker } from "react-color";
-import socket from "../../socket";
+import { socketGroceries as socket } from "../../socket";
 
 
 interface Props {

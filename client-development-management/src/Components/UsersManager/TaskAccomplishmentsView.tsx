@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { Line } from 'react-chartjs-2';
 import { ChartHeader } from "./ChartHeader";
-import socket from "../../socket";
+import { socketTasks as socket } from "../../socket";
 import TaskAccomplishments from "../../Classes/TaskAccomplishments";
 import Tasks from "../../Classes/Tasks";
 import Users from "../../Classes/Users";

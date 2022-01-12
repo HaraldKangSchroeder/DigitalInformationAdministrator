@@ -10,7 +10,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { SelectMenu } from '../SelectMenu';
-import socket from "../../socket";
+import { socketGroceries as socket } from "../../socket";
 import GroceryTypes from "../../Classes/GroceryTypes";
 
 const useStyles = makeStyles({

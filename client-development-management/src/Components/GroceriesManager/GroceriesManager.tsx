@@ -5,7 +5,7 @@ import Groceries from "../../Classes/Groceries";
 import Grocery from "../../Classes/Grocery";
 import GroceryType from "../../Classes/GroceryType";
 import GroceryTypes from "../../Classes/GroceryTypes";
-import socket from "../../socket";
+import { socketGroceries as socket } from "../../socket";
 import DialogChangeEntityName from "../DialogChangeEntityName";
 import { DialogEntityDeletion } from "../DialogEntityDeletion";
 import { EntitiesSelection } from "../EntitiesSelection";
@@ -26,12 +26,15 @@ export default function GroceriesManager() {
 
     useEffect(() => {
         socket.on("groceryData", ({ groceries, groceryTypes }) => {
+            console.log("received Grocery data");
             setGroceryEntities({
                 groceries: new Groceries(groceries),
                 groceryTypes: new GroceryTypes(groceryTypes),
             })
         });
 
+        console.log("getGroceryData");
+        console.log(socket);
         socket.emit("getGroceryData");
 
         return () => {

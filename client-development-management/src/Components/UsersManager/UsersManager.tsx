@@ -4,7 +4,7 @@ import { DialogEntityDeletion } from "../DialogEntityDeletion";
 import { DialogCreateUser } from "./DialogCreateUser";
 import { TaskAccomplishmentsView } from "./TaskAccomplishmentsView";
 import Grid from '@material-ui/core/Grid';
-import socket from "../../socket";
+import { socketTasks as socket } from "../../socket";
 import Users from "../../Classes/Users";
 import User from "../../Classes/User";
 import DialogChangeEntityName from "../DialogChangeEntityName";

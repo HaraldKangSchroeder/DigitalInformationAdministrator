@@ -2,24 +2,20 @@ import { Grid } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import Weather from "../../Classes/Weather";
 import NavBar from "../Navbar/NavBar";
-import { socketTasks as socket } from "../../socket";
 import WeatherCards from "./WeatherCards";
 import WeatherGraph from "./WeatherGraph";
+import axios from "axios";
 
 export default function WeatherView() {
     const [weather, setWeather] = useState(new Weather());
     const [selectedDay, setSelectedDay] = useState(0);
 
     useEffect(() => {
-        socket.on("weatherData", data => {
+        const getData = async () => {
+            let { data } = await axios.get("http://localhost:9000/getWeatherData");
             setWeather(new Weather(data.list));
-        });
-
-        socket.emit("getWeatherData");
-
-        return () => {
-            socket.off("weatherData");
         }
+        getData();
     }, []);
 
     useEffect(() => {

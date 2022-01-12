@@ -3,7 +3,6 @@ const { configs } = require("./configs");
 const socketio = require("socket.io");
 const cors = require("cors");
 const tasksManager = require("./src/tasksManager");
-const weatherManager = require("./src/weatherManager");
 const { logDivider } = require("./src/utils");
 const databaseManager = require("./src/databaseManager");
 
@@ -45,7 +44,6 @@ async function setup() {
     }
 
     tasksManager.startFrequentUpdates(io);
-    weatherManager.startUpdateWeatherData(io);
 
     io.on("connection", (socket) => {
         console.log("new socket connection");
@@ -57,6 +55,5 @@ async function setup() {
         });
 
         tasksManager.setUpSocketListeners(io, socket);
-        weatherManager.setupSocketListeners(socket);
     });
 }

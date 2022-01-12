@@ -2,7 +2,7 @@ import { Grid } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import Weather from "../../Classes/Weather";
 import NavBar from "../Navbar/NavBar";
-import socket from "../../socket";
+import { socketTasks as socket } from "../../socket";
 import WeatherCards from "./WeatherCards";
 import WeatherGraph from "./WeatherGraph";
 

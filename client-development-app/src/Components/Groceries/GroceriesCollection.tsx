@@ -1,5 +1,4 @@
 import { makeStyles } from "@material-ui/core";
-import React from "react";
 import Groceries from "../../Classes/Groceries";
 import Grocery from "../../Classes/Grocery";
 import GroceryTypes from "../../Classes/GroceryTypes";

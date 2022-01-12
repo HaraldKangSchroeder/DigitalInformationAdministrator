@@ -4,7 +4,7 @@ import Groceries from '../../Classes/Groceries';
 import GroceryTypes from '../../Classes/GroceryTypes';
 import GroceriesCollection from './GroceriesCollection';
 import NavBar from '../Navbar/NavBar';
-import socket from '../../socket';
+import { socketGroceries as socket } from "../../socket";
 
 
 export default function GroceryCartView() {

@@ -1,6 +1,6 @@
 import Grid from '@material-ui/core/Grid';
 import { useEffect, useState } from 'react';
-import socket from "../../socket";
+import { socketTasks as socket } from "../../socket";
 import TasksCollection from "./TasksCollection";
 import UsersCollection from "./UsersCollection";
 import NavBar from '../Navbar/NavBar';

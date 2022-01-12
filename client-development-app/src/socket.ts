@@ -1,12 +1,11 @@
-import { io, Socket } from "socket.io-client";
-import { DefaultEventsMap } from "socket.io-client/build/typed-events";
+import { io } from "socket.io-client";
 
-let socket : Socket<DefaultEventsMap, DefaultEventsMap>;
-if(process.env.REACT_APP_SOCKET_PATH){
-    socket = io({path : process.env.REACT_APP_SOCKET_PATH});
-}
-else{
-    socket = io();
-}
+export const socketTasks = io({
+    path: process.env.REACT_APP_SOCKET_PATH
+});
 
-export default socket;
+export const socketGroceries = io("https://grocery-cart-haring.herokuapp.com/", {
+    auth: {
+        token: "123456"
+    }
+});

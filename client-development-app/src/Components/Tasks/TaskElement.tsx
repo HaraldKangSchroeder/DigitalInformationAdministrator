@@ -5,7 +5,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Users from "../../Classes/Users";
 import User from "../../Classes/User";
-import socket from "../../socket";
+import { socketTasks as socket } from "../../socket";
 import TaskAccomplishment from "../../Classes/TaskAccomplishment";
 
 const useStyles = makeStyles({

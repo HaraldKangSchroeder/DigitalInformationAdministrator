@@ -3,7 +3,6 @@ const { configs } = require("./configs");
 const socketio = require("socket.io");
 const cors = require("cors");
 const tasksManager = require("./src/tasksManager");
-const groceriesManager = require("./src/groceriesManager");
 const weatherManager = require("./src/weatherManager");
 const { logDivider } = require("./src/utils");
 const databaseManager = require("./src/databaseManager");
@@ -58,7 +57,6 @@ async function setup() {
         });
 
         tasksManager.setUpSocketListeners(io, socket);
-        groceriesManager.setupSocketListeners(io, socket);
         weatherManager.setupSocketListeners(socket);
     });
 }

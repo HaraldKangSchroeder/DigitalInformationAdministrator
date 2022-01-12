@@ -1,36 +1,34 @@
 version: "3.7"
 services:
-    db:
-        restart: always
-        image: postgres
-        container_name: db
-        environment:
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-        volumes:
-            - ./postgresql/pgdata:/var/lib/postgresql/data
-    app:
-        restart: always
-        build:
-            # use env variables during docker-compose build 
-            # https://stackoverflow.com/questions/52429984/docker-compose-build-environment-variable
-            context: .
-            args:
-                - REACT_APP_BASEPATH_APP=${REACT_APP_BASEPATH_APP}
-                - REACT_APP_BASEPATH_MANAGEMENT=${REACT_APP_BASEPATH_MANAGEMENT}
-                - SOCKET_PATH=${SOCKET_PATH}
-        container_name: app
-        depends_on:
-            - db
-        environment:
-            PGHOST: db
-            PGPASSWORD: postgres
-            PGUSER: postgres
-            WEATHER_API_KEY: ${WEATHER_API_KEY}
-            WEATHER_LOCATION_LAT: ${WEATHER_LOCATION_LAT}
-            WEATHER_LOCATION_LON: ${WEATHER_LOCATION_LON}
-            REACT_APP_BASEPATH_APP: ${REACT_APP_BASEPATH_APP}
-            REACT_APP_BASEPATH_MANAGEMENT: ${REACT_APP_BASEPATH_MANAGEMENT}
-            SOCKET_PATH: ${SOCKET_PATH}
-        ports:
-            - '8910:8910'
+  db:
+    restart: always
+    image: postgres
+    container_name: db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./postgresql/pgdata:/var/lib/postgresql/data
+  app:
+    restart: always
+    build:
+      # use env variables during docker-compose build 
+      # https://stackoverflow.com/questions/52429984/docker-compose-build-environment-variable
+      context: .
+      args:
+        - REACT_APP_BASEPATH_APP=${REACT_APP_BASEPATH_APP}
+        - REACT_APP_BASEPATH_MANAGEMENT=${REACT_APP_BASEPATH_MANAGEMENT}
+    container_name: app
+    depends_on:
+      - db
+    environment:
+      PGHOST: db
+      PGPASSWORD: postgres
+      PGUSER: postgres
+      WEATHER_API_KEY: ${WEATHER_API_KEY}
+      WEATHER_LOCATION_LAT: ${WEATHER_LOCATION_LAT}
+      WEATHER_LOCATION_LON: ${WEATHER_LOCATION_LON}
+      REACT_APP_BASEPATH_APP: ${REACT_APP_BASEPATH_APP}
+      REACT_APP_BASEPATH_MANAGEMENT: ${REACT_APP_BASEPATH_MANAGEMENT}
+    ports:
+      - '8910:8910'

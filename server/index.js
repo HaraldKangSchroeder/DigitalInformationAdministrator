@@ -27,21 +27,11 @@ async function setup() {
     await databaseManager.createConnection();
     await databaseManager.setupDatabase();
 
-    if (process.env.SOCKET_PATH) {
-        io = socketio(server, {
-            path: process.env.SOCKET_PATH,
-            cors: {
-                origin: '*',
-            }
-        });
-    }
-    else {
-        io = socketio(server, {
-            cors: {
-                origin: '*',
-            }
-        });
-    }
+    io = socketio(server, {
+        cors: {
+            origin: '*',
+        }
+    });
 
     tasksManager.startFrequentUpdates(io);
 

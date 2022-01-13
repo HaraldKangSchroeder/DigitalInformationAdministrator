@@ -12,7 +12,7 @@ export default function WeatherView() {
 
     useEffect(() => {
         const getData = async () => {
-            let { data } = await axios.get("http://localhost:9000/getWeatherData");
+            let { data } = await axios.get(process.env.REACT_APP_WEATHER_PROVIDER_URL + "/getWeatherData");
             setWeather(new Weather(data.list));
         }
         getData();

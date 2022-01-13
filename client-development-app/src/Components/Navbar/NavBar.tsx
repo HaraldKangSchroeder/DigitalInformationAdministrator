@@ -44,12 +44,18 @@ export default function NavBar() {
                 <Link to='/' >
                     <div style={{ backgroundImage: `url("${process.env.PUBLIC_URL}/tasks.png")` }} className={classes.image} />
                 </Link>
-                <Link to='/Groceries' >
-                    <div style={{ backgroundImage: `url("${process.env.PUBLIC_URL}/groceryCartNavbar.png")` }} className={classes.image} />
-                </Link>
-                <Link to='/Weather' >
-                    <div style={{ backgroundImage: `url("${process.env.PUBLIC_URL}/weather.png")` }} className={classes.image} />
-                </Link>
+                {process.env.REACT_APP_GROCERY_CART_URL ?
+                    <Link to='/Groceries' >
+                        <div style={{ backgroundImage: `url('${process.env.PUBLIC_URL}/groceryCartNavbar.png')` }} className={classes.image} />
+                    </Link> :
+                    ""
+                }
+                {process.env.REACT_APP_WEATHER_PROVIDER_URL ?
+                    <Link to='/Weather' >
+                        <div style={{ backgroundImage: `url("${process.env.PUBLIC_URL}/weather.png")` }} className={classes.image} />
+                    </Link> :
+                    ""
+                }
                 <Link to='/TaskAccomplishmentsOverview' >
                     <div style={{ backgroundImage: `url("${process.env.PUBLIC_URL}/magnifyingGlasses.png")` }} className={classes.image} />
                 </Link>

@@ -12,8 +12,15 @@ export default function WeatherView() {
 
     useEffect(() => {
         const getData = async () => {
-            let { data } = await axios.get(process.env.REACT_APP_WEATHER_PROVIDER_URL + "/getWeatherData");
-            setWeather(new Weather(data.list));
+            try {
+                let { data } = await axios.post(process.env.REACT_APP_WEATHER_PROVIDER_URL + "/getWeatherData", {
+                    token: process.env.REACT_APP_WEATHER_PROVIDER_TOKEN
+                });
+                setWeather(new Weather(data.list));
+            }
+            catch (e) {
+                console.error("Failed to get weather data");
+            }
         }
         getData();
     }, []);

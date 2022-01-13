@@ -2,8 +2,8 @@ import { io } from "socket.io-client";
 
 export const socketTasks = io();
 
-export const socketGroceries = io("https://grocery-cart-haring.herokuapp.com/", {
+export const socketGroceries = process.env.REACT_APP_GROCERY_CART_URL ? io(process.env.REACT_APP_GROCERY_CART_URL, {
     auth: {
-        token: "123456"
+        token: process.env.REACT_APP_GROCERY_CART_TOKEN
     }
-});
+}) : null;

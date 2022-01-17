@@ -21,6 +21,7 @@ public class OptionsView extends AppCompatActivity {
     private String username = "";
     private String password = "";
     private String socketPath = "";
+    private String token = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,16 +33,19 @@ public class OptionsView extends AppCompatActivity {
         setChangeSocketPathButtonAction();
         setChangeUsernameButtonAction();
         setChangePasswordButtonAction();
+        setChangeTokenButtonAction();
 
         setTextViewRemoteHost();
         setTextViewSocketPath();
         setTextViewUsername();
         setTextViewPassword();
+        setTextViewToken();
 
         setEditTextChangeRemoteHostAction();
         setEditTextChangeSocketPathAction();
         setEditTextChangeUsernameAction();
         setEditTextChangePasswordAction();
+        setEditTextChangeTokenAction();
 
         setButtonGoToAction(R.id.buttonGoToGroceryCartView, GroceryCartView.class);
     }
@@ -82,6 +86,24 @@ public class OptionsView extends AppCompatActivity {
                 setTextViewSocketPath();
 
                 EditText et = (EditText) findViewById(R.id.editTextSocketPath);
+                et.setText("");
+            }
+        });
+    }
+
+    public void setChangeTokenButtonAction(){
+        Button btn = (Button)findViewById(R.id.buttonSetToken);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("token", token);
+                editor.commit();
+                GroceryCartNetworkManager.handleChangeToken(token);
+                setTextViewToken();
+
+                EditText et = (EditText) findViewById(R.id.editTextToken);
                 et.setText("");
             }
         });
@@ -155,6 +177,11 @@ public class OptionsView extends AppCompatActivity {
         et.setText(getHiddenText(GroceryCartNetworkManager.password));
     }
 
+    public void setTextViewToken(){
+        TextView et = (TextView) findViewById(R.id.textViewToken);
+        et.setText(getHiddenText(GroceryCartNetworkManager.token));
+    }
+
     private String getHiddenText(String text){
         String hiddenText = "";
         for(int i = 0; i < text.length(); i++){
@@ -218,6 +245,23 @@ public class OptionsView extends AppCompatActivity {
             }
         });
     }
+
+
+    public void setEditTextChangeTokenAction(){
+        EditText et = (EditText) findViewById(R.id.editTextToken);
+        et.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {}
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                token = s.toString();
+            }
+        });
+    }
+
+
 
     public void setButtonGoToAction(int buttonId, Class destinationClass){
         Button btn = (Button)findViewById(buttonId);

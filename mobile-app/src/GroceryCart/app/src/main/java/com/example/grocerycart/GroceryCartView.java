@@ -58,6 +58,9 @@ public class GroceryCartView extends AppCompatActivity {
             String password = sharedPreferences.getString("password", "") ;
             GroceryCartNetworkManager.setPassword(password);
 
+            String token = sharedPreferences.getString("token", "") ;
+            GroceryCartNetworkManager.setToken(token);
+
             GroceryCartNetworkManager.setupSocket();
         }
         GroceryCartNetworkManager.startListener("connect", onConnect);

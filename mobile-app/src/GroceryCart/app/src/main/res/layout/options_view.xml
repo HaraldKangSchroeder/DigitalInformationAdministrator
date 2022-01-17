@@ -134,6 +134,45 @@
                 app:backgroundTint="#56BDF4" />
 
             <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Token"
+                android:textColor="#DDDDDD"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewToken"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Token"
+                android:textColor="#DDDDDD"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/editTextToken"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:imeOptions="actionDone"
+                android:inputType="textPersonName"
+                android:textColor="#DDDDDD" />
+
+            <Button
+                android:id="@+id/buttonSetToken"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="30dp"
+                android:text="SET"
+                app:backgroundTint="#56BDF4" />
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"

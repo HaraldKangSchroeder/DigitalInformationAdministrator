@@ -37,9 +37,10 @@ import io.socket.engineio.client.transports.WebSocket;
 public class GroceryCartNetworkManager extends AppCompatActivity {
 
     public static String remoteHost = "";
-    public static String socketPath = "";
+    public static String socketPath = "/socket.io/";
     public static String username = "";
     public static String password = "";
+    public static String token = "";
 
     public static String remoteHostErrorText = "";
 
@@ -59,6 +60,11 @@ public class GroceryCartNetworkManager extends AppCompatActivity {
 
     public static void handleChangeSocketPath(String socketPath){
         setSocketPath(socketPath);
+        resetSocket();
+    }
+
+    public static void handleChangeToken(String token) {
+        setToken(token);
         resetSocket();
     }
 
@@ -98,7 +104,12 @@ public class GroceryCartNetworkManager extends AppCompatActivity {
         remoteHost = newRemoteHost;
     }
     public static void setSocketPath(String newSocketPath){
-        socketPath = newSocketPath;
+        if(newSocketPath.length() == 0) {
+            socketPath = "/socket.io/";
+        }
+        else {
+            socketPath = newSocketPath;
+        }
     }
     public static void setUsername(String newUsername){
         username = newUsername;
@@ -106,6 +117,7 @@ public class GroceryCartNetworkManager extends AppCompatActivity {
     public static void setPassword(String newPassword){
         password = newPassword;
     }
+    public static void setToken(String newToken) {token = newToken;}
 
 
     public static void startListener(String messageListenTo, Emitter.Listener fn){
@@ -199,8 +211,7 @@ public class GroceryCartNetworkManager extends AppCompatActivity {
 
         String userPassword = username + ":" + password;
         String userPasswordEncoded = Base64.encodeToString(userPassword.getBytes(), Base64.NO_WRAP);
-        // set as an option
-        IO.Options opts = new IO.Options();
+        IO.Options opts = IO.Options.builder().setAuth(Collections.singletonMap("token", token)).build();
         opts.path = socketPath;
         opts.callFactory = okHttpClient;
         opts.webSocketFactory = okHttpClient;

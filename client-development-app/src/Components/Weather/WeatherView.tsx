@@ -22,7 +22,16 @@ export default function WeatherView() {
                 console.error("Failed to get weather data");
             }
         }
+
+        const interval = setInterval(() => {
+            getData();
+        }, 10800000);
+
         getData();
+
+        return () => {
+            clearInterval(interval);
+        }
     }, []);
 
     useEffect(() => {

@@ -16,9 +16,8 @@ services:
       # https://stackoverflow.com/questions/52429984/docker-compose-build-environment-variable
       context: .
       args:
-        - BASEPATH_APP=${BASEPATH_APP}
-        - BASEPATH_MANAGEMENT=${BASEPATH_MANAGEMENT}
         - WEATHER_PROVIDER_URL=${WEATHER_PROVIDER_URL}
+        - WEATHER_PROVIDER_TOKEN=${WEATHER_PROVIDER_TOKEN}
         - GROCERY_CART_URL=${GROCERY_CART_URL}
         - GROCERY_CART_TOKEN=${GROCERY_CART_TOKEN}
     container_name: app
@@ -29,8 +28,7 @@ services:
       PGPASSWORD: postgres
       PGUSER: postgres
       WEATHER_PROVIDER_URL: ${WEATHER_PROVIDER_URL}
-      REACT_APP_BASEPATH_APP: ${BASEPATH_APP}
-      REACT_APP_BASEPATH_MANAGEMENT: ${BASEPATH_MANAGEMENT}
+      WEATHER_PROVIDER_TOKEN: ${WEATHER_PROVIDER_TOKEN}
       GROCERY_CART_URL: ${GROCERY_CART_URL}
       GROCERY_CART_TOKEN: ${GROCERY_CART_TOKEN}
     ports:

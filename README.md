@@ -1,8 +1,8 @@
 # DIA - Digital Information Administrator
 
 DIA is a private project of mine to improve the management of home relevant tasks. 
-It consists of 2 main component
-* the app - shows relevant informations and should be used constantly
+It consists of 2 main components
+* the app - shows relevant informations and is intended for daily usage
 * the management - changes data that gets displayed in the app
 
 ## App features

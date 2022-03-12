@@ -1,4 +1,6 @@
 import { makeStyles } from "@material-ui/core";
+import { Socket } from "socket.io-client";
+import { DefaultEventsMap } from "socket.io-client/build/typed-events";
 import Groceries from "../../Classes/Groceries";
 import Grocery from "../../Classes/Grocery";
 import GroceryTypes from "../../Classes/GroceryTypes";
@@ -17,6 +19,7 @@ interface Props {
     groceries: Groceries,
     groceryTypes: GroceryTypes,
     groceryCart: Groceries,
+    socket: Socket<DefaultEventsMap, DefaultEventsMap>
 }
 
 export default function GroceriesCollection(props: Props) {
@@ -29,6 +32,7 @@ export default function GroceriesCollection(props: Props) {
                     <div style={{ marginBottom: "3vh" }}>
                         {groceriesOrganized.map((grocery: Grocery) =>
                             <GroceryElement
+                                socket={props.socket}
                                 backgroundColor={props.groceryTypes.getColor(grocery.getType())}
                                 isInGroceryCart={props.groceryCart.contains(grocery)}
                                 grocery={grocery}

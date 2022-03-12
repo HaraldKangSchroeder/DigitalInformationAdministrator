@@ -1,10 +1,12 @@
 import { Grid } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Groceries from '../../Classes/Groceries';
 import GroceryTypes from '../../Classes/GroceryTypes';
 import GroceriesCollection from './GroceriesCollection';
 import NavBar from '../Navbar/NavBar';
-import { socketGroceries as socket } from "../../socket";
+import { io } from 'socket.io-client';
+
+
 
 
 export default function GroceryCartView() {
@@ -14,8 +16,20 @@ export default function GroceryCartView() {
         groceryCart: new Groceries()
     })
 
+    const socket = useRef(null);
+
     useEffect(() => {
-        socket.on("groceryData", ({ groceries, groceryTypes, groceryCartEntries }) => {
+
+        // socket must be created here (instead of globally). Else, the will be a persistent connection which might need to many resspources from official cloud services (e.g. heroku only provides 500 hours/month usage)
+        socket.current = process.env.REACT_APP_GROCERY_CART_URL ? io(process.env.REACT_APP_GROCERY_CART_URL, {
+            auth: {
+                token: process.env.REACT_APP_GROCERY_CART_TOKEN
+            }
+        }) : null;
+
+        if (socket.current == null) return;
+
+        socket.current.on("groceryData", ({ groceries, groceryTypes, groceryCartEntries }: { groceries: any, groceryTypes: any, groceryCartEntries: any }) => {
             setState({
                 groceries: new Groceries(groceries),
                 groceryTypes: new GroceryTypes(groceryTypes),
@@ -23,10 +37,11 @@ export default function GroceryCartView() {
             })
         });
 
-        socket.emit("getGroceryData");
+        socket.current.emit("getGroceryData");
 
         return () => {
-            socket.off("groceryData");
+            socket.current?.off("groceryData");
+            socket.current?.disconnect();
         }
     }, []);
 
@@ -38,6 +53,7 @@ export default function GroceryCartView() {
                 </Grid>
                 <Grid item xs={11}>
                     <GroceriesCollection
+                        socket={socket.current}
                         groceries={state.groceries}
                         groceryTypes={state.groceryTypes}
                         groceryCart={state.groceryCart}

@@ -33,8 +33,6 @@ export default function GroceriesManager() {
             })
         });
 
-        console.log("getGroceryData");
-        console.log(socket);
         socket.emit("getGroceryData");
 
         return () => {

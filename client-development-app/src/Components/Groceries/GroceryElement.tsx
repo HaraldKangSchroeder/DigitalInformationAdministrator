@@ -1,6 +1,7 @@
 import { Avatar, ListItem, ListItemAvatar, ListItemText, makeStyles } from "@material-ui/core";
+import { Socket } from "socket.io-client";
+import { DefaultEventsMap } from "socket.io-client/build/typed-events";
 import Grocery from "../../Classes/Grocery";
-import { socketGroceries as socket } from "../../socket";
 
 const useStyles = makeStyles({
     root: (props: Props) => ({
@@ -29,16 +30,17 @@ interface Props {
     grocery: Grocery,
     isInGroceryCart: boolean,
     backgroundColor: string,
+    socket: Socket<DefaultEventsMap, DefaultEventsMap>
 }
 
 export default function GroceryElement(props: Props) {
 
     const handleSubmit = (e: any) => {
         if (props.isInGroceryCart) {
-            socket.emit("deleteGroceryCartEntry", { name: props.grocery.getName() });
+            props.socket?.emit("deleteGroceryCartEntry", { name: props.grocery.getName() });
             return;
         }
-        socket.emit("createGroceryCartEntry", { name: props.grocery.getName(), type: props.grocery.getType(), amount: "" });
+        props.socket?.emit("createGroceryCartEntry", { name: props.grocery.getName(), type: props.grocery.getType(), amount: "" });
     }
 
     const classes = useStyles(props);

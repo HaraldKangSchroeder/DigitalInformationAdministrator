@@ -3,6 +3,8 @@ import { makeStyles } from "@material-ui/core"
 import Users from "../../Classes/Users";
 import User from "../../Classes/User";
 import TaskAccomplishments from "../../Classes/TaskAccomplishments";
+import { Socket } from "socket.io-client";
+import { DefaultEventsMap } from "socket.io-client/build/typed-events";
 
 const useStyles = makeStyles({
     root: {
@@ -16,6 +18,7 @@ interface Props {
     taskAccomplishments: TaskAccomplishments;
     users: Users;
     selectedUser: User;
+    socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 }
 
 export default function TasksCollection(props: Props) {
@@ -26,7 +29,7 @@ export default function TasksCollection(props: Props) {
                 props.taskAccomplishments.getTaskAccomplishmentsGroupedByImportance().map((groupedTaskAccomplishments) =>
                     <div style={{ marginBottom: "3vh" }}>
                         {groupedTaskAccomplishments.map((taskAccomplishment) => {
-                            return <TaskElement selectedUser={props.selectedUser} users={props.users} taskAccomplishment={taskAccomplishment} />
+                            return <TaskElement socket={props.socket} selectedUser={props.selectedUser} users={props.users} taskAccomplishment={taskAccomplishment} />
                         })}
                     </div>
                 )

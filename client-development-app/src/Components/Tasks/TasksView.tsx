@@ -1,13 +1,12 @@
 import Grid from '@material-ui/core/Grid';
-import { useEffect, useState } from 'react';
-import { socketTasks as socket } from "../../socket";
+import { useEffect, useRef, useState } from 'react';
 import TasksCollection from "./TasksCollection";
 import UsersCollection from "./UsersCollection";
 import NavBar from '../Navbar/NavBar';
 import Users from "../../Classes/Users";
 import User from '../../Classes/User';
 import TaskAccomplishments from '../../Classes/TaskAccomplishments';
-// import './App.css';
+import { io } from 'socket.io-client';
 
 export default function TasksView() {
     const [selectedUser, setSelectedUser] = useState(null);
@@ -16,15 +15,27 @@ export default function TasksView() {
         users: new Users()
     })
 
+    const socket = useRef(null);
+
     useEffect(() => {
+
+        // socket must be created here (instead of globally). Else, there will be a persistent connection which might need to many ressources from official cloud services (e.g. heroku only provides 500 hours/month usage)
+        socket.current = process.env.REACT_APP_TASKS_URL ? io(process.env.REACT_APP_TASKS_URL, {
+            auth: {
+                token: process.env.REACT_APP_TASKS_TOKEN
+            }
+        }) : null;
+
+        if (socket.current == null) return;
+
         // request taskaccomplishments of current week and users and set state respectively
-        socket.on("currentWeekData", ({ taskAccomplishments, users }) => {
+        socket.current.on("currentWeekData", ({ taskAccomplishments, users } : any) => {
             setState({ taskAccomplishments: new TaskAccomplishments(taskAccomplishments), users: new Users(users) });
         });
-        socket.emit("getCurrentWeekData");
+        socket.current.emit("getCurrentWeekData");
 
         return () => {
-            socket.off("currentWeekData");
+            socket.current.off("currentWeekData");
         }
     }, []);
 
@@ -44,7 +55,7 @@ export default function TasksView() {
                     <NavBar />
                 </Grid>
                 <Grid item xs={9}>
-                    <TasksCollection selectedUser={selectedUser} users={state.users} taskAccomplishments={state.taskAccomplishments} />
+                    <TasksCollection socket={socket.current} selectedUser={selectedUser} users={state.users} taskAccomplishments={state.taskAccomplishments} />
                 </Grid>
                 <Grid container item xs={2}>
                     <UsersCollection selectedUser={selectedUser} changeSelectedUser={changeSelectedUser} users={state.users} />

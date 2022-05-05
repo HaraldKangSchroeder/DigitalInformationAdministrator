@@ -5,8 +5,9 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Users from "../../Classes/Users";
 import User from "../../Classes/User";
-import { socketTasks as socket } from "../../socket";
 import TaskAccomplishment from "../../Classes/TaskAccomplishment";
+import { Socket } from "socket.io-client";
+import { DefaultEventsMap } from "socket.io-client/build/typed-events";
 
 const useStyles = makeStyles({
     root: (props: Props) => ({
@@ -56,6 +57,7 @@ interface Props {
     taskAccomplishment: TaskAccomplishment;
     users: Users;
     selectedUser: User;
+    socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 }
 
 export default function TaskElement(props: Props) {
@@ -67,21 +69,21 @@ export default function TaskElement(props: Props) {
             let isTaskAlreadyAssignedToUser = props.taskAccomplishment.getUserId() != null;
             if (isTaskAlreadyAssignedToUser) {
                 if (props.taskAccomplishment.getUserId() === props.selectedUser.getId()) {
-                    return socket.emit("updateTaskAccomplishment",
+                    return props.socket.emit("updateTaskAccomplishment",
                         {
                             taskAccomplishmentId: props.taskAccomplishment.getId(),
                             newUserId: null,
                             oldUserId: props.taskAccomplishment.getUserId()
                         });
                 }
-                return socket.emit("updateTaskAccomplishment",
+                return props.socket.emit("updateTaskAccomplishment",
                     {
                         taskAccomplishmentId: props.taskAccomplishment.getId(),
                         newUserId: props.selectedUser.getId(),
                         oldUserId: props.taskAccomplishment.getUserId()
                     });
             }
-            return socket.emit("updateTaskAccomplishment",
+            return props.socket.emit("updateTaskAccomplishment",
                 {
                     taskAccomplishmentId: props.taskAccomplishment.getId(),
                     newUserId: props.selectedUser.getId(),
@@ -89,7 +91,7 @@ export default function TaskElement(props: Props) {
                 });
 
         }
-        socket.emit("updateTaskAccomplishment",
+        props.socket.emit("updateTaskAccomplishment",
             {
                 taskAccomplishmentId: props.taskAccomplishment.getId(),
                 newUserId: null,

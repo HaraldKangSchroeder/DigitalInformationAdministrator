@@ -1,13 +1,13 @@
 import { Grid, makeStyles } from "@material-ui/core";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Line } from 'react-chartjs-2';
 import { ChartHeader } from "./ChartHeader";
-import { socketTasks as socket } from "../../socket";
 import TaskAccomplishments from "../../Classes/TaskAccomplishments";
 import Tasks from "../../Classes/Tasks";
 import Users from "../../Classes/Users";
 import User from "../../Classes/User";
 import NavBar from "../Navbar/NavBar";
+import { io } from "socket.io-client";
 
 const COLORS = [
     'rgba(0, 0, 255,1)',
@@ -51,33 +51,44 @@ export function TaskAccomplishmentsView() {
     const [visualizationData, setVisualizationData] = useState({});
     const [visualizationMode, setVisualizationMode] = useState<string>(VISUALIZATION_MODES[0]);
 
+    let socket = useRef(null);
+
     useEffect(() => {
-        socket.on("users", (userEntries) => {
+        // socket must be created here (instead of globally). Else, there will be a persistent connection which might need to many ressources from official cloud services (e.g. heroku only provides 500 hours/month usage)
+        socket.current = process.env.REACT_APP_TASKS_URL ? io(process.env.REACT_APP_TASKS_URL, {
+            auth: {
+                token: process.env.REACT_APP_TASKS_TOKEN
+            }
+        }) : null;
+
+        if (socket.current == null) return;
+
+        socket.current.on("users", (userEntries : Object[]) => {
             if (userEntries.length === 0) return;
             let newUsers = new Users(userEntries);
             setUsers(newUsers);
         })
-        socket.on("taskAccomplishmentYears", (years) => {
+        socket.current.on("taskAccomplishmentYears", (years : number[]) => {
             setYears(years);
         });
 
-        socket.on("taskAccomplishments", (taskAccomplishmentEntries) => {
+        socket.current.on("taskAccomplishments", (taskAccomplishmentEntries : Object[]) => {
             if (taskAccomplishmentEntries.length === 0) return;
             let newTaskAccomplishments = new TaskAccomplishments(taskAccomplishmentEntries);
             setTaskAccomplishments(newTaskAccomplishments);
         });
 
-        socket.emit("getUsers");
+        socket.current.emit("getUsers");
 
         return () => {
-            socket.off("taskAccomplishmentYears");
-            socket.off("taskAccomplishments");
-            socket.off("users");
+            socket.current.off("taskAccomplishmentYears");
+            socket.current.off("taskAccomplishments");
+            socket.current.off("users");
         }
     }, [])
 
     useEffect(() => {
-        socket.emit("getTaskAccomplishmentYears");
+        socket.current.emit("getTaskAccomplishmentYears");
     }, [users])
 
     useEffect(() => {
@@ -90,7 +101,7 @@ export function TaskAccomplishmentsView() {
     useEffect(() => {
         let isYearSet = year !== 0;
         if (!isYearSet) return;
-        socket.emit("getTaskAccomplishments", { year: year });
+        socket.current.emit("getTaskAccomplishments", { year: year });
     }, [year])
 
     useEffect(() => {

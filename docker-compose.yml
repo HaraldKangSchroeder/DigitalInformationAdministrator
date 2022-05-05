@@ -1,15 +1,6 @@
 version: "3.7"
 services:
-  db:
-    restart: always
-    image: postgres
-    container_name: db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - ./postgresql/pgdata:/var/lib/postgresql/data
-  app:
+  frontend_provider:
     restart: always
     build:
       # use env variables during docker-compose build 
@@ -20,16 +11,15 @@ services:
         - WEATHER_PROVIDER_TOKEN=${WEATHER_PROVIDER_TOKEN}
         - GROCERY_CART_URL=${GROCERY_CART_URL}
         - GROCERY_CART_TOKEN=${GROCERY_CART_TOKEN}
-    container_name: app
-    depends_on:
-      - db
+        - TASKS_URL=${TASKS_URL}
+        - TASKS_TOKEN=${TASKS_TOKEN}
+    container_name: frontend_provider
     environment:
-      PGHOST: db
-      PGPASSWORD: postgres
-      PGUSER: postgres
       WEATHER_PROVIDER_URL: ${WEATHER_PROVIDER_URL}
       WEATHER_PROVIDER_TOKEN: ${WEATHER_PROVIDER_TOKEN}
       GROCERY_CART_URL: ${GROCERY_CART_URL}
       GROCERY_CART_TOKEN: ${GROCERY_CART_TOKEN}
+      TASKS_URL: ${TASKS_URL}
+      TASKS_TOKEN: ${TASKS_TOKEN}
     ports:
       - '8910:8910'

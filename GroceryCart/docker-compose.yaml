@@ -1,0 +1,23 @@
+services:
+  db:
+    restart: always
+    image: postgres
+    environment:
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+    container_name: grocery-cart-db
+    volumes:
+      - ./postgresql/pgdata:/var/lib/postgresql/data
+  app:
+    build: .
+    depends_on:
+      - db
+    environment:
+      PGHOST: db
+      PGPASSWORD: ${PGPASSWORD}
+      PGUSER: ${PGUSER}
+      TOKEN: ${TOKEN}
+    ports:
+      - "9001:8000"
+    restart: always
+    container_name: grocery-cart

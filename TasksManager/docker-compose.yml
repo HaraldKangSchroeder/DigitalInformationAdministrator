@@ -13,8 +13,6 @@ services:
     restart: always
     build:
       context: .
-      args:
-        - TOKEN=${TOKEN}
     container_name: tasks_server
     depends_on:
       - tasks_db

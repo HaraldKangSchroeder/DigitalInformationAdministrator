@@ -26,7 +26,6 @@ export default function GroceriesManager() {
 
     useEffect(() => {
         socket.on("groceryData", ({ groceries, groceryTypes }) => {
-            console.log("received Grocery data");
             setGroceryEntities({
                 groceries: new Groceries(groceries),
                 groceryTypes: new GroceryTypes(groceryTypes),
@@ -78,10 +77,9 @@ export default function GroceriesManager() {
     const changeSelectedGroceryType = (groceryType: GroceryType) => {
         let selectedGroceryType = null; //new selection is equal to already selected grocery type
         if (selections.selectedGroceryType === null || (selections.selectedGroceryType.getType() !== groceryType.getType())) selectedGroceryType = groceryType;
-        console.log("sgt : " + selectedGroceryType);
+    
         let isGrocerySelected = selections.selectedGrocery != null;
         if (isGrocerySelected) {
-            console.log("set to null");
             socket.emit("updateGrocery", { name: selections.selectedGrocery.getName(), type: selectedGroceryType === null ? "" : selectedGroceryType.getType() });
         }
         return setSelections({

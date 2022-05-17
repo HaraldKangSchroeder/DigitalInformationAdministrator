@@ -89,7 +89,6 @@ exports.updateTaskAccomplishment = async ({ taskAccomplishmentId, newUserId, old
 
     // update scores
     let { score } = await repository.getTaskAccomplishment(taskAccomplishmentId);
-    console.log("score : " + score);
     if (newUserId != null) await repository.updateYearlyScore(currentYear, newUserId, score);
     if (oldUserId != null) await repository.updateYearlyScore(currentYear, oldUserId, -score);
 

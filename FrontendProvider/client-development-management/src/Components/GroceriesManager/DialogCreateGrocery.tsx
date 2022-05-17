@@ -76,8 +76,6 @@ export default function DialogCreateGrocery(props: Props) {
 
     let isNameSet = state.name !== "";
 
-    console.log(state.type === null);
-
     return (
         <div>
             <Button

@@ -5,7 +5,7 @@ services:
       API_KEY: ${API_KEY}
       LOCATION_LAT: ${LOCATION_LAT}
       LOCATION_LON: ${LOCATION_LON}
-      TOKEN: ${TOKEN}
+      KEY: ${KEY}
     ports:
       - "9000:9000"
     restart: always

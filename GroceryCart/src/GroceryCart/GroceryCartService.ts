@@ -5,7 +5,7 @@ import { ApplicationError } from "../errors/errors";
 import { Socket } from "socket.io";
 dotenv.config();
 
-const token = process.env.TOKEN;
+const key = process.env.KEY;
 let io = null;
 
 export const setIo = (_io) => {
@@ -22,11 +22,11 @@ export const ioBroadcastGroceryData = async (socket?: Socket) => {
 }
 
 export const validate = async (socket, next) => {
-    const clientToken = socket.handshake.auth.token;
+    const clientKey = socket.handshake.auth.token;
 
-    if (token === clientToken) return next();
+    if (key === clientKey) return next();
 
-    next(new ApplicationError(403, "Wrong token"));
+    next(new ApplicationError(403, "Wrong key"));
 }
 
 export const createGrocery = async ({ name, type }: Grocery, socket: Socket) => {

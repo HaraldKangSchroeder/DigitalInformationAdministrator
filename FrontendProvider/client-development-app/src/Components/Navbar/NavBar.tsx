@@ -50,7 +50,7 @@ export default function NavBar() {
                     </Link> :
                     ""
                 }
-                {process.env.REACT_APP_WEATHER_PROVIDER_URL ?
+                {process.env.REACT_APP_WEATHER_SERVICE_URL ?
                     <Link to='/Weather' >
                         <div style={{ backgroundImage: `url("${process.env.PUBLIC_URL}/weather.png")` }} className={classes.image} />
                     </Link> :

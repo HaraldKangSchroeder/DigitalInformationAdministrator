@@ -16,7 +16,7 @@ services:
       PGHOST: db
       PGPASSWORD: ${PGPASSWORD}
       PGUSER: ${PGUSER}
-      TOKEN: ${TOKEN}
+      KEY: ${KEY}
     ports:
       - "9001:8000"
     restart: always

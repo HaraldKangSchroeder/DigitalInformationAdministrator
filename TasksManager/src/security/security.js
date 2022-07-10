@@ -1,9 +1,9 @@
 
-const key = process.env.KEY;
+const token = process.env.TOKEN;
 
 exports.validate = async (socket, next) => {
-    const clientKey = socket.handshake.auth.token;
-    if (key === clientKey) return next();
-    console.log("Wrong key");
-    next(new Error("Wrong key"));
+    const clientToken = socket.handshake.auth.token;
+    if (token === clientToken) return next();
+    console.log("Wrong token");
+    next(new Error("Wrong token"));
 }

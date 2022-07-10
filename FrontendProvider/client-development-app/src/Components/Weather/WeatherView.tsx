@@ -14,7 +14,7 @@ export default function WeatherView() {
         const getData = async () => {
             try {
                 let { data } = await axios.post(process.env.REACT_APP_WEATHER_SERVICE_URL + "/getWeatherData", {
-                    token: process.env.REACT_APP_WEATHER_SERVICE_KEY
+                    token: process.env.REACT_APP_WEATHER_SERVICE_TOKEN
                 });
                 setWeather(new Weather(data.list));
             }

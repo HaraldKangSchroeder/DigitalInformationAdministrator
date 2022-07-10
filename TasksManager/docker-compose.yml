@@ -18,7 +18,7 @@ services:
       - tasks_db
     environment:
       PGHOST: tasks_db
-      KEY: ${KEY}
+      TOKEN: ${TOKEN}
       PGPASSWORD: postgres
       PGUSER: postgres
     ports:

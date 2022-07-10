@@ -3,7 +3,7 @@
 ### Setup backend
 
 1. Create a .env file, paste the content of the .sample-env file in there and set the following environment variable
-   1. `KEY` : a key for security
+   1. `TOKEN` : a token for authentication
    2. `PGUSER` : username of the psql dbms
    3. `PGPASSWORD` : password for the `PGUSER`
 2. Execute `docker-compose build` to build the grocerycart

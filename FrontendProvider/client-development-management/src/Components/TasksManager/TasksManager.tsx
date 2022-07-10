@@ -14,6 +14,7 @@ export function TasksManager() {
     const [tasks, setTasks] = useState(null);
 
     useEffect(() => {
+        if (!socket) return;
         if (!socket.connected) socket.connect();
 
         socket.on("tasks", (tasks) => {

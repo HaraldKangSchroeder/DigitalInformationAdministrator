@@ -35,7 +35,6 @@ async function setup() {
     service.startFrequentUpdates(io);
 
     io.on("connection", (socket) => {
-        console.log(process.env.TOKEN);
         console.log("new socket connection");
         logDivider();
 

@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 });
 
 app.post("/getWeatherData", async (req, res) => {
-    if (!(process.env.KEY === req.body.token)) return res.status(401).send("Unauthorized");
+    if (!(process.env.TOKEN === req.body.token)) return res.status(401).send("Unauthorized");
     let uri = `http://api.openweathermap.org/data/2.5/forecast?lat=${process.env.LOCATION_LAT}&lon=${process.env.LOCATION_LON}&appid=${process.env.API_KEY}`;
     let { data } = await axios.get(uri);
     res.send(data);

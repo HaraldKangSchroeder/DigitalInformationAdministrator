@@ -41,9 +41,11 @@ export default function NavBar() {
     return (
         <div className={classes.root}>
             <div style={{ width: "70px", paddingTop: "10px", height: "80vh" }}>
-                <Link to='/' >
-                    <div style={{ backgroundImage: `url("${process.env.PUBLIC_URL}/tasks.png")` }} className={classes.image} />
-                </Link>
+                {process.env.REACT_APP_TASKS_MANAGER_URL ?
+                    <Link to='/' >
+                        <div style={{ backgroundImage: `url("${process.env.PUBLIC_URL}/tasks.png")` }} className={classes.image} />
+                    </Link> : ""
+                }
                 {process.env.REACT_APP_GROCERY_CART_URL ?
                     <Link to='/Groceries' >
                         <div style={{ backgroundImage: `url('${process.env.PUBLIC_URL}/groceryCartNavbar.png')` }} className={classes.image} />
@@ -56,9 +58,11 @@ export default function NavBar() {
                     </Link> :
                     ""
                 }
-                <Link to='/TaskAccomplishmentsOverview' >
-                    <div style={{ backgroundImage: `url("${process.env.PUBLIC_URL}/magnifyingGlasses.png")` }} className={classes.image} />
-                </Link>
+                {process.env.REACT_APP_TASKS_MANAGER_URL ?
+                    <Link to='/TaskAccomplishmentsOverview' >
+                        <div style={{ backgroundImage: `url("${process.env.PUBLIC_URL}/magnifyingGlasses.png")` }} className={classes.image} />
+                    </Link> : ""
+                }
                 <div className={classes.clockContainer}>
                     <Clock />
                 </div>

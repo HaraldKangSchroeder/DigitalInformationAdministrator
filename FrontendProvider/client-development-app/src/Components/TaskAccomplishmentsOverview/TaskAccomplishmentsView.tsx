@@ -57,7 +57,7 @@ export function TaskAccomplishmentsView() {
         // socket must be created here (instead of globally). Else, there will be a persistent connection which might need to many ressources from official cloud services (e.g. heroku only provides 500 hours/month usage)
         socket.current = process.env.REACT_APP_TASKS_MANAGER_URL ? io(process.env.REACT_APP_TASKS_MANAGER_URL, {
             auth: {
-                token: process.env.REACT_APP_TASKS_MANAGER_KEY
+                token: process.env.REACT_APP_TASKS_MANAGER_TOKEN
             }
         }) : null;
 

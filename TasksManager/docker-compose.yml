@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+  tasks_db:
+    restart: always
+    image: postgres
+    container_name: tasks_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./postgresql/pgdata:/var/lib/postgresql/data
+  tasks_server:
+    restart: always
+    build:
+      context: .
+    container_name: tasks_server
+    depends_on:
+      - tasks_db
+    environment:
+      PGHOST: tasks_db
+      TOKEN: ${TOKEN}
+      PGPASSWORD: postgres
+      PGUSER: postgres
+    ports:
+      - '8686:8686'

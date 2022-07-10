@@ -1,9 +1,11 @@
 # DIA - Digital Information Administrator
 
 DIA is a private project of mine to improve the management of home relevant tasks. 
-It consists of 2 main components
-* the app - shows relevant informations and is intended for daily usage
-* the management - changes data that gets displayed in the app
+It consists of 4 main components
+* the frontend provider (mandatory since it serves the webpage)
+* tasksmanager
+* weatherservice
+* grocery cart 
 
 ## App features
 
@@ -25,45 +27,16 @@ https://user-images.githubusercontent.com/81776044/137017714-00dbb4a9-9ac1-4895-
 
 ## Setup
 
-1. The application comes along with Docker, specifically with docker-compose.\
-You need to install those first -
-see https://docs.docker.com/compose/install/. You also need an account on Docker Hub ([https://hub.docker.com/](https://hub.docker.com/)).
+Only the frontend provider (step 4) is mandatory, which can be extended by the other 3 components (step 1-3).  
 
-2. For the weather forecast, the https://openweathermap.org/guide API is used.
-Create an account and create an API KEY for the 5 Day / 3 Hour Forecast. (There is a free contract which is sufficient)
+All components come along with Docker, specifically with docker-compose  
+You need to install those first - see https://docs.docker.com/compose/install/. You also need an account on Docker Hub ([https://hub.docker.com/](https://hub.docker.com/)).
 
-3. Create a .env file, paste the content of the .sample-env file in there and set the following environment variables
-    * `WEATHER_API_KEY` :\
-    API KEY from Step 2.
-    * `WEATHER_LOCATION_LAT` :\
-    Lateral coordinates of your location
-    * `WEATHER_LOCATION_LON` :\
-    Longitual coordinates of your location
-    * `REACT_APP_BASEPATH_APP` :\
-    Path for the app of DIA, so you can access it under\
-    \<`HOSTNAME`\>:8910\<`REACT_APP_BASEPATH_APP`> 
-    (e.g. /dia/app)
-    * `REACT_APP_BASEPATH_MANAGEMENT` :\
-    Path for the management of DIA, so you can access it under\
-    \<`HOSTNAME`\>:8910\<`REACT_APP_BASEPATH_MANAGEMENT`>
-    (e.g. /dia/app)
-    * `REACT_APP_BASEPATH_MANAGEMENT` :\
-    Path for the websocket communication (e.g. /dia/socket.io)\
-    This path is also relevant for the mobile app since the communication runs through it
-
-4. Execute `docker-compose up` to start the application (append `-d` flag to start in detached mode). This might take a couple minutes.
-
-### Mobile App related
-5. Use the GroceryCart.apk file which you can find in /mobile-app to install the app on your mobile phone
-6. Go to the options view where you can set
-    * remote host : without any proxy, this is `http://<HOSTNAME>:8910`
-    * socket path : according to the example above, this is `/dia/socket.io`
-    * username : only necessary if you are using a reverse proxy with basic auth
-    * password : only necessary if you are using a reverse proxy with basic auth
+1. If you want to use the tasksmanager, use [this guide](./TasksManager/README.md)
+2. If you want to use the grocerycart, use [this guide](./GroceryCart/README.md)
+3. If you want to use the weather service, use [this guide](./WeatherService/README.md)
+4. Use [this guide](./FrontendProvider/README.md) in order to setup the frontend provider
 
 ## Personal Setup
-My application is constantly running (in detached mode) on a raspberry pi 4 which is attached to a touchdisplay (https://www.sunfounder.com/products/10inch-touchscreen-for-raspberrypi). To attach both components on a surface (in my case the fridge door), i created a case using a 3d printer.
-
-Since the mobile app needs to access the data of the shopping list from outside the local network, i also applied portforwarding.
-This indicates security leaks, which is why I've also set up an nginx server that acts as a reverse proxy with further security measures ([https://github.com/HaraldKangSchroeder/ReverseProxy](https://github.com/HaraldKangSchroeder/ReverseProxy)).
+My application is constantly running (in detached mode) on a raspberry pi 4 which is attached to a touchdisplay (https://www.sunfounder.com/products/10inch-touchscreen-for-raspberrypi). To attach both components on a surface, I created a case using a 3d printer.
 

@@ -1,0 +1,12 @@
+services:
+  app:
+    build: .
+    environment:
+      API_KEY: ${API_KEY}
+      LOCATION_LAT: ${LOCATION_LAT}
+      LOCATION_LON: ${LOCATION_LON}
+      TOKEN: ${TOKEN}
+    ports:
+      - "9000:9000"
+    restart: always
+    container_name: weather-provider

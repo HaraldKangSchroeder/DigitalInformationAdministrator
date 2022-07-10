@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+  frontend_provider:
+    restart: always
+    build:
+      # use env variables during docker-compose build 
+      # https://stackoverflow.com/questions/52429984/docker-compose-build-environment-variable
+      context: .
+      args:
+        - WEATHER_SERVICE_URL=${WEATHER_SERVICE_URL}
+        - WEATHER_SERVICE_TOKEN=${WEATHER_SERVICE_TOKEN}
+        - GROCERY_CART_URL=${GROCERY_CART_URL}
+        - GROCERY_CART_TOKEN=${GROCERY_CART_TOKEN}
+        - TASKS_MANAGER_URL=${TASKS_MANAGER_URL}
+        - TASKS_MANAGER_TOKEN=${TASKS_MANAGER_TOKEN}
+    container_name: frontend_provider
+    environment:
+      WEATHER_SERVICE_URL: ${WEATHER_SERVICE_URL}
+      WEATHER_SERVICE_TOKEN: ${WEATHER_SERVICE_TOKEN}
+      GROCERY_CART_URL: ${GROCERY_CART_URL}
+      GROCERY_CART_TOKEN: ${GROCERY_CART_TOKEN}
+      TASKS_MANAGER_URL: ${TASKS_MANAGER_URL}
+      TASKS_MANAGER_TOKEN: ${TASKS_MANAGER_TOKEN}
+    ports:
+      - '8910:8910'

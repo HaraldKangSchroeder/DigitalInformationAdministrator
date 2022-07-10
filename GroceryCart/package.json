@@ -10,7 +10,7 @@
         "postinstall": "tsc",
         "watch-node": "nodemon dist/index.js",
         "watch-ts": "tsc -w",
-        "deploy": "git push heroku master"
+        "deploy": "git push heroku main"
     },
     "keywords": [],
     "author": "",

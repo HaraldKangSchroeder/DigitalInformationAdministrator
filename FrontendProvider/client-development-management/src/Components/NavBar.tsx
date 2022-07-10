@@ -35,16 +35,13 @@ export default function NavBar() {
                 centered
             >
                 {
-                    process.env.REACT_APP_TASKS_MANAGER_URL ?
-                        <React.Fragment>
-                            <Tab className={classes.text} to='/' component={Link} label="Tasks" />
-                            <Tab className={classes.text} to='/users' component={Link} label="Users" />
-                        </React.Fragment> : ""
+                    process.env.REACT_APP_TASKS_MANAGER_URL ? <Tab className={classes.text} to='/' component={Link} label="Tasks" /> : ""
                 }
                 {
-                    process.env.REACT_APP_GROCERY_CART_URL ?
-                        <Tab className={classes.text} to='/groceries' component={Link} label="Groceries" /> :
-                        ""
+                    process.env.REACT_APP_TASKS_MANAGER_URL ? <Tab className={classes.text} to='/users' component={Link} label="Users" /> : ""
+                }
+                {
+                    process.env.REACT_APP_GROCERY_CART_URL ? <Tab className={classes.text} to='/groceries' component={Link} label="Groceries" /> : ""
                 }
             </Tabs>
         </Paper>

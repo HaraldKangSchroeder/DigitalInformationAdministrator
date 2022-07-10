@@ -3,7 +3,7 @@
 ### Setup backend
 
 1. Create a .env file, paste the content of the .sample-env file in there and set the following environment variable
-   1. `KEY` : a key for security+
+   1. `KEY` : a key for security
    2. `PGUSER` : username of the psql dbms
    3. `PGPASSWORD` : password for the `PGUSER`
 2. Execute `docker-compose build` to build the grocerycart
@@ -21,4 +21,4 @@
 
 
 ### Heroku
-For this component, I use Heroku since it is necessary to access the data from outside your local network.
+I myself host this component on Heroku, since it is necessary to access the data from outside your local network

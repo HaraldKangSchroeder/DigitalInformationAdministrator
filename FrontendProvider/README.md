@@ -14,6 +14,6 @@
       2. `WEATHER_SERVICE_KEY` : key for the weather service
 2. Execute `docker-compose build` to build the frontend provider
 3. Execute `docker-compose up -d` to run the frontend provider in detached mode
-4. The frontend provider should run now on port 8910. If you want to change the port, you need to modify the docker-compose.yml respectively.
+4. The frontend provider should run now on port 8910. If you want to change the port, you need to modify docker-compose.yml respectively.
    1. You can access the app using `http://<HOSTNAME>:8910/app`
    2. You can access the management using `http://<HOSTNAME>:8910/management`

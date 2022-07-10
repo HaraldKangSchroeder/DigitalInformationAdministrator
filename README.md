@@ -2,7 +2,7 @@
 
 DIA is a private project of mine to improve the management of home relevant tasks. 
 It consists of 4 main components
-* the frontend web client
+* the frontend provider (mandatory since it serves the webpage)
 * tasksmanager
 * weatherservice
 * grocery cart 
@@ -27,7 +27,7 @@ https://user-images.githubusercontent.com/81776044/137017714-00dbb4a9-9ac1-4895-
 
 ## Setup
 
-Only the web client is mandatory, which can be extended by the other 3 components.  
+Only the frontend provider (step 4) is mandatory, which can be extended by the other 3 components (step 1-3).  
 
 All components come along with Docker, specifically with docker-compose  
 You need to install those first - see https://docs.docker.com/compose/install/. You also need an account on Docker Hub ([https://hub.docker.com/](https://hub.docker.com/)).
@@ -38,5 +38,5 @@ You need to install those first - see https://docs.docker.com/compose/install/. 
 4. Use [this guide](./FrontendProvider/README.md) in order to setup the frontend provider
 
 ## Personal Setup
-My application is constantly running (in detached mode) on a raspberry pi 4 which is attached to a touchdisplay (https://www.sunfounder.com/products/10inch-touchscreen-for-raspberrypi). To attach both components on a surface (in my case the fridge door), I created a case using a 3d printer.
+My application is constantly running (in detached mode) on a raspberry pi 4 which is attached to a touchdisplay (https://www.sunfounder.com/products/10inch-touchscreen-for-raspberrypi). To attach both components on a surface, I created a case using a 3d printer.
 
